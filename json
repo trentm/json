@@ -1,0 +1,176 @@
+#!/usr/bin/env node
+//
+// json -- pipe in your JSON for nicer output and for extracting data bits
+//
+
+var VERSION = "1.0.0";
+
+var sys = require('sys');
+var Script = process.binding('evals').Script;
+
+
+
+//---- support functions
+
+function printHelp() {
+  sys.puts("Usage: <something generating JSON on stdout> | json [options] [fields]");
+  sys.puts("");
+  sys.puts("Pipe in your JSON for nicer output. Or supply `fields` to extract");
+  sys.puts("subsets of the JSON. This will skip over HTTP header blocks ");
+  sys.puts("(as from `curl -i`) by default.");
+  sys.puts("");
+  sys.puts("By default, the output is JSON-y: JSON expect for a simple string return");
+  sys.puts("value, which is printed without quotes. Use '-j' or '-i' to override.");
+  sys.puts("");
+  sys.puts("Options:");  
+  sys.puts("  -h        print this help info and exit");
+  sys.puts("  -H        drop any HTTP header block");
+  sys.puts("  -i        output using node's `sys.inspect`");
+  sys.puts("  -j        output using `JSON.stringfy`, i.e. strict JSON");
+  sys.puts("");
+  sys.puts("Examples:");
+  sys.puts("  curl -s http://search.twitter.com/search.json?q=node.js | json");
+  sys.puts("  curl -s http://search.twitter.com/search.json?q=node.js | json results");
+  sys.puts("");
+  sys.puts("See <https://github.com/trentm/json> for more.");
+}
+
+
+// Parse the command-line options and arguments into an object.
+//
+//    {
+//      'fields': [...]    // list of JSON filtering fields
+//      'help': true,      // true if '-h' option given
+//      // etc.
+//    }
+function parseArgv(argv) {
+  var parsed = {
+    fields: [],
+    help: false,
+    dropHeaders: false,
+    outputSysInspect: false,
+    outputJSON: false
+  };
+  
+  // Turn '-iH' into '-i -H'.
+  var a = argv.slice(2);  // drop ['node', 'scriptname']
+  for (var i = 0; i < a.length; i ++) {
+    if (a[i].charAt(0) === "-" && a[i].length > 2) {
+      var arg = a[i].replace(/^-+/, "").split("").map(function (a) {
+        return "-" + a;
+      });
+      a.splice.apply(a, [i, 1].concat(arg));
+    }
+  }
+
+  while (a.length > 0) {
+    var arg = a.shift();
+    switch(arg) {
+      case "-h": // display help and exit
+        parsed.help = true;
+        break;
+      case "-H": // drop any headers
+        parsed.dropHeaders = true;
+        break;
+      case "-i": // output with sys.inspect
+        parsed.outputSysInspect = true;
+        break;
+      case "-j": // output with JSON.stringify
+        parsed.outputJSON = true;
+        break;
+      default: // arguments
+        parsed.fields.push(arg);
+        break;
+    } 
+  }
+
+  return parsed;
+}
+
+
+function log(o) {
+  console.log(o);
+}
+
+function isInteger(s) {
+  return (s.search(/^-?[0-9]+$/) == 0);
+}
+
+
+//---- mainline
+
+function main(argv) {
+  var args = parseArgv(argv);
+  //log(args);
+  if (args.help) {
+    printHelp();
+    return;
+  }
+  
+  var buffer = "";
+  
+  var stdin = process.openStdin();
+  stdin.setEncoding('utf8');
+  stdin.on('data', function (chunk) {
+      buffer += chunk;
+  });
+  
+  stdin.on('end', function () {
+    // Take off a leading HTTP header if any and pass it through.
+    if (buffer.slice(0,5) === "HTTP/") {
+      var index = buffer.indexOf('\r\n\r\n');
+      var sepLen = 4;
+      if (index == -1) {
+        index = buffer.indexOf('\n\n');
+        sepLen = 2;
+      }
+      if (index != -1) {
+        if (! args.dropHeaders) {
+          process.stdout.write(buffer.slice(0, index+sepLen));
+        }
+        buffer = buffer.slice(index+sepLen);
+      }
+    }
+    
+    // Expect the remainder to be JSON.
+    var data;
+    try {
+      data = JSON.parse(buffer);
+    } catch(ex) {
+      // Doesn't look like JSON. Just print it out and move on.
+      log("warning: doesn't look like JSON: "+ex+"\n-- buffer\n"+buffer);
+      process.stdout.write(buffer);
+      if (buffer[buffer.length-1] !== "\n") {
+        process.stdout.write('\n');
+      }
+      return;
+    }
+    
+    for (var i=0; i < args.fields.length; i++) {
+      var field = args.fields[i];
+      var lookup = (isInteger(field) ? "["+field+"]" : "."+field);
+      data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
+    }
+    
+    // Print out results.
+    if (args.outputSysInspect) {
+      process.stdout.write(sys.inspect(data, false, Infinity, true));
+    } else if (args.outputJSON) {
+      process.stdout.write(JSON.stringify(data, null, 2));
+    } else {
+      if (typeof data === 'string') {
+        process.stdout.write(data);
+      } else {
+        process.stdout.write(JSON.stringify(data, null, 2));
+      }
+    }
+    process.stdout.write('\n');
+  });
+}
+
+if (require.main === module) {
+  var retval = main(process.argv);
+  if (retval) {
+    process.exit(retval);
+  }
+}
