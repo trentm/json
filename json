@@ -2,6 +2,8 @@
 //
 // json -- pipe in your JSON for nicer output and for extracting data bits
 //
+// See <https://github.com/trentm/json>.
+//
 
 var VERSION = "1.1.0";
 
