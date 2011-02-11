@@ -3,7 +3,7 @@
 // json -- pipe in your JSON for nicer output and for extracting data bits
 //
 
-var VERSION = "1.0.0";
+var VERSION = "1.1.0";
 
 var sys = require('sys');
 var Script = process.binding('evals').Script;
@@ -13,20 +13,21 @@ var Script = process.binding('evals').Script;
 //---- support functions
 
 function printHelp() {
-  sys.puts("Usage: <something generating JSON on stdout> | json [options] [fields]");
+  sys.puts("Usage: <something generating JSON on stdout> | json [options] [lookup]");
   sys.puts("");
-  sys.puts("Pipe in your JSON for nicer output. Or supply `fields` to extract");
-  sys.puts("subsets of the JSON. This will skip over HTTP header blocks ");
+  sys.puts("Pipe in your JSON for nicer output. Or supply a `lookup` to extract");
+  sys.puts("a subset of the JSON. HTTP header blocks are skipped by default");
   sys.puts("(as from `curl -i`) by default.");
   sys.puts("");
   sys.puts("By default, the output is JSON-y: JSON expect for a simple string return");
   sys.puts("value, which is printed without quotes. Use '-j' or '-i' to override.");
   sys.puts("");
   sys.puts("Options:");  
-  sys.puts("  -h        print this help info and exit");
-  sys.puts("  -H        drop any HTTP header block");
-  sys.puts("  -i        output using node's `sys.inspect`");
-  sys.puts("  -j        output using `JSON.stringfy`, i.e. strict JSON");
+  sys.puts("  -h, --help  print this help info and exit");
+  sys.puts("  --version   print version of this command and exit");
+  sys.puts("  -H          drop any HTTP header block");
+  sys.puts("  -i          output using node's `sys.inspect`");
+  sys.puts("  -j          output using `JSON.stringfy`, i.e. strict JSON");
   sys.puts("");
   sys.puts("Examples:");
   sys.puts("  curl -s http://search.twitter.com/search.json?q=node.js | json");
@@ -39,13 +40,15 @@ function printHelp() {
 // Parse the command-line options and arguments into an object.
 //
 //    {
-//      'fields': [...]    // list of JSON filtering fields
+//      'lookup': '...'    // the first arg: lookup
+//      'extra': [...]     // extra args put here
 //      'help': true,      // true if '-h' option given
 //      // etc.
 //    }
 function parseArgv(argv) {
   var parsed = {
-    fields: [],
+    lookup: null,
+    extra: [],
     help: false,
     dropHeaders: false,
     outputSysInspect: false,
@@ -55,7 +58,7 @@ function parseArgv(argv) {
   // Turn '-iH' into '-i -H'.
   var a = argv.slice(2);  // drop ['node', 'scriptname']
   for (var i = 0; i < a.length; i ++) {
-    if (a[i].charAt(0) === "-" && a[i].length > 2) {
+    if (a[i].charAt(0) === "-" && a[i].charAt(1) != '-' && a[i].length > 2) {
       var arg = a[i].replace(/^-+/, "").split("").map(function (a) {
         return "-" + a;
       });
@@ -67,7 +70,11 @@ function parseArgv(argv) {
     var arg = a.shift();
     switch(arg) {
       case "-h": // display help and exit
+      case "--help":
         parsed.help = true;
+        break;
+      case "--version":
+        parsed.version = true;
         break;
       case "-H": // drop any headers
         parsed.dropHeaders = true;
@@ -79,7 +86,11 @@ function parseArgv(argv) {
         parsed.outputJSON = true;
         break;
       default: // arguments
-        parsed.fields.push(arg);
+        if (parsed.lookup === null) {
+          parsed.lookup = arg;
+        } else {
+          parsed.extra.push(arg);
+        }
         break;
     } 
   }
@@ -105,6 +116,14 @@ function main(argv) {
   if (args.help) {
     printHelp();
     return;
+  }
+  if (args.version) {
+    sys.puts("json "+VERSION);
+    return;
+  }
+  if (args.extra.length) {
+    sys.puts("error: too many arguments: extra="+args.extra);
+    return 1;
   }
   
   var buffer = "";
@@ -146,16 +165,13 @@ function main(argv) {
       return;
     }
     
-    var lookup = "";
-    for (var i=0; i < args.fields.length; i++) {
-      var field = args.fields[i];
-      if (field[0] === '[') {
-        lookup += field;
-      } else {
-        lookup += '.' + field;
+    if (args.lookup) {
+      var lookup = args.lookup;
+      if (lookup[0] !== '[') {
+        lookup = '.' + lookup;
       }
+      data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
     }
-    data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
     
     // Print out results.
     if (args.outputSysInspect) {

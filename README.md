@@ -117,6 +117,16 @@ Or, say you are stuck with the headers in your pipeline, `json -H` will drop the
     $ curl -is https://github.com/api/v2/json/repos/show/ry/node | json -H repository.watchers
     4753
 
+Here is an example that shows indexing a list. (The given "lookup" argument is basically
+JavaScript code appended, with '.' if necessary, to the JSON data and eval'd.)
+
+    $ curl -s http://github.com/api/v2/json/repos/search/nodejs | json 'repositories[2].description'
+    Connect is a middleware layer for Node.js
+
+
+# TODO
+
+- consider a '*' syntax for running the subsequent lookup on all items in a list
 
 
 # Alternatives you might prefer
