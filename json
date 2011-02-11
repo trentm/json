@@ -146,21 +146,28 @@ function main(argv) {
       return;
     }
     
+    var lookup = "";
     for (var i=0; i < args.fields.length; i++) {
       var field = args.fields[i];
-      var lookup = (isInteger(field) ? "["+field+"]" : "."+field);
-      data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
+      if (field[0] === '[') {
+        lookup += field;
+      } else {
+        lookup += '.' + field;
+      }
     }
+    data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
     
     // Print out results.
     if (args.outputSysInspect) {
       process.stdout.write(sys.inspect(data, false, Infinity, true));
     } else if (args.outputJSON) {
-      process.stdout.write(JSON.stringify(data, null, 2));
+      if (typeof data !== 'undefined') {
+        process.stdout.write(JSON.stringify(data, null, 2));
+      }
     } else {
       if (typeof data === 'string') {
         process.stdout.write(data);
-      } else {
+      } else if (typeof data !== 'undefined') {
         process.stdout.write(JSON.stringify(data, null, 2));
       }
     }
