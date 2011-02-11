@@ -17,20 +17,21 @@ is a single-file node.js script.
 
 `json -h`:
 
-    Usage: <something generating JSON on stdout> | json [options] [fields]
+    Usage: <something generating JSON on stdout> | json [options] [lookup]
 
-    Pipe in your JSON for nicer output. Or supply `fields` to extract
-    subsets of the JSON. This will skip over HTTP header blocks 
+    Pipe in your JSON for nicer output. Or supply a `lookup` to extract
+    a subset of the JSON. HTTP header blocks are skipped by default
     (as from `curl -i`) by default.
 
-    By default, the output is JSON-y: JSON expect for a simple string return
+    By default, the output is JSON-y: JSON except for a simple string return
     value, which is printed without quotes. Use '-j' or '-i' to override.
 
     Options:
-      -h        print this help info and exit
-      -H        drop any HTTP header block
-      -i        output using node's `sys.inspect`
-      -j        output using `JSON.stringfy`, i.e. strict JSON
+      -h, --help  print this help info and exit
+      --version   print version of this command and exit
+      -H          drop any HTTP header block
+      -i          output using node's `sys.inspect`
+      -j          output using `JSON.stringfy`, i.e. strict JSON
 
     Examples:
       curl -s http://search.twitter.com/search.json?q=node.js | json
@@ -78,7 +79,7 @@ Say you just want to extract one value:
 
 If you use `curl -i` to get HTTP headers (because perhaps they contain relevant information), `json` will skip those automatically:
 
-    $ curl -is https://github.com/api/v2/json/repos/show/ry/node | json repository 
+    $ curl -is https://github.com/api/v2/json/repos/show/ry/node | json repository
     HTTP/1.1 200 OK
     Server: nginx/0.7.67
     Date: Fri, 11 Feb 2011 06:45:02 GMT

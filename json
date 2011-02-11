@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/json>.
 //
 
-var VERSION = "1.1.0";
+var VERSION = "1.1.1";
 
 var sys = require('sys');
 var Script = process.binding('evals').Script;
@@ -21,7 +21,7 @@ function printHelp() {
   sys.puts("a subset of the JSON. HTTP header blocks are skipped by default");
   sys.puts("(as from `curl -i`) by default.");
   sys.puts("");
-  sys.puts("By default, the output is JSON-y: JSON expect for a simple string return");
+  sys.puts("By default, the output is JSON-y: JSON except for a simple string return");
   sys.puts("value, which is printed without quotes. Use '-j' or '-i' to override.");
   sys.puts("");
   sys.puts("Options:");  
