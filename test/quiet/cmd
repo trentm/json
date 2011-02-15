@@ -1,0 +1,6 @@
+echo "# no args"
+cat input | ../../json 2>&1
+echo "# -q"
+cat input | ../../json -q 2>&1
+echo "# --quiet"
+cat input | ../../json --quiet 2>&1
