@@ -171,10 +171,45 @@ function main(argv) {
     }
     
     if (args.lookup) {
-      var lookup = args.lookup;
-      if (lookup[0] !== '[') {
-        lookup = '.' + lookup;
+      // Parse command line lookup string into separate parts of the lookup.
+      var split = args.lookup.split(/(\.|\[)/);
+      var bits = [];
+      var save = null;
+      for (var i=0; i < split.length; i++) {
+        var bit = split[i];
+        switch (bit) {
+        case '.':
+          save = null;
+          break;
+        case '[':
+          save = bit;
+          break;
+        default:
+          if (save) {
+            bits.push(save + bit);
+          } else {
+            bits.push(bit);
+          }
+          save = null;
+          break;
+        }
       }
+
+      // Put it back together with some convenience transformations.
+      lookup = "";
+      var isJSIdentifier = /^[$A-Za-z_][0-9A-Za-z_]*$/;
+      for (var i=0; i < bits.length; i++) {
+        var bit = bits[i];
+        if (bit[0] === '[') {
+          lookup += bit;
+        } else if (! isJSIdentifier(bits[i])) {
+          // Allow a non-JS-indentifier token, e.g. `json foo-bar`.
+          lookup += '["' + bits[i].replace('"', '\\"') + '"]';
+        } else {
+          lookup += '.' + bits[i];
+        }
+      }
+
       data = Script.runInNewContext("(" + JSON.stringify(data) + ")" + lookup);
     }
     

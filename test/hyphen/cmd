@@ -1,0 +1,2 @@
+# See <https://github.com/trentm/json/issues#issue/1>
+cat input | ../../json platform-release
