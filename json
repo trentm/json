@@ -186,6 +186,8 @@ function main(argv) {
       for (var i=0; i < split.length; i++) {
         var bit = split[i];
         switch (bit) {
+        case '':
+          break;
         case '.':
           save = null;
           break;

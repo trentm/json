@@ -1,2 +1,5 @@
 # See <https://github.com/trentm/json/issues#issue/1>
+echo "# unadorned"
 cat input | ../../json platform-release
+echo "# bracket notation"
+cat input | ../../json '["platform-release"]'
