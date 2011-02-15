@@ -125,6 +125,13 @@ JavaScript code appended, with '.' if necessary, to the JSON data and eval'd.)
     Connect is a middleware layer for Node.js
 
 
+# Test suite
+
+    make test
+
+
+
+
 # TODO
 
 - consider a '*' syntax for running the subsequent lookup on all items in a list
