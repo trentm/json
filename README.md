@@ -129,6 +129,15 @@ JavaScript code appended, with '.' if necessary, to the JSON data and eval'd.)
 
     make test
 
+Note that the 'utf8' test fails with a V8 build before  [revision
+5399](http://code.google.com/p/v8/source/detail?r=5399), see
+<http://code.google.com/p/v8/issues/detail?id=855>. I'm not sure exactly what
+node versions this corresponds to, but at least: broken in node 0.2.5 and
+working in node 0.4.0.
+
+If you are stuck with an older node and don't want the utf8 failure in your face:
+
+    TEST_ONLY=-utf8 make test
 
 
 
