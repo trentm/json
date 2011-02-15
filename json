@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/json>.
 //
 
-var VERSION = "1.1.2";
+var VERSION = "1.1.3";
 
 var sys = require('sys');
 var Script = process.binding('evals').Script;
@@ -152,8 +152,11 @@ function main(argv) {
         buffer = buffer.slice(index+sepLen);
       }
     }
-    
+
     // Expect the remainder to be JSON.
+    if (! buffer.length) {
+      return;
+    }
     var data;
     try {
       data = JSON.parse(buffer);
