@@ -1,5 +1,5 @@
 # no args
-warning: doesn't look like JSON: SyntaxError: Unexpected token ILLEGAL (buffer="{'foo'}\n")
+json: warning: doesn't look like JSON: SyntaxError: Unexpected token ILLEGAL (buffer="{'foo'}\n")
 {'foo'}
 # -q
 {'foo'}
