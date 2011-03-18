@@ -169,7 +169,7 @@ function main(argv) {
     } catch(ex) {
       // Doesn't look like JSON. Just print it out and move on.
       if (! args.quiet) {
-        warn("warning: doesn't look like JSON: "+ex+" (buffer="+JSON.stringify(buffer)+")");
+        warn("json: warning: doesn't look like JSON: "+ex+" (buffer="+JSON.stringify(buffer)+")");
       }
       process.stdout.write(buffer);
       if (buffer.length && buffer[buffer.length-1] !== "\n") {
