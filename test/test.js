@@ -59,15 +59,17 @@ for (var i=0; i < names.length; ++i) {
     }
     data[name] = (function(dir) {
       return function(test) {
-        var numTests = 1;
+        var numTests = 0;
+
         var expectedExitCode = null;
         try {
           var p = path.join(dir, "expected.exitCode");
           if (fs.statSync(p)) {
             expectedExitCode = Number(fs.readFileSync(p));
+            numTests += 1;
           }
         } catch(e) {}
-          
+
         var expectedStdout = null;
         try {
           var p = path.join(dir, "expected.stdout");
@@ -76,11 +78,13 @@ for (var i=0; i < names.length; ++i) {
             numTests += 1;
           }
         } catch(e) {}
-        
+
         test.expect(numTests);
         exec("bash cmd", {"cwd": dir}, function(error, stdout, stderr) {
-          var errmsg = "\n-- return value:\n"+error+"\n-- stdout:\n"+stdout+"\n-- stderr:\n"+stderr;
-          test.equal(expectedExitCode, error && error.code, errmsg);
+          var errmsg = "\n-- return value:\n" + (error && error.code) + "\n-- stdout:\n"+stdout+"\n-- stderr:\n"+stderr;
+          if (expectedExitCode !== null) {
+            test.equal(expectedExitCode, error && error.code, errmsg);
+          }
           if (expectedStdout !== null) {
             test.equal(stdout, expectedStdout, errmsg);
           }
