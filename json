@@ -102,6 +102,7 @@ function parseArgv(argv) {
         break;
     } 
   }
+  //TODO: '--' handling and error on a first arg that looks like an option.,d
 
   return parsed;
 }
@@ -130,8 +131,8 @@ function main(argv) {
     return;
   }
   if (args.extra.length) {
-    sys.puts("error: too many arguments: extra="+args.extra);
-    return 1;
+    sys.puts("json: error: too many arguments: extra="+args.extra);
+    process.exit(1);
   }
   
   var buffer = "";
@@ -169,13 +170,13 @@ function main(argv) {
     } catch(ex) {
       // Doesn't look like JSON. Just print it out and move on.
       if (! args.quiet) {
-        warn("json: warning: doesn't look like JSON: "+ex+" (buffer="+JSON.stringify(buffer)+")");
+        warn("json: error: doesn't look like JSON: "+ex+" (buffer="+JSON.stringify(buffer)+")");
       }
       process.stdout.write(buffer);
       if (buffer.length && buffer[buffer.length-1] !== "\n") {
         process.stdout.write('\n');
       }
-      return;
+      process.exit(1);
     }
     
     if (args.lookup) {
@@ -242,8 +243,5 @@ function main(argv) {
 }
 
 if (require.main === module) {
-  var retval = main(process.argv);
-  if (retval) {
-    process.exit(retval);
-  }
+  main(process.argv);
 }
