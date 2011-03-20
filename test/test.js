@@ -17,18 +17,53 @@ var sys  = require('sys');
 var exec = require('child_process').exec;
 var fs   = require('fs');
 var testCase = require('nodeunit').testCase;
+var warn = console.warn;
 
 
 var data = {
   //setUp: function(callback) {
   //  ...
-  //}
+  //},
+
+  parseLookup: function(test) {
+    var parseLookup = require("../json").parseLookup;
+    test.deepEqual(parseLookup("42"), ["42"]);
+    test.deepEqual(parseLookup("a"), ["a"]);
+    test.deepEqual(parseLookup("a.b"), ["a", "b"]);
+    test.deepEqual(parseLookup("a.b.c"), ["a", "b", "c"]);
+    
+    test.deepEqual(parseLookup("[42]"), ["[42]"]);
+    test.deepEqual(parseLookup("['a']"), ["['a']"]);
+    test.deepEqual(parseLookup('["a"]'), ['["a"]']);
+    
+    test.deepEqual(parseLookup("b[42]"), ["b", "[42]"]);
+    test.deepEqual(parseLookup("b['a']"), ["b", "['a']"]);
+    test.deepEqual(parseLookup('b["a"]'), ["b", '["a"]']);
+    
+    test.deepEqual(parseLookup("[42].b"), ["[42]", "b"]);
+    test.deepEqual(parseLookup("['a'].b"), ["['a']", "b"]);
+    test.deepEqual(parseLookup('["a"].b'), ['["a"]', "b"]);
+
+    test.deepEqual(parseLookup("['a-b']"), ["['a-b']"]);
+    test.deepEqual(parseLookup('["a-b"]'), ['["a-b"]']);
+    test.deepEqual(parseLookup("['a.b']"), ["['a.b']"]);
+    test.deepEqual(parseLookup('["a.b"]'), ['["a.b"]']);
+    test.deepEqual(parseLookup("['a[b']"), ["['a[b']"]);
+    test.deepEqual(parseLookup('["a[b"]'), ['["a[b"]']);
+    test.deepEqual(parseLookup("['a]b']"), ["['a]b']"]);
+    test.deepEqual(parseLookup('["a]b"]'), ['["a]b"]']);
+    
+    test.deepEqual(parseLookup("['a\\'[b']"), ["['a\\'[b']"]);
+    test.deepEqual(parseLookup("['a\\'[b'].c"), ["['a\\'[b']", "c"]);
+
+    test.done();
+  }
 };
 
 // Process includes and excludes from "TEST_ONLY".
 var only = [], excludes = [];
 if (process.env.TEST_ONLY) {
-  console.warn("Note: Limiting 'test.js' tests by $TEST_ONLY: '"
+  warn("Note: Limiting 'test.js' tests by $TEST_ONLY: '"
     + process.env.TEST_ONLY + "'");
   var tokens = process.env.TEST_ONLY.trim().split(/\s+/);
   for (var i=0; i < tokens.length; i++) {
@@ -56,6 +91,9 @@ for (var i=0; i < names.length; ++i) {
       fs.statSync(path.join(dir, "cmd"));
     } catch(e) {
       continue;
+    }
+    if (data[name] !== undefined) {
+      throw("error: test '"+name+"' already exists");
     }
     data[name] = (function(dir) {
       return function(test) {
