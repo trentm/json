@@ -1,3 +1,9 @@
+help:
+	@echo "json Makefile"
+	@echo ""
+	@echo "test     run the test suite"
+	@echo "tag      create a git tag for current version"
+
 test:
 	(cd test && make test)
 
