@@ -9,6 +9,7 @@ test:
 
 tag:
 	grep "var VERSION =" json | awk -F'"' '{print $$2}' > VERSION
+	@echo "* * * Create tag '`cat VERSION`'. * * *"
 	git tag -a "`cat VERSION`" -m "version `cat VERSION`"
 	rm VERSION
 	@echo "* * * Remember to 'git push --tags origin master'. * * *"
