@@ -1,0 +1,3 @@
+# json(1) -- pipe in thy JSON
+
+JSON love for your command line.
