@@ -42,44 +42,45 @@ is a single-file node.js script.
 
 # Examples
 
-Using the Github API to look at [node](https://github/ry/node):
+Using the Github API to look at [node](https://github/joyent/node):
 
-    $ curl -s http://github.com/api/v2/json/repos/show/ry/node
-    {"repository":{"language":"C++","url":"https://github.com/ry/node","pushed_at":"2011/02/10 02:48:07 -0800","homepage":"http://nodejs.org/","has_downloads":false,"watchers":4753,"fork":false,"created_at":"2009/05/27 09:29:46 -0700","size":15316,"private":false,"has_wiki":true,"name":"node","owner":"ry","open_issues":229,"forks":514,"description":"evented I/O for v8 javascript","has_issues":true}}
+    $ curl -s http://github.com/api/v2/json/repos/show/joyent/node
+    {"repository":{"has_wiki":true,"forks":597,"language":"C++","pushed_at":"2011/03/18 15:19:24 -0700","homepage":"http://nodejs.org/","open_issues":271,"fork":false,"has_issues":true,"url":"https://github.com/joyent/node","created_at":"2009/05/27 09:29:46 -0700","size":20984,"private":false,"has_downloads":false,"name":"node","owner":"joyent","organization":"joyent","watchers":5584,"description":"evented I/O for v8 javascript"}}
 
 Nice output by default:
 
-    $ curl -s https://github.com/api/v2/json/repos/show/ry/node | json
+    $ curl -s http://github.com/api/v2/json/repos/show/joyent/node | json
     {
       "repository": {
-        "language": "C++",
-        "url": "https://github.com/ry/node",
-        "homepage": "http://nodejs.org/",
         "has_wiki": true,
-        "watchers": 4753,
-        "forks": 514,
-        "open_issues": 229,
+        "language": "C++",
+        "homepage": "http://nodejs.org/",
+        "open_issues": 271,
         "fork": false,
         "has_issues": true,
+        "url": "https://github.com/joyent/node",
+        "forks": 597,
         "created_at": "2009/05/27 09:29:46 -0700",
-        "size": 15316,
+        "pushed_at": "2011/03/18 15:19:24 -0700",
+        "size": 20984,
         "private": false,
-        "name": "node",
-        "owner": "ry",
-        "description": "evented I/O for v8 javascript",
         "has_downloads": false,
-        "pushed_at": "2011/02/10 02:48:07 -0800"
+        "name": "node",
+        "owner": "joyent",
+        "organization": "joyent",
+        "watchers": 5584,
+        "description": "evented I/O for v8 javascript"
       }
     }
 
 Say you just want to extract one value:
 
-    $ curl -s https://github.com/api/v2/json/repos/show/ry/node | json repository.open_issues
+    $ curl -s https://github.com/api/v2/json/repos/show/joyent/node | json repository.open_issues
     229
 
 If you use `curl -i` to get HTTP headers (because perhaps they contain relevant information), `json` will skip those automatically:
 
-    $ curl -is https://github.com/api/v2/json/repos/show/ry/node | json repository
+    $ curl -is https://github.com/api/v2/json/repos/show/joyent/node | json repository
     HTTP/1.1 200 OK
     Server: nginx/0.7.67
     Date: Fri, 11 Feb 2011 06:45:02 GMT
@@ -97,7 +98,7 @@ If you use `curl -i` to get HTTP headers (because perhaps they contain relevant 
       "forks": 514,
       "has_issues": true,
       "language": "C++",
-      "url": "https://github.com/ry/node",
+      "url": "https://github.com/joyent/node",
       "homepage": "http://nodejs.org/",
       "has_downloads": false,
       "watchers": 4753,
@@ -107,7 +108,7 @@ If you use `curl -i` to get HTTP headers (because perhaps they contain relevant 
       "private": false,
       "has_wiki": true,
       "name": "node",
-      "owner": "ry",
+      "owner": "joyent",
       "pushed_at": "2011/02/10 02:48:07 -0800",
       "description": "evented I/O for v8 javascript",
       "open_issues": 229
@@ -115,7 +116,7 @@ If you use `curl -i` to get HTTP headers (because perhaps they contain relevant 
 
 Or, say you are stuck with the headers in your pipeline, `json -H` will drop them:
 
-    $ curl -is https://github.com/api/v2/json/repos/show/ry/node | json -H repository.watchers
+    $ curl -is https://github.com/api/v2/json/repos/show/joyent/node | json -H repository.watchers
     4753
 
 Here is an example that shows indexing a list. (The given "lookup" argument is basically
