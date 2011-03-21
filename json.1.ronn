@@ -1,3 +1,103 @@
-# json(1) -- pipe in thy JSON
+# json(1) -- JSON love for your command line
 
-JSON love for your command line.
+
+## SYNOPSIS
+
+`<something generating JSON on stdout> | json [options] [lookup]`
+
+
+## DESCRIPTION
+
+Pipe in your JSON for nicer (pretty-printed) output. Or supply a `lookup` to
+extract a subset of the JSON. HTTP header blocks are skipped by default (as from
+`curl -i`) by default.
+
+
+## OPTIONS
+
+By default `json` outputs results in a "flat" format that is intended to be
+of most use to the UNIX command-line. Currently the only difference between
+flat and JSON output is that a simple string result is printed *without* JSON's
+double-quotes. Other output formats:
+
+- `-i`:
+  output using node's `sys.inspect`
+
+- `-j`:
+  output using `JSON.stringfy`, i.e. strict JSON
+
+If your JSON output is a REST API response, it migth include the headers
+(e.g. when calling with `curl -i`). By default `json` will pass those headers
+through (without choking on them). However if you want then stripped you
+can use:
+
+- `-H`:
+  drop a leading HTTP header block, if any
+
+Miscellaneous options:
+
+- `-h, --help`:
+  print this help info and exit
+- `--version`:
+  print version of this command and exit
+- `-q, --quiet`:
+  don't warn if input isn't valid JSON
+
+
+## EXAMPLES
+
+A REST API:
+
+    $ curl -s http://github.com/api/v2/json/repos/show/joyent/node
+    {"repository":{"has_wiki":true,"forks":597,"language":"C++","pushed_at":"2011/03/18 15:19:24 -0700","homepage":"http://nodejs.org/","open_issues":271,"fork":false,"has_issues":true,"url":"https://github.com/joyent/node","created_at":"2009/05/27 09:29:46 -0700","size":20984,"private":false,"has_downloads":false,"name":"node","owner":"joyent","organization":"joyent","watchers":5584,"description":"evented I/O for v8 javascript"}}
+
+Nice output by default:
+
+    $ curl -s http://github.com/api/v2/json/repos/show/joyent/node | json
+    {
+      "repository": {
+        "has_wiki": true,
+        "language": "C++",
+        "homepage": "http://nodejs.org/",
+        "open_issues": 271,
+        "fork": false,
+        "has_issues": true,
+        "url": "https://github.com/joyent/node",
+        "forks": 597,
+        "created_at": "2009/05/27 09:29:46 -0700",
+        "pushed_at": "2011/03/18 15:19:24 -0700",
+        "size": 20984,
+        "private": false,
+        "has_downloads": false,
+        "name": "node",
+        "owner": "joyent",
+        "organization": "joyent",
+        "watchers": 5584,
+        "description": "evented I/O for v8 javascript"
+      }
+    }
+
+Say you just want to extract one value:
+
+    $ curl -s https://github.com/api/v2/json/repos/show/joyent/node | json repository.open_issues
+    271
+
+More examples at <https://github.com/trentm/json#readme>
+
+
+## BUGS
+
+`json` is written in JavaScript and requires node.js (`node`). Report bugs
+to <https://github.com/trentm/json>.
+
+
+## COPYRIGHT
+
+json is Copyright (c) 2011 Trent Mick
+
+## SEE ALSO
+
+- json-command: <https://github.com/zpoley/json-command>
+- JSONPath: <http://goessner.net/articles/JsonPath/>, <http://code.google.com/p/jsonpath/wiki/Javascript>
+- jsawk: <https://github.com/micha/jsawk>
+- jshon: <http://kmkeen.com/jshon/>

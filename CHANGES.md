@@ -1,5 +1,10 @@
 # json Changelog
 
+## json v1.1.8 (not yet tagged)
+
+- [Issue 4] Add a man page (using ronnjs).
+
+
 ## json v1.1.7
 
 - [Issue 5] Fix getting a key with a period. E.g.:

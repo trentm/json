@@ -76,7 +76,7 @@ Nice output by default:
 Say you just want to extract one value:
 
     $ curl -s https://github.com/api/v2/json/repos/show/joyent/node | json repository.open_issues
-    229
+    271
 
 If you use `curl -i` to get HTTP headers (because perhaps they contain relevant information), `json` will skip those automatically:
 
