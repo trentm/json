@@ -9,7 +9,7 @@ is a single-file node.js script.
 2. Get the 'json' script and put it on your PATH somewhere. For example:
 
         cd ~/bin
-        curl http://github.com/trentm/json/raw/master/json > json
+        curl https://github.com/trentm/json/raw/master/json > json
         chmod 755 json
 
 
