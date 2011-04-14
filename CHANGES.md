@@ -1,5 +1,10 @@
 # json Changelog
 
+## json v1.1.9 (not yet tagged)
+
+(nothing yet)
+
+
 ## json v1.1.8
 
 - [Issue 7] Handle "HTTP/1.1 100 Continue" leading header block.
