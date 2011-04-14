@@ -12,6 +12,8 @@ Pipe in your JSON for nicer (pretty-printed) output. Or supply a `lookup` to
 extract a subset of the JSON. HTTP header blocks are skipped by default (as from
 `curl -i`) by default.
 
+See a full changelog here <https://github.com/trentm/json/blob/master/CHANGES.md>
+
 
 ## OPTIONS
 
@@ -94,6 +96,7 @@ to <https://github.com/trentm/json>.
 ## COPYRIGHT
 
 json is Copyright (c) 2011 Trent Mick
+
 
 ## SEE ALSO
 
