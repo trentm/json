@@ -121,7 +121,7 @@ for (var i=0; i < names.length; ++i) {
         exec("bash cmd", {"cwd": dir}, function(error, stdout, stderr) {
           var errmsg = "\n-- return value:\n" + (error && error.code) + "\n-- stdout:\n"+stdout+"\n-- stderr:\n"+stderr;
           if (expectedExitCode !== null) {
-            test.equal(expectedExitCode, error && error.code, errmsg);
+            test.equal(expectedExitCode, error && error.code || 0, errmsg);
           }
           if (expectedStdout !== null) {
             test.equal(stdout, expectedStdout, errmsg);

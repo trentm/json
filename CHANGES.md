@@ -1,7 +1,8 @@
 # json Changelog
 
-## json v1.1.8 (not yet tagged)
+## json v1.1.8
 
+- [Issue 7] Handle "HTTP/1.1 100 Continue" leading header block.
 - [Issue 4] Add a man page (using ronnjs).
 
 
