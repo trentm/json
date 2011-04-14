@@ -108,7 +108,7 @@ function parseArgv(argv) {
         break;
     } 
   }
-  //TODO: '--' handling and error on a first arg that looks like an option.,d
+  //TODO: '--' handling and error on a first arg that looks like an option.
 
   return parsed;
 }
@@ -327,20 +327,24 @@ function main(argv) {
     }
     
     // Print out results.
+    var output = null;
     if (args.outputSysInspect) {
-      process.stdout.write(sys.inspect(data, false, Infinity, true));
+      output = sys.inspect(data, false, Infinity, true);
     } else if (args.outputJSON) {
       if (typeof data !== 'undefined') {
-        process.stdout.write(JSON.stringify(data, null, 2));
+        output = JSON.stringify(data, null, 2);
       }
     } else {
       if (typeof data === 'string') {
-        process.stdout.write(data);
+        output = data;
       } else if (typeof data !== 'undefined') {
-        process.stdout.write(JSON.stringify(data, null, 2));
+        output = JSON.stringify(data, null, 2);
       }
     }
-    process.stdout.write('\n');
+    if (output.length) {
+      process.stdout.write(output);
+      process.stdout.write('\n');
+    }
   });
 }
 

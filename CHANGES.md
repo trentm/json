@@ -2,7 +2,7 @@
 
 ## json v1.1.9 (not yet tagged)
 
-(nothing yet)
+- [Issue 8] Don't emit a newline for empty output.
 
 
 ## json v1.1.8
