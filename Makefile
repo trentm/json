@@ -12,6 +12,8 @@ docs:
 
 test:
 	(cd test && make test)
+testall:
+	(cd test && make testall)
 
 tag:
 	grep "var VERSION =" json | awk -F'"' '{print $$2}' > VERSION
