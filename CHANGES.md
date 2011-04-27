@@ -1,5 +1,10 @@
 # json Changelog
 
+## json v1.2.0
+
+- [issue #10] Fix for node v0.5.
+
+
 ## json v1.1.9
 
 - [Issue 8] Don't emit a newline for empty output.
