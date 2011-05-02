@@ -117,6 +117,15 @@ for (var i=0; i < names.length; ++i) {
           }
         } catch(e) {}
 
+        var expectedStderr = null;
+        try {
+          var p = path.join(dir, "expected.stderr");
+          if (fs.statSync(p)) {
+            expectedStderr = fs.readFileSync(p, "utf8");
+            numTests += 1;
+          }
+        } catch(e) {}
+
         test.expect(numTests);
         exec("bash cmd", {"cwd": dir}, function(error, stdout, stderr) {
           var errmsg = "\n-- return value:\n" + (error && error.code) + "\n-- stdout:\n"+stdout+"\n-- stderr:\n"+stderr;
@@ -125,6 +134,9 @@ for (var i=0; i < names.length; ++i) {
           }
           if (expectedStdout !== null) {
             test.equal(stdout, expectedStdout, errmsg);
+          }
+          if (expectedStderr !== null) {
+            test.equal(stderr, expectedStderr, errmsg);
           }
           test.done();
         });
