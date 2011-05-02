@@ -1,5 +1,10 @@
 # json Changelog
 
+## json v1.2.1
+
+- [issue #12] Fix handling of output when result of lookup is `undefined`.
+
+
 ## json v1.2.0
 
 - [issue #10] Fix for node v0.5.

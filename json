@@ -5,7 +5,7 @@
 // See <https://github.com/trentm/json>.
 //
 
-var VERSION = "1.2.0";
+var VERSION = "1.2.1";
 
 var sys = require('sys');
 var runInNewContext;
@@ -347,7 +347,7 @@ function main(argv) {
         output = JSON.stringify(data, null, 2);
       }
     }
-    if (output.length) {
+    if (output && output.length) {
       process.stdout.write(output);
       process.stdout.write('\n');
     }
