@@ -1,5 +1,41 @@
 # json Changelog
 
+## json v1.3.0
+
+- Add experimental support for '*' in the lookup. This will extract all
+  the elements of an array. Examples:
+        
+        $ echo '["a", "b", "c"]' | json -x '*'
+        a
+        b
+        c
+        $ echo '[{"one": "un"}, {"two": "deux"}]' | json -x '*'
+        {
+          "one": "un"
+        }
+        {
+          "two": "deux"
+        }
+        $ echo '[{"foo": "bar"}, {"foo": "baz"}]' | json -x '*.foo'
+        bar
+        baz
+  
+  This is still experimental because I want to feel it out (is it useful?
+  does it cause problems for regular usage?) and it is incomplete. The
+  second example above shows that with '*', json can emit multiple JSON
+  documents. `json` needs to change to support *accepting* multiple JSON
+  documents.
+  
+  Also, a limitation: How to extract *multiple* fields from a list of
+  objects? Is this even a necessary feature? Thinking out loud:
+    
+        '*' 'name,version'
+        '*.name|version'
+        '*.{name|version}'      # glob syntax? is this right?
+
+- Add '-x|--experimental' option to turn on incomplete/experimental features.
+
+
 ## json v1.2.1
 
 - [issue #12] Fix handling of output when result of lookup is `undefined`.
