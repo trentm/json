@@ -22,7 +22,7 @@
   
   This is still experimental because I want to feel it out (is it useful?
   does it cause problems for regular usage?) and it is incomplete. The
-  second example above shows that with '*', json can emit multiple JSON
+  second example above shows that with '\*', json can emit multiple JSON
   documents. `json` needs to change to support *accepting* multiple JSON
   documents.
   
