@@ -29,9 +29,7 @@
   Also, a limitation: How to extract *multiple* fields from a list of
   objects? Is this even a necessary feature? Thinking out loud:
     
-        '*' 'name,version'
-        '*.name|version'
-        '*.{name|version}'      # glob syntax? is this right?
+        '*.{name,version}'      # a la bash. Josh likes it. What else do you need?
 
 - Add '-x|--experimental' option to turn on incomplete/experimental features.
 
