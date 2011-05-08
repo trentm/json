@@ -1,2 +1,14 @@
-# bracket notation
-42
+# star on list
+a
+b
+c
+# star on list of objects
+{
+  "one": "un"
+}
+{
+  "two": "deux"
+}
+# star on list of objects, sub lookup
+bar
+baz
