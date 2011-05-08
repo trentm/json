@@ -2,6 +2,7 @@
 
 ## json v1.3.0
 
+- package.json and publish to npm as "jsontool" ("json" name is taken)
 - Add experimental support for '*' in the lookup. This will extract all
   the elements of an array. Examples:
         

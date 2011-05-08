@@ -4,7 +4,11 @@ is a single-file node.js script.
 
 # Installation
 
-1. Get [node](http://nodejs.org).
+1. Get [node](http://nodejs.org) and [npm](http://npmjs.org).
+
+2. `npm install jsontool`.
+
+**OR manually**:
 
 2. Get the 'json' script and put it on your PATH somewhere. For example:
 
