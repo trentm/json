@@ -1,7 +1,7 @@
 .\" Generated with Ronnjs/v0.1
 .\" http://github.com/kapouer/ronnjs/
 .
-.TH "JSON" "1" "April 2011" "" ""
+.TH "JSON" "1" "May 2011" "" ""
 .
 .SH "NAME"
 \fBjson\fR \-\- JSON love for your command line
@@ -11,8 +11,7 @@
 .
 .SH "DESCRIPTION"
 Pipe in your JSON for nicer (pretty\-printed) output\. Or supply a \fBlookup\fR to
-extract a subset of the JSON\. HTTP header blocks are skipped by default (as from
-\fBcurl \-i\fR) by default\.
+extract a subset of the JSON\. HTTP header blocks are skipped by default (as from \fBcurl \-i\fR) by default\.
 .
 .P
 See a full changelog here \fIhttps://github\.com/trentm/json/blob/master/CHANGES\.md\fR
@@ -59,6 +58,10 @@ print version of this command and exit
 .IP "\(bu" 4
 \fB\-q, \-\-quiet\fR:
 don\'t warn if input isn\'t valid JSON
+.
+.IP "\(bu" 4
+\fB\-x, \-\-experimental\fR:
+Enable experimental features\. Currently this enables \'*\' in the lookup for JSON arrays\.
 .
 .IP "" 0
 .

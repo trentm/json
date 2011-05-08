@@ -44,6 +44,8 @@ Miscellaneous options:
   print version of this command and exit
 - `-q, --quiet`:
   don't warn if input isn't valid JSON
+- `-x, --experimental`:
+  Enable experimental features. Currently this enables '\*' in the lookup for JSON arrays.
 
 
 ## EXAMPLES
@@ -90,7 +92,7 @@ More examples at <https://github.com/trentm/json#readme>
 ## BUGS
 
 `json` is written in JavaScript and requires node.js (`node`). Report bugs
-to <https://github.com/trentm/json>.
+to <https://github.com/trentm/json/issues>.
 
 
 ## COPYRIGHT
