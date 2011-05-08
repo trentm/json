@@ -7,7 +7,7 @@ help:
 
 docs:
 	mkdir -p man/man1
-	support/ronnjs/bin/ronn.js -r json.1.ronn > man/man1/json.1
+	node_modules/.bin/ronn -r json.1.ronn > man/man1/json.1
 	@echo "# test with 'man man/man1/json.1'"
 
 test:
