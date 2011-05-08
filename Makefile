@@ -20,6 +20,6 @@ tag:
 	@echo "* * * Create tag '`cat VERSION`'. * * *"
 	git tag -a "`cat VERSION`" -m "version `cat VERSION`"
 	rm VERSION
-	@echo "* * * Remember to 'git push --tags origin master'. * * *"
+	@echo "* * * Remember to 'git push --tags origin master' then perhaps 'npm publish'. * * *"
 
 .PHONY: test tag
