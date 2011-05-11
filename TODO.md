@@ -8,3 +8,5 @@
         ValueError: Expecting : delimiter: line 7 column 18 (char 216)
 
   Is the error location on the JSON exception object?
+- npm/lib/utils/minimatch.js: fnmatch/glob implementation. Use that for more generic "*.foo" or "*.{foo,bar}" matching. Says Isaac: "it'd be cool :)".
+
