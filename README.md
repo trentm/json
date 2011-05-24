@@ -153,6 +153,7 @@ If you are stuck with an older node and don't want the utf8 failure in your face
 
 # Alternatives you might prefer
 
+- json:select: <http://jsonselect.org/>
 - jsonpipe: <https://github.com/dvxhouse/jsonpipe>
 - json-command: <https://github.com/zpoley/json-command>
 - JSONPath: <http://goessner.net/articles/JsonPath/>, <http://code.google.com/p/jsonpath/wiki/Javascript>
