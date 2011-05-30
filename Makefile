@@ -16,7 +16,7 @@ testall:
 	(cd test && make testall)
 
 tag:
-	grep "var VERSION =" json | awk -F'"' '{print $$2}' > VERSION
+	grep "var VERSION =" lib/jsontool.js | awk -F'"' '{print $$2}' > VERSION
 	@echo "* * * Create tag '`cat VERSION`'. * * *"
 	git tag -a "`cat VERSION`" -m "version `cat VERSION`"
 	rm VERSION
