@@ -1,7 +1,7 @@
 {
   "name": "jsontool",
   "description": "a 'json' command for massaging JSON on your Unix command line",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/trentm/json.git"
@@ -10,14 +10,15 @@
     "Trent Mick <trentm@gmail.com>"
   ],
   "bin": {
-    "json": "./json"
+    "json": "./lib/jsontool.js"
   },
+  "main": "./lib/jsontool.js",
   "man": "./man/man1/json.1",
   "scripts": {
     "test": "make test"
   },
   "engines": ["node >=0.2.0"],
-  "keywords": ["json", "command", "shell"],
+  "keywords": ["json", "jsontool", "filter", "command", "shell"],
   "devDependencies": {
     "nodeunit": "0.5"
   }

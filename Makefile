@@ -1,5 +1,5 @@
 help:
-	@echo "json Makefile"
+	@echo "jsontool Makefile"
 	@echo ""
 	@echo "docs     rebuild the man page (from ronn source)"
 	@echo "test     run the test suite"

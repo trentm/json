@@ -1,4 +1,30 @@
-# json Changelog
+# json (aka jsontool) Changelog
+
+## json v1.3.1
+
+- Make "jsontool" require'able as a module. For example, you can now:
+
+        $ npm install jsontool
+        $ node
+        > var jsontool = require('jsontool')
+        > jsontool.parseLookup('a.b.c')
+        [ 'a', 'b', 'c' ]
+        > jsontool.parseLookup('my-key.0["bar"]')
+        [ 'my-key', '0', '["bar"]' ]
+        > jsontool.main(['', '', '--help'])
+        Usage: <something generating JSON on stdout> | json [options] [lookup]
+        ...
+
+  Currently other exported API is experimental and will likely change to be
+  more generally useful (e.g. the current `processDatum` isn't all handy
+  for module usage).
+
+  Note: For command-line usage, the main module has moved from "json" to
+  "lib/jsontool.js". So, if you are not using npm, you can setup the `json`
+  command via something like:
+  
+        alias json='.../json/lib/jsontool.js'
+
 
 ## json v1.3.0
 

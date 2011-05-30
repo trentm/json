@@ -1,8 +1,8 @@
 echo "# star on list"
-echo '["a", "b", "c"]' | json -x '*'
+echo '["a", "b", "c"]' | ../../lib/jsontool.js -x '*'
 
 echo "# star on list of objects"
-echo '[{"one": "un"}, {"two": "deux"}]' | json -x '*'
+echo '[{"one": "un"}, {"two": "deux"}]' | ../../lib/jsontool.js -x '*'
 
 echo "# star on list of objects, sub lookup"
-echo '[{"foo": "bar"}, {"foo": "baz"}]' | json -x '*.foo'
+echo '[{"foo": "bar"}, {"foo": "baz"}]' | ../../lib/jsontool.js -x '*.foo'

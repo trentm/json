@@ -13,11 +13,11 @@ is a single-file node.js script.
 2. Get the 'json' script and put it on your PATH somewhere. For example:
 
         cd ~/bin
-        curl https://github.com/trentm/json/raw/master/json > json
+        curl https://github.com/trentm/json/raw/master/json/lib/jsontool.js > json
         chmod 755 json
 
 
-# Usage
+# Command-Line Usage
 
 `json -h`:
 
@@ -42,6 +42,18 @@ is a single-file node.js script.
       curl -s http://search.twitter.com/search.json?q=node.js | json results
 
     See <https://github.com/trentm/json> for more.
+
+
+
+# Module Usage
+
+Since v1.3.1 you can using "jsontool" as a node.js module:
+
+    var jsontool = require('jsontool');
+    
+However, so far the module API isn't that useful. This will improve in
+subsequent releases. For now the cli is the primary focus.
+
 
 
 # Examples

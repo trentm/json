@@ -1,5 +1,5 @@
 
-/* 'json' test suite
+/* 'jsontool' test suite
  *
  * Usage:
  *      nodeunit test.js
@@ -26,7 +26,7 @@ var data = {
   //},
 
   parseLookup: function(test) {
-    var parseLookup = require("../json").parseLookup;
+    var parseLookup = require("../lib/jsontool.js").parseLookup;
     test.deepEqual(parseLookup("42"), ["42"]);
     test.deepEqual(parseLookup("a"), ["a"]);
     test.deepEqual(parseLookup("a.b"), ["a", "b"]);
