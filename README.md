@@ -13,7 +13,7 @@ is a single-file node.js script.
 2. Get the 'json' script and put it on your PATH somewhere. For example:
 
         cd ~/bin
-        curl https://github.com/trentm/json/raw/master/lib/jsontool.js > json
+        curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
         chmod 755 json
 
 
