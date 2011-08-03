@@ -1,3 +1,4 @@
+- make testall: need a version of nodeunit that doesn't use "require.paths": no longer in v0.5
 - npm/lib/utils/minimatch.js: fnmatch/glob implementation.
   Use that for more generic "*.foo" or "*.{foo,bar}" matching. Says Isaac: "it'd be cool :)".
     https://github.com/isaacs/npm/blob/master/lib/utils/minimatch.js
