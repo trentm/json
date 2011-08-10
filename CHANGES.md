@@ -2,7 +2,8 @@
 
 ## json v1.3.2
 
-- [issues #16] Fix to use `<regex object>.exec` instead of using the regex
+- [issue #17] Ensure stdout is flushed on exit.
+- [issue #16] Fix to use `<regex object>.exec` instead of using the regex
   object as a function -- no longer allowed in the v8 used in node v0.5.x.
 
 
