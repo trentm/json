@@ -1,13 +1,13 @@
 # json (aka jsontool) Changelog
 
-## json v1.3.2
+## json 1.3.2
 
 - [issue #17] Ensure stdout is flushed on exit.
 - [issue #16] Fix to use `<regex object>.exec` instead of using the regex
   object as a function -- no longer allowed in the v8 used in node v0.5.x.
 
 
-## json v1.3.1
+## json 1.3.1
 
 - Make "jsontool" require'able as a module. For example, you can now:
 
@@ -33,7 +33,7 @@
         alias json='.../json/lib/jsontool.js'
 
 
-## json v1.3.0
+## json 1.3.0
 
 - package.json and publish to npm as "jsontool" ("json" name is taken)
 - Add experimental support for '*' in the lookup. This will extract all
@@ -68,28 +68,28 @@
 - Add '-x|--experimental' option to turn on incomplete/experimental features.
 
 
-## json v1.2.1
+## json 1.2.1
 
 - [issue #12] Fix handling of output when result of lookup is `undefined`.
 
 
-## json v1.2.0
+## json 1.2.0
 
 - [issue #10] Fix for node v0.5.
 
 
-## json v1.1.9
+## json 1.1.9
 
 - [Issue 8] Don't emit a newline for empty output.
 
 
-## json v1.1.8
+## json 1.1.8
 
 - [Issue 7] Handle "HTTP/1.1 100 Continue" leading header block.
 - [Issue 4] Add a man page (using ronnjs).
 
 
-## json v1.1.7
+## json 1.1.7
 
 - [Issue 5] Fix getting a key with a period. E.g.:
 
@@ -102,12 +102,12 @@
         42
 
 
-## json v1.1.6
+## json 1.1.6
 
 - [Issue 6] Error exit value if invalid JSON.
 
 
-## json v1.1.4
+## json 1.1.4
 
 - [Issue 2] Fix bracket notation: `echo '{"foo-bar": "baz"}' | json '["foo-bar"]'`
 
