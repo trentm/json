@@ -147,16 +147,16 @@ def cut_a_release(project_name, version_file, dry_run=False):
         f = codecs.open(changes_path, 'w', 'utf-8')
         f.write(changes_txt)
         f.close()
-        sh.run('git commit %s -m "prepare for %s release"'
+        run('git commit %s -m "prepare for %s release"'
             % (changes_path, version), log.debug)
 
     # Tag version and push.
     curr_tags = set(t for t in _capture_stdout(["git", "tag", "-l"]).split('\n') if t)
     if not dry_run and version not in curr_tags:
         log.info("tag the release")
-        sh.run('git tag -a "%s" -m "version %s"' % (version, version),
+        run('git tag -a "%s" -m "version %s"' % (version, version),
             log.debug)
-        sh.run('git push --tags', log.debug)
+        run('git push --tags', log.debug)
 
     # Commits to prepare for future dev and push.
     # - update changelog file
@@ -202,9 +202,9 @@ def cut_a_release(project_name, version_file, dry_run=False):
         f.close()
 
     if not dry_run:
-        sh.run('git commit %s %s -m "prep for future dev"' % (
+        run('git commit %s %s -m "prep for future dev"' % (
             changes_path, version_file))
-        sh.run('git push')
+        run('git push')
 
 
 
@@ -324,6 +324,25 @@ class _NoReflowFormatter(optparse.IndentedHelpFormatter):
     """An optparse formatter that does NOT reflow the description."""
     def format_description(self, description):
         return description or ""
+
+def run(cmd, dry_run=False):
+    """Run the given command.
+
+    Raises OSError is the command returns a non-zero exit status.
+    """
+    log.debug("running '%s'", cmd)
+    if dry_run:
+        return
+    fixed_cmd = cmd
+    if sys.platform == "win32" and cmd.count('"') > 2:
+        fixed_cmd = '"' + cmd + '"'
+    retval = os.system(fixed_cmd)
+    if hasattr(os, "WEXITSTATUS"):
+        status = os.WEXITSTATUS(retval)
+    else:
+        status = retval
+    if status:
+        raise OSError(status, "error running '%s'" % cmd)
 
 
 #---- mainline
