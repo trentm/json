@@ -197,36 +197,37 @@ def cut_a_release(project_name, version_files, dry_run=False):
 
     # - update version file
     next_version_tuple = _tuple_from_version(next_version)
-    for i, version_file in enumerate(version_files):
-        ver_content = codecs.open(version_file, 'r', 'utf-8').read()
-        if version_file_type == "package.json":
+    for i, ver_file in enumerate(version_files):
+        ver_content = codecs.open(ver_file, 'r', 'utf-8').read()
+        ver_file_type, ver_info = parsed_version_files[i]
+        if ver_file_type == "package.json":
             marker = '"version": "%s"' % version
             if marker not in ver_content:
                 raise Error("couldn't find `%s' version marker in `%s' "
-                    "content: can't prep for subsequent dev" % (marker, version_file))
+                    "content: can't prep for subsequent dev" % (marker, ver_file))
             ver_content = ver_content.replace(marker,
                 '"version": "%s"' % next_version)
-        elif version_file_type == "javascript":
+        elif ver_file_type == "javascript":
             marker = 'var VERSION = "%s";' % version
             if marker not in ver_content:
                 raise Error("couldn't find `%s' version marker in `%s' "
-                    "content: can't prep for subsequent dev" % (marker, version_file))
+                    "content: can't prep for subsequent dev" % (marker, ver_file))
             ver_content = ver_content.replace(marker,
                 'var VERSION = "%s";' % next_version)
-        elif version_file_type == "python":
+        elif ver_file_type == "python":
             marker = "__version_info__ = %r" % (version_info,)
             if marker not in ver_content:
                 raise Error("couldn't find `%s' version marker in `%s' "
-                    "content: can't prep for subsequent dev" % (marker, version_file))
+                    "content: can't prep for subsequent dev" % (marker, ver_file))
             ver_content = ver_content.replace(marker,
                 "__version_info__ = %r" % (next_version_tuple,))
-        elif version_file_type == "version":
+        elif ver_file_type == "version":
             ver_content = next_version
         else:
-            raise Error("unknown version_file_type: %r" % version_file_type)
+            raise Error("unknown ver_file_type: %r" % ver_file_type)
         if not dry_run:
-            log.info("update version to '%s' in '%s'", next_version, version_file)
-            f = codecs.open(version_file, 'w', 'utf-8')
+            log.info("update version to '%s' in '%s'", next_version, ver_file)
+            f = codecs.open(ver_file, 'w', 'utf-8')
             f.write(ver_content)
             f.close()
 
@@ -409,13 +410,16 @@ def main(argv):
         help='the name of this project (default is the base dir name)',
         default=basename(os.getcwd()))
     parser.add_option("-f", "--version-file", metavar="PATH",
-        help='the path to the project file holding the version info')
+        action='append', dest="version_files",
+        help='The path to the project file holding the version info. Can be '
+             'specified multiple times if more than one file should be updated '
+             'with new version info. If excluded, it will be guessed.')
     parser.add_option("-n", "--dry-run", action="store_true",
         help='Do a dry-run', default=False)
     opts, args = parser.parse_args()
     log.setLevel(opts.log_level)
     
-    cut_a_release(opts.project_name, opts.version_file, dry_run=opts.dry_run)
+    cut_a_release(opts.project_name, opts.version_files, dry_run=opts.dry_run)
 
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r5)
