@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 1.3.4 (not yet released)
+## json 1.3.4
 
 - [issue #18] Fix `json --version` for standalone mode again (was broken in json 1.3.3).
 
