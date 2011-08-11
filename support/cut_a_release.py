@@ -18,7 +18,7 @@ __version__ = '.'.join(map(str, __version_info__))
 
 import sys
 import os
-from os.path import join, dirname, normpath, abspath, exists, basename
+from os.path import join, dirname, normpath, abspath, exists, basename, splitext
 from glob import glob
 import re
 import codecs
@@ -39,16 +39,16 @@ class Error(Exception):
 
 #---- main functionality
 
-def cut_a_release(project_name, version_file, dry_run=False):
+def cut_a_release(project_name, version_files, dry_run=False):
     """Cut a release.
     
     @param project_name {str}
-    @param version_file {str} Path to the file holding the version info
-        for this project.
+    @param version_files {list} List of paths to files holding the version
+        info for this project.
         
-        If not given, or None, it attempts to guess the version file:
+        If none are given it attempts to guess the version file:
         package.json or VERSION.txt or VERSION or $project_name.py
-        or lib/$project_name.py.
+        or lib/$project_name.py or $project_name.js or lib/$project_name.js.
         
         The version file can be in one of the following forms:
         
@@ -62,6 +62,11 @@ def cut_a_release(project_name, version_file, dry_run=False):
           
             __version__ = '.'.join(map(str, __version_info__))
    
+        - A .js file, in which case the file is expected to have a top-level
+          global called "VERSION" as follows:
+          
+            ver VERSION = "1.2.3";
+   
         - A "package.json" file, typical of a node.js npm-using project.
           The package.json file must have a "version" field.
         
@@ -72,7 +77,7 @@ def cut_a_release(project_name, version_file, dry_run=False):
         Granted it might not be your cup of tea. I should add support for
         just `__version__ = "1.2.3"`. I'm open to other suggestions too.
     """
-    if version_file is None:
+    if not version_files:
         log.info("guessing version file")
         candidates = [
             "package.json",
@@ -80,18 +85,21 @@ def cut_a_release(project_name, version_file, dry_run=False):
             "VERSION",
             "%s.py" % project_name,
             "lib/%s.py" % project_name,
+            "%s.js" % project_name,
+            "lib/%s.js" % project_name,
         ]
         for candidate in candidates:
             if exists(candidate):
-                version_file = candidate
+                version_files = [candidate]
                 break
         else:
             raise Error("could not find a version file: specify its path or "
                 "add one of the following to your project: '%s'"
                 % "', '".join(candidates))
-        log.info("using '%s' as version file", version_file)
+        log.info("using '%s' as version file", version_files[0])
 
-    version_file_type, version_info = _parse_version_file(version_file)
+    parsed_version_files = [_parse_version_file(f) for f in version_files]
+    version_file_type, version_info = parsed_version_files[0]
     version = _version_from_version_info(version_info)
 
     # Confirm
@@ -188,34 +196,43 @@ def cut_a_release(project_name, version_file, dry_run=False):
         f.close()
 
     # - update version file
-    ver_content = codecs.open(version_file, 'r', 'utf-8').read()
     next_version_tuple = _tuple_from_version(next_version)
-    if version_file_type == "package.json":
-        marker = '"version": "%s"' % version
-        if marker not in ver_content:
-            raise Error("couldn't find `%s' version marker in `%s' "
-                "content: can't prep for subsequent dev" % (marker, version_file))
-        ver_content = ver_content.replace(marker,
-            '"version": "%s"' % next_version)
-    elif version_file_type == "python":
-        marker = "__version_info__ = %r" % (version_info,)
-        if marker not in ver_content:
-            raise Error("couldn't find `%s' version marker in `%s' "
-                "content: can't prep for subsequent dev" % (marker, version_file))
-        ver_content = ver_content.replace(marker,
-            "__version_info__ = %r" % (next_version_tuple,))
-    elif version_file_type == "version":
-        ver_content = next_version
-    else:
-        raise Error("unknown version_file_type: %r" % version_file_type)
-    if not dry_run:
-        f = codecs.open(version_file, 'w', 'utf-8')
-        f.write(ver_content)
-        f.close()
+    for i, version_file in enumerate(version_files):
+        ver_content = codecs.open(version_file, 'r', 'utf-8').read()
+        if version_file_type == "package.json":
+            marker = '"version": "%s"' % version
+            if marker not in ver_content:
+                raise Error("couldn't find `%s' version marker in `%s' "
+                    "content: can't prep for subsequent dev" % (marker, version_file))
+            ver_content = ver_content.replace(marker,
+                '"version": "%s"' % next_version)
+        elif version_file_type == "javascript":
+            marker = 'var VERSION = "%s";' % version
+            if marker not in ver_content:
+                raise Error("couldn't find `%s' version marker in `%s' "
+                    "content: can't prep for subsequent dev" % (marker, version_file))
+            ver_content = ver_content.replace(marker,
+                'var VERSION = "%s";' % next_version)
+        elif version_file_type == "python":
+            marker = "__version_info__ = %r" % (version_info,)
+            if marker not in ver_content:
+                raise Error("couldn't find `%s' version marker in `%s' "
+                    "content: can't prep for subsequent dev" % (marker, version_file))
+            ver_content = ver_content.replace(marker,
+                "__version_info__ = %r" % (next_version_tuple,))
+        elif version_file_type == "version":
+            ver_content = next_version
+        else:
+            raise Error("unknown version_file_type: %r" % version_file_type)
+        if not dry_run:
+            log.info("update version to '%s' in '%s'", next_version, version_file)
+            f = codecs.open(version_file, 'w', 'utf-8')
+            f.write(ver_content)
+            f.close()
 
     if not dry_run:
         run('git commit %s %s -m "prep for future dev"' % (
-            changes_path, version_file))
+            changes_path, ' '.join(version_files)))
         run('git push')
 
 
@@ -273,6 +290,7 @@ def _parse_version_file(version_file):
     - package.json with "version" field
     - VERSION.txt or VERSION file with just the version string
     - python file with __version_info__
+    - .js file with `var VERSION = "1.2.3";`
     """
     f = codecs.open(version_file, 'r', 'utf-8')
     content = f.read()
@@ -284,8 +302,12 @@ def _parse_version_file(version_file):
         version_info = _version_info_from_version(obj["version"])
     elif splitext(version_file)[1] == ".py":
         version_file_type = "python"
-        m = re.search(r'^__version_info__\s*=\s*(.*?)\s*$', content, re.M)
+        m = re.search(r'^__version_info__ = (.*?)$', content, re.M)
         version_info = eval(m.group(1))
+    elif splitext(version_file)[1] == ".js":
+        version_file_type = "javascript"
+        m = re.search(r'^var VERSION = "(.*?)";$', content, re.M)
+        version_info = _version_info_from_version(m.group(1))
     else:
         # Presume a text file with just the version.
         version_file_type = "version"
