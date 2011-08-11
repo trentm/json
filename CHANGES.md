@@ -1,8 +1,12 @@
 # json (aka jsontool) Changelog
 
-## json 1.3.2
+## json 1.3.3 (not yet released)
 
 - [issue #17] Ensure stdout is flushed on exit.
+
+
+## json 1.3.2
+
 - [issue #16] Fix to use `<regex object>.exec` instead of using the regex
   object as a function -- no longer allowed in the v8 used in node v0.5.x.
 
