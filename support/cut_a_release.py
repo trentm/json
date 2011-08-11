@@ -351,7 +351,7 @@ def main(argv):
     parser.add_option("-f", "--version-file", metavar="PATH",
         help='the path to the project file holding the version info')
     parser.add_option("-n", "--dry-run", action="store_true",
-        help='Do a dry-run', default=True)  # XXX default false when done
+        help='Do a dry-run', default=False)
     opts, args = parser.parse_args()
     log.setLevel(opts.log_level)
     
