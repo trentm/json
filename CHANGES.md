@@ -2,10 +2,13 @@
 
 ## json 1.3.4 (not yet released)
 
-(nothing yet)
+- [issue #18] Fix `json --version` for standalone mode again (was broken in json 1.3.3).
+
 
 ## json 1.3.3
 
+- WARNING: `json --version` is broken when running outside the source (or npm
+  install'd) tree. I.e. this is a bad release for standalone.
 - [issue #17] Ensure stdout is flushed on exit.
 
 
