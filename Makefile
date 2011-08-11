@@ -20,11 +20,16 @@ test: node_modules/.bin/nodeunit
 testall:
 	(cd test && make testall)
 
-tag:
-	grep "var VERSION =" lib/jsontool.js | awk -F'"' '{print $$2}' > VERSION
-	@echo "* * * Create tag '`cat VERSION`'. * * *"
-	git tag -a "`cat VERSION`" -m "version `cat VERSION`"
-	rm VERSION
-	@echo "* * * Remember to 'git push --tags origin master' then perhaps 'npm publish'. * * *"
+#tag:
+#	grep "var VERSION =" lib/jsontool.js | awk -F'"' '{print $$2}' > VERSION
+#	@echo "* * * Create tag '`cat VERSION`'. * * *"
+#	git tag -a "`cat VERSION`" -m "version `cat VERSION`"
+#	rm VERSION
+#	@echo "* * * Remember to 'git push --tags origin master' then perhaps 'npm publish'. * * *"
 
-.PHONY: test tag
+cut_a_release:
+	./support/cut_a_release.py
+	@echo ""
+	@echo "# You might want to 'npm publish' now."
+
+.PHONY: test cut_a_release
