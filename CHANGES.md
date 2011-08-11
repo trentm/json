@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 1.3.3 (not yet released)
+## json 1.3.3
 
 - [issue #17] Ensure stdout is flushed on exit.
 
