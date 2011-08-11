@@ -125,7 +125,7 @@ def cut_a_release(project_name, version_file, dry_run=False):
         raise Error("top section in `%s' is for "
             "version %r, expected version %r: aborting"
             % (changes_path, top_ver, version))
-    top_nyr = changes_sections[0][1]
+    top_nyr = changes_sections[0][1].strip()
     if not top_nyr:
         answer = query_yes_no("\n* * *\n"
             "The top section in `%s' doesn't have the expected\n"
@@ -148,15 +148,27 @@ def cut_a_release(project_name, version_file, dry_run=False):
         f.write(changes_txt)
         f.close()
         run('git commit %s -m "prepare for %s release"'
-            % (changes_path, version), log.debug)
+            % (changes_path, version))
 
     # Tag version and push.
     curr_tags = set(t for t in _capture_stdout(["git", "tag", "-l"]).split('\n') if t)
     if not dry_run and version not in curr_tags:
         log.info("tag the release")
-        run('git tag -a "%s" -m "version %s"' % (version, version),
-            log.debug)
-        run('git push --tags', log.debug)
+        run('git tag -a "%s" -m "version %s"' % (version, version))
+        run('git push --tags')
+
+    # Optionally release.
+    if version_file_type == "package.json":
+        answer = query_yes_no("\n* * *\nPublish to npm?", default="yes")
+        print "* * *"
+        if answer == "yes":
+            run('npm publish')
+    elif version_file_type == "python" and exists("setup.py"):
+        answer = query_yes_no("\n* * *\nPublish to pypi?", default="yes")
+        print "* * *"
+        if answer == "yes":
+            run("%spython setup.py sdist --formats zip upload"
+                % _setup_command_prefix())
 
     # Commits to prepare for future dev and push.
     # - update changelog file
@@ -325,14 +337,12 @@ class _NoReflowFormatter(optparse.IndentedHelpFormatter):
     def format_description(self, description):
         return description or ""
 
-def run(cmd, dry_run=False):
+def run(cmd):
     """Run the given command.
 
     Raises OSError is the command returns a non-zero exit status.
     """
     log.debug("running '%s'", cmd)
-    if dry_run:
-        return
     fixed_cmd = cmd
     if sys.platform == "win32" and cmd.count('"') > 2:
         fixed_cmd = '"' + cmd + '"'
@@ -343,6 +353,15 @@ def run(cmd, dry_run=False):
         status = retval
     if status:
         raise OSError(status, "error running '%s'" % cmd)
+
+def _setup_command_prefix():
+    prefix = ""
+    if sys.platform == "darwin":
+        # http://forums.macosxhints.com/archive/index.php/t-43243.html
+        # This is an Apple customization to `tar` to avoid creating
+        # '._foo' files for extended-attributes for archived files.
+        prefix = "COPY_EXTENDED_ATTRIBUTES_DISABLE=1 "
+    return prefix
 
 
 #---- mainline
