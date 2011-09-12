@@ -11,5 +11,8 @@
 
         ValueError: Expecting : delimiter: line 7 column 18 (char 216)
 
-  Is the error location on the JSON exception object?
+  Is the error location on the JSON exception object? Don't think so.
+  Consider using: https://github.com/jesusabdullah/json-san or the equivalent use of jshint
+  for better error reporting.
+- grok json-select: https://github.com/harthur/js-select
 
