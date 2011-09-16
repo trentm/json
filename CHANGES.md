@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 1.4.0 (not yet released)
+## json 1.4.0
 
 - [issue #19] Allow multiple lookup arguments:
 
