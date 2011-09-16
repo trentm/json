@@ -10,7 +10,8 @@ is a single-file node.js script.
 
 **OR manually**:
 
-2. Get the 'json' script and put it on your PATH somewhere. For example:
+2. Get the 'json' script and put it on your PATH somewhere (it is a single file
+   with no external dependencies). For example:
 
         cd ~/bin
         curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
@@ -21,21 +22,24 @@ is a single-file node.js script.
 
 `json -h`:
 
-    Usage: <something generating JSON on stdout> | json [options] [lookup]
+    Usage: <something generating JSON on stdout> | json [options] [lookups...]
 
-    Pipe in your JSON for nicer output. Or supply a `lookup` to extract
-    a subset of the JSON. HTTP header blocks are skipped by default
-    (as from `curl -i`) by default.
+    Pipe in your JSON for nicer output. Or supply one or more `lookups`
+    to extract a subset of the JSON. HTTP header blocks (as from `curl -i`)
+    are skipped by default.
 
-    By default, the output is JSON-y: JSON except for a simple string return
+    By default, the output is JSON-y: JSON, except for a simple string return
     value, which is printed without quotes. Use '-j' or '-i' to override.
 
     Options:
-      -h, --help  print this help info and exit
-      --version   print version of this command and exit
-      -H          drop any HTTP header block
-      -i          output using node's `sys.inspect`
-      -j          output using `JSON.stringfy`, i.e. strict JSON
+      -h, --help    print this help info and exit
+      --version     print version of this command and exit
+      -q, --quiet   don't warn if input isn't valid JSON
+      -H            drop any HTTP header block
+      -i            output using node's `sys.inspect`
+      -j            output using `JSON.stringfy`, i.e. strict JSON
+      -x, --experimental
+                    enable experimental features: '*' in lookup
 
     Examples:
       curl -s http://search.twitter.com/search.json?q=node.js | json

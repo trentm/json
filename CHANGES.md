@@ -1,8 +1,16 @@
 # json (aka jsontool) Changelog
 
-## json 1.3.5 (not yet released)
+## json 1.4.0 (not yet released)
 
-(nothing yet)
+- [issue #19] Allow multiple lookup arguments:
+
+        $ echo '{"one": 1, "two": 2}' | json one two
+        1
+        2
+
+  WARNING: This involve a backward incompatible change in the JS APIs
+  `jsontool.processDatum` and `jsontool.processDatumExperimental`.
+
 
 ## json 1.3.4
 
