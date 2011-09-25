@@ -92,7 +92,12 @@ Nice output by default:
         "description": "evented I/O for v8 javascript"
       }
     }
+   
+If you want colorized output, install pygments-json:
 
+    $ pip install --user pygments-json  # or pypm install pygments-json
+    $ curl http://api.ihackernews.com/page | json | PYTHONIOENCODING=utf8 pygmentize -f console -l json | less -R
+![Screenshot of colorized output](http://i.imgur.com/T30rN.png)
 Say you just want to extract one value:
 
     $ curl -s https://github.com/api/v2/json/repos/show/joyent/node | json repository.open_issues
