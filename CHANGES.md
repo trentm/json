@@ -2,7 +2,9 @@
 
 ## json 1.4.1 (not yet released)
 
-(nothing yet)
+- [issue #9] Gracefully handle EPIPE (i.e. stdout being closed on json before
+  it is finished writing).
+
 
 ## json 1.4.0
 
