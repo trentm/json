@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 1.4.2 (not yet released)
+
+(nothing yet)
+
 ## json 1.4.1
 
 - [issue #9] Gracefully handle EPIPE (i.e. stdout being closed on json before
