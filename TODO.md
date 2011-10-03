@@ -76,6 +76,7 @@
             }
         ]
 
+- update man page for flat-array input
 - -v|--verbose option that'll include warnings: first warning is that a
   lookup bit that is '*' and '-x' was used -> obsolete warning
 

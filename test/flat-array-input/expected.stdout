@@ -1,0 +1,49 @@
+# simple
+[
+  {
+    "one": 1
+  },
+  {
+    "two": 2
+  }
+]
+
+# more complex
+[
+  {
+    "one": 1
+  },
+  {
+    "two": 1
+  },
+  [
+    "three",
+    3
+  ],
+  [
+    "four",
+    4
+  ],
+  {
+    "five": 5
+  },
+  {
+    "six": 6
+  },
+  {
+    "seven": 7
+  }
+]
+
+# cat json files
+[
+  {
+    "a": "A"
+  },
+  {
+    "b": "B"
+  },
+  {
+    "c": "C"
+  }
+]

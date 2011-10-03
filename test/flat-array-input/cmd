@@ -1,0 +1,8 @@
+echo "# simple"
+cat input1 | ../../lib/jsontool.js
+echo ""
+echo "# more complex"
+cat input2 | ../../lib/jsontool.js
+echo ""
+echo "# cat json files"
+cat dir/*.json | ../../lib/jsontool.js

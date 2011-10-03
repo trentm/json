@@ -1,8 +1,38 @@
 # json (aka jsontool) Changelog
 
-## json 1.4.2 (not yet released)
+## json 2.0.0 (not yet released)
 
-(nothing yet)
+- Support multiple top-level JSON objects as input to mean a list of
+  these object:
+  
+    $ echo '{"one": 1}
+    {"two": 1}' | ./lib/jsontool.js
+    [
+      {
+        "one": 1
+      },
+      {
+        "two": 1
+      }
+    ]
+    
+  This can be nice to process a stream of JSON objects generated from
+  multiple calls to another tool or `cat *.json | json`. Rules:
+    
+  - Only JS objects and arrays. Don't see strong need for basic
+    JS types right now and this limitation simplifies.
+  - The break between JS objects has to include a newline. I.e. good:
+
+       {"one": 1}
+       {"two": 2}
+
+    bad:
+
+       {"one": 1}{"two": 2}
+
+    This condition should be fine for typical use cases and ensures
+    no false matches inside JS strings.
+
 
 ## json 1.4.1
 
