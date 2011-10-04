@@ -128,15 +128,22 @@ for (var i=0; i < names.length; ++i) {
 
         test.expect(numTests);
         exec("bash cmd", {"cwd": dir}, function(error, stdout, stderr) {
-          var errmsg = "\n-- return value:\n" + (error && error.code) + "\n-- stdout:\n"+stdout+"\n-- stderr:\n"+stderr;
+          var errmsg = ("\n-- return value:\n" + (error && error.code)
+            + "\n-- stdout:\n" + stdout
+            + "\n-- expected stdout:\n" + expectedStdout
+            + "\n-- stderr:\n" + stderr
+            + "\n-- expected stderr:\n" + expectedStderr);
           if (expectedExitCode !== null) {
-            test.equal(expectedExitCode, error && error.code || 0, errmsg);
+            test.equal(expectedExitCode, error && error.code || 0,
+              "\n\nunexpected exit code"+errmsg);
           }
           if (expectedStdout !== null) {
-            test.equal(stdout, expectedStdout, errmsg);
+            test.equal(stdout, expectedStdout,
+              "\n\nunexpected stdout"+errmsg);
           }
           if (expectedStderr !== null) {
-            test.equal(stderr, expectedStderr, errmsg);
+            test.equal(stderr, expectedStderr,
+              "\n\nunexpected stderr"+errmsg);
           }
           test.done();
         });
