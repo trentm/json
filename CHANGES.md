@@ -2,8 +2,36 @@
 
 ## json 2.0.0 (not yet released)
 
+
+- '-a|--array' for independently processing each element of an input array.
+  
+        $ echo '[
+        {
+          "name": "Trent",
+          "id": 12,
+          "email": "trent@example.com"
+        },
+        {
+          "name": "Mark",
+          "id": 13,
+          "email": "mark@example.com"
+        }
+        ]' | json -a name email
+        Trent trent@example.com
+        Mark mark@example.com
+
+  This example shows that '-a' results in tabular output. The '-d' option
+  can be used to specify a delimiter other than the default single space, e.g.:
+  
+        json -d, -a field1 field2
+  
+  [Backward Incompatibility] This is a replacement for the experimental '*'
+  syntax in the lookup strings (previously enabled via '-x|--experimental').
+  That syntax and option has been removed.
+
 - Add '--' option processing support and error out if an unknown option is
   given.
+
 - Support multiple top-level JSON objects as input to mean a list of
   these object:
   

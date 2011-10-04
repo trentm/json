@@ -1,0 +1,21 @@
+Trent
+trent@example.com
+
+Trent trent@example.com
+Mark mark@example.com
+
+Trent trent@example.com
+
+Trent,trent@example.com
+Mark,mark@example.com
+
+{
+  "foo": "bar"
+}
+{
+  "foo": "baz"
+}
+bar
+baz
+"bar"
+"baz"
