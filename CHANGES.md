@@ -2,6 +2,8 @@
 
 ## json 2.0.0 (not yet released)
 
+- Add '--' option processing support and error out if an unknown option is
+  given.
 - Support multiple top-level JSON objects as input to mean a list of
   these object:
   

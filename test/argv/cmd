@@ -1,0 +1,11 @@
+JSON=../../lib/jsontool.js
+
+$JSON -h | grep -- --help
+
+echo ""
+$JSON --version | awk '{print $1}'
+
+$JSON --booga
+
+echo ""
+echo '{"--booga": "boo"}' | $JSON -- --booga
