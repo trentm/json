@@ -2,6 +2,12 @@
 
 ## json 2.0.0 (not yet released)
 
+- '-o | --output MODE' support. Supported modes:
+  
+        jsony (default): JSON with string quotes elided
+        json: JSON output, 2-space indent
+        json-N: JSON output, N-space indent, e.g. 'json-4'
+        inspect: node.js `util.inspect` output
 
 - '-a|--array' for independently processing each element of an input array.
   
