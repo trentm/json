@@ -6,14 +6,14 @@
 
 ## json 2.0.0
 
-- '-o | --output MODE' support. Supported modes:
+-   '-o | --output MODE' support. Supported modes:
   
         jsony (default): JSON with string quotes elided
         json: JSON output, 2-space indent
         json-N: JSON output, N-space indent, e.g. 'json-4'
         inspect: node.js `util.inspect` output
 
-- '-a|--array' for independently processing each element of an input array.
+-   '-a|--array' for independently processing each element of an input array.
   
         $ echo '[
         {
@@ -30,48 +30,48 @@
         Trent trent@example.com
         Mark mark@example.com
 
-  This example shows that '-a' results in tabular output. The '-d' option
-  can be used to specify a delimiter other than the default single space, e.g.:
+    This example shows that '-a' results in tabular output. The '-d' option
+    can be used to specify a delimiter other than the default single space, e.g.:
   
         json -d, -a field1 field2
   
-  [Backward Incompatibility] This is a replacement for the experimental '*'
-  syntax in the lookup strings (previously enabled via '-x|--experimental').
-  That syntax and option has been removed.
+    [Backward Incompatibility] This is a replacement for the experimental '*'
+    syntax in the lookup strings (previously enabled via '-x|--experimental').
+    That syntax and option has been removed.
 
-- Add '--' option processing support and error out if an unknown option is
-  given.
+-   Add '--' option processing support and error out if an unknown option is
+    given.
 
-- Support multiple top-level JSON objects as input to mean a list of
-  these object:
+-   Support multiple top-level JSON objects as input to mean a list of
+    these object:
   
-    $ echo '{"one": 1}
-    {"two": 1}' | ./lib/jsontool.js
-    [
-      {
-        "one": 1
-      },
-      {
-        "two": 1
-      }
-    ]
+        $ echo '{"one": 1}
+        {"two": 1}' | ./lib/jsontool.js
+        [
+          {
+            "one": 1
+          },
+          {
+            "two": 1
+          }
+        ]
     
-  This can be nice to process a stream of JSON objects generated from
-  multiple calls to another tool or `cat *.json | json`. Rules:
+    This can be nice to process a stream of JSON objects generated from
+    multiple calls to another tool or `cat *.json | json`. Rules:
     
-  - Only JS objects and arrays. Don't see strong need for basic
-    JS types right now and this limitation simplifies.
-  - The break between JS objects has to include a newline. I.e. good:
+    -   Only JS objects and arrays. Don't see strong need for basic
+        JS types right now and this limitation simplifies.
+    -   The break between JS objects has to include a newline. I.e. good:
 
-       {"one": 1}
-       {"two": 2}
+            {"one": 1}
+            {"two": 2}
 
-    bad:
+        bad:
 
-       {"one": 1}{"two": 2}
+            {"one": 1}{"two": 2}
 
-    This condition should be fine for typical use cases and ensures
-    no false matches inside JS strings.
+        This condition should be fine for typical use cases and ensures
+        no false matches inside JS strings.
 
 
 ## json 1.4.1

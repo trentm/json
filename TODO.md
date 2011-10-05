@@ -1,6 +1,6 @@
 # current
 
-- update README man page for -x, -d, -a changes
+- update README for 'cat *.json | json' input handling
 - -v|--verbose option that'll include warnings: first warning is that a
   lookup bit that is '*' and '-x' was used -> obsolete warning
 
