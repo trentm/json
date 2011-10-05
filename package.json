@@ -10,7 +10,7 @@
     "Trent Mick <trentm@gmail.com>"
   ],
   "bin": {
-    "json": "./lib/jsontool.js"
+    "json": "./lib/jsontool.js",
     "json2": "./lib/jsontool.js"
   },
   "main": "./lib/jsontool.js",
