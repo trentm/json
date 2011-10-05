@@ -8,13 +8,6 @@
 
 # top
 
-- -o|--output TYPE
-  'jsony' (default) is JSON except: (a) a bare string is output without
-        quotes; (b) a 
-  'json' (aka 'json-2')
-  'json-2'
-  ...
-  'compact'  # one object per line, better name?
 - npm/lib/utils/minimatch.js: fnmatch/glob implementation.
   Use that for more generic "*.foo" or "*.{foo,bar}" matching. Says Isaac: "it'd be cool :)".
     https://github.com/isaacs/npm/blob/master/lib/utils/minimatch.js
@@ -73,16 +66,6 @@
           }
         ]
 
-
-- finish '*' handling: support input of multiple json docs (see changelog entry for '*')
-
-    $ echo '[{"one": "un"}, {"two": "deux"}]' | json -x '*'
-    {
-      "one": "un"
-    }
-    {
-      "two": "deux"
-    }
 
 - The JSON syntax error sucks because it doesn't show where in the document the syntax error is. Sometimes it is hard to find.
 

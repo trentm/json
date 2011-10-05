@@ -3,49 +3,72 @@
 
 ## SYNOPSIS
 
-`<something generating JSON on stdout> | json [options] [lookup]`
+`<something generating JSON on stdout> | json [OPTIONS] [LOOKUPS]`
 
 
 ## DESCRIPTION
 
-Pipe in your JSON for nicer (pretty-printed) output. Or supply a `lookup` to
-extract a subset of the JSON. HTTP header blocks are skipped by default (as from
-`curl -i`) by default.
+Pipe in your JSON for nicer (pretty-printed) output or supply one or more
+lookups` to extract a subset of the JSON. HTTP header blocks are skipped by
+default (as from `curl -i`) by default.
 
-See a full changelog here <https://github.com/trentm/json/blob/master/CHANGES.md>
+See more complete documentation in the readme and changelog:
+
+- README: <https://github.com/trentm/json#readme>
+- Change log: <https://github.com/trentm/json/blob/master/CHANGES.md>
 
 
 ## OPTIONS
 
-By default `json` outputs results in a "flat" format that is intended to be
-of most use to the UNIX command-line. Currently the only difference between
-flat and JSON output is that a simple string result is printed *without* JSON's
-double-quotes. Other output formats:
-
-- `-i`:
-  output using node's `sys.inspect`
-
-- `-j`:
-  output using `JSON.stringfy`, i.e. strict JSON
-
-If your JSON output is a REST API response, it migth include the headers
+If your JSON output is a REST API response, it might include the headers
 (e.g. when calling with `curl -i`). By default `json` will pass those headers
 through (without choking on them). However if you want then stripped you
 can use:
 
-- `-H`:
-  drop a leading HTTP header block, if any
+`-H`
+  drop any HTTP header block (as from `curl -i ...`)
+
+
+By default `json` outputs results in a "flat" format that is intended to be
+of most use to the UNIX command-line. Currently the only difference between
+flat and JSON output is that a simple string result is printed *without* JSON's
+double-quotes. Other output formats are supported:
+
+`-o, --output MODE`
+  Specify an output mode. One of:
+      
+      jsony (default): JSON with string quotes elided
+      json: JSON output, 2-space indent
+      json-N: JSON output, N-space indent, e.g. 'json-4'
+      inspect: node.js `util.inspect` output
+  
+`-i`
+  shortcut for `-o inspect`
+
+`-j`
+  shortcut for `-o json`
+  
+
+You can process elements of an input array separately and generate tabular
+output:
+  
+`-a, --array`
+  Process input as an array of separate inputs and output in tabular form.
+  
+`-d DELIM`
+  Delimiter string for tabular output (default is ' ').
+
 
 Miscellaneous options:
 
-- `-h, --help`:
+`-h, --help`
   print this help info and exit
-- `--version`:
+
+`--version`
   print version of this command and exit
-- `-q, --quiet`:
+
+`-q, --quiet`
   don't warn if input isn't valid JSON
-- `-x, --experimental`:
-  Enable experimental features. Currently this enables '\*' in the lookup for JSON arrays.
 
 
 ## EXAMPLES
@@ -53,7 +76,7 @@ Miscellaneous options:
 A REST API:
 
     $ curl -s http://github.com/api/v2/json/repos/show/joyent/node
-    {"repository":{"has_wiki":true,"forks":597,"language":"C++","pushed_at":"2011/03/18 15:19:24 -0700","homepage":"http://nodejs.org/","open_issues":271,"fork":false,"has_issues":true,"url":"https://github.com/joyent/node","created_at":"2009/05/27 09:29:46 -0700","size":20984,"private":false,"has_downloads":false,"name":"node","owner":"joyent","organization":"joyent","watchers":5584,"description":"evented I/O for v8 javascript"}}
+    {"repository":{"has_wiki":true,"forks":597,"language":"C++",...}
 
 Nice output by default:
 
@@ -83,10 +106,11 @@ Nice output by default:
 
 Say you just want to extract one value:
 
-    $ curl -s https://github.com/api/v2/json/repos/show/joyent/node | json repository.open_issues
+    $ curl -s https://github.com/api/v2/json/repos/show/joyent/node \
+      | json repository.open_issues
     271
 
-More examples at <https://github.com/trentm/json#readme>
+More examples at <https://github.com/trentm/json#readme>.
 
 
 ## BUGS
