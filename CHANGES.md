@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.0.1 (not yet released)
+
+(nothing yet)
+
 ## json 2.0.0
 
 - '-o | --output MODE' support. Supported modes:
