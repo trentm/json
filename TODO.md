@@ -1,18 +1,17 @@
 # current
 
+- BUG: this doesn't return all content. Need to use a real fix for all stdout flush!
+    echo foo bar | xargs -n1 -I{} curl http://github.com/api/v2/json/issues/search/joyent/node/open/{} | bin/json
+- also arrayification doesn't work for:
+    echo foo bar | xargs -n1 -I{} curl http://github.com/api/v2/json/issues/search/joyent/node/open/{} | bin/json
+  Need to consider allowing '}{' on the same line -- despite possible false positive
+
 - update README for 'cat *.json | json' input handling
-- -v|--verbose option that'll include warnings: first warning is that a
-  lookup bit that is '*' and '-x' was used -> obsolete warning
 
   
 
 # top
 
-- npm/lib/utils/minimatch.js: fnmatch/glob implementation.
-  Use that for more generic "*.foo" or "*.{foo,bar}" matching. Says Isaac: "it'd be cool :)".
-    https://github.com/isaacs/npm/blob/master/lib/utils/minimatch.js
-  Note: probably not using minimatch here. Just * ? [RANGE] and {CHOICES} support.
-  Not sure of real value of "**" support.
 - edit support:
     $ json -e foo=bar
     {

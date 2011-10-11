@@ -287,6 +287,25 @@ Or a hacked up "compact" output mode which prints the elements of an array on th
     ]
 
 
+# Multiple top-level JSON objects
+
+`json` supports "arrayifying" multiple top-level JSON objects on its input:
+
+    $ echo '{"one": 1}
+    {"two": 1}' | ./lib/jsontool.js
+    [
+      {
+        "one": 1
+      },
+      {
+        "two": 1
+      }
+    ]
+
+This can most often be useful when wanting to process the output of a command
+that generates JSON, run multiple times.
+
+
 
 # Test suite
 
