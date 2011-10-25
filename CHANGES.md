@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.0.2 (not yet released)
+
+(nothing yet)
+
 ## json 2.0.1
 
 - [issue#23] Fix output in '-a|--array' mode if one or more keys don't
