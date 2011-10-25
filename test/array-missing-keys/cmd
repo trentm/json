@@ -1,0 +1,6 @@
+JSON=../../lib/jsontool.js
+cat input | $JSON -a a
+echo ""
+cat input | $JSON -a a b
+echo ""
+cat input | $JSON -a a b -d,

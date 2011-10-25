@@ -2,7 +2,9 @@
 
 ## json 2.0.1 (not yet released)
 
-(nothing yet)
+- [issue#23] Fix output in '-a|--array' mode if one or more keys don't
+  exist in one or more of the array items.
+
 
 ## json 2.0.0
 
