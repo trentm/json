@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 2.0.1 (not yet released)
+## json 2.0.1
 
 - [issue#23] Fix output in '-a|--array' mode if one or more keys don't
   exist in one or more of the array items.
