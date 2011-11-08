@@ -2,7 +2,8 @@
 
 ## json 2.0.3 (not yet released)
 
-(nothing yet)
+- Fix stdout flushing in some cases.
+
 
 ## json 2.0.2
 
