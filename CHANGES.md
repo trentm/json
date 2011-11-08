@@ -2,6 +2,14 @@
 
 ## json 2.0.3 (not yet released)
 
+- Allow auto-arrayification of separate JSON objects without a separating newline.
+
+        $ echo '{"a":1}{"b":2}' | bin/json -o json-0
+        [{"a":1},{"b":2}]
+
+  The rules for auto-arrayification then are: Objects and arrays only,
+  separated by no space or space including a newline.
+
 - Fix stdout flushing in some cases.
 
 

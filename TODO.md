@@ -1,9 +1,5 @@
 # current
 
-- also arrayification doesn't work for:
-    echo foo bar | xargs -n1 -I{} curl http://github.com/api/v2/json/issues/search/joyent/node/open/{} | bin/json
-  Need to consider allowing '}{' on the same line -- despite possible false positive
-
 - update README for 'cat *.json | json' input handling
 
   

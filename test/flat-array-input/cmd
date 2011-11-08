@@ -4,5 +4,8 @@ echo ""
 echo "# more complex"
 cat input2 | ../../lib/jsontool.js
 echo ""
+echo "# on single line"
+cat input3 | ../../lib/jsontool.js
+echo ""
 echo "# cat json files"
 cat dir/*.json | ../../lib/jsontool.js

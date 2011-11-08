@@ -35,6 +35,16 @@
   }
 ]
 
+# on single line
+[
+  {
+    "one": 1
+  },
+  {
+    "two": 2
+  }
+]
+
 # cat json files
 [
   {
