@@ -21,7 +21,7 @@
   "engines": ["node >=0.2.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
   "devDependencies": {
-    "nodeunit": "0.5",
+    "nodeunit": "0.6",
     "ronn": "0.3.6"
   }
 }

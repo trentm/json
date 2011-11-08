@@ -2,7 +2,8 @@
 
 ## json 2.0.2 (not yet released)
 
-(nothing yet)
+- Add node v0.6 support. Drop v0.2 and v0.3 support.
+
 
 ## json 2.0.1
 
