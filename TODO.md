@@ -1,9 +1,3 @@
-# current
-
-- update README for 'cat *.json | json' input handling
-
-  
-
 # top
 
 - edit support:

@@ -2,7 +2,39 @@
 
 ## json 2.0.3 (not yet released)
 
-- Allow auto-arrayification of separate JSON objects without a separating newline.
+- Auto-arrayification: Drop support for arrayifying an array adjacent to
+  an object. I.e. only arrayify adjacent objects *or* adjacent arrays.
+
+- Auto-arrayification: Change "arrayification" of adjacent *arrays* to be
+  a single flat arrays of the input arrays' elements. Before:
+  
+        $ echo '[1,2][3,4]' | bin/json
+        [
+          [
+            1,
+            2,
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+
+  and now:
+
+        $ echo '[1,2][3,4]' | bin/json
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+
+  This is expected to be more useful in practice.
+
+- Auto-arrayification: Allow JSON objects (or arrays) to be "arrayified"
+  if not separated by any space. Previously a newline (at least) separation
+  was required. So, for example, the following now works:
 
         $ echo '{"a":1}{"b":2}' | bin/json -o json-0
         [{"a":1},{"b":2}]

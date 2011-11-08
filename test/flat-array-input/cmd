@@ -1,11 +1,31 @@
+JSON="node ../../lib/jsontool.js -q -o json-0"
+
 echo "# simple"
-cat input1 | ../../lib/jsontool.js
+cat objects.input | $JSON
+echo ""
+echo "# on same line"
+cat objects-on-same-line.input | $JSON
 echo ""
 echo "# more complex"
-cat input2 | ../../lib/jsontool.js
+cat objects-complex.input | $JSON
 echo ""
-echo "# on single line"
-cat input3 | ../../lib/jsontool.js
+echo "# simple arrays"
+cat arrays.input | $JSON
+echo ""
+echo "# on same line"
+cat arrays-on-same-line.input | $JSON
+echo ""
+echo "# more complex"
+cat arrays-complex.input | $JSON
 echo ""
 echo "# cat json files"
-cat dir/*.json | ../../lib/jsontool.js
+cat dir/*.json | $JSON
+echo ""
+echo "# objects on same line (space FAIL)"
+cat objects-on-same-line-fail.input | $JSON
+echo ""
+echo "# arrays on same line (space FAIL)"
+cat arrays-on-same-line-fail.input | $JSON
+echo ""
+echo "# mixed objects and arrays FAIL"
+cat mixed-objects-and-arrays.input | $JSON

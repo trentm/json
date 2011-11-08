@@ -22,35 +22,10 @@ is a single-file node.js script.
 
 `json -h`:
 
-    Usage: <something generating JSON on stdout> | json [options] [lookups...]
+    Usage:
+        <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
 
-    Pipe in your JSON for nicer output or supply one or more `lookups`
-    to extract a subset of the JSON. HTTP header blocks (as from `curl -i`)
-    are skipped by default.
-
-    Options:
-      -h, --help    print this help info and exit
-      --version     print version of this command and exit
-      -q, --quiet   don't warn if input isn't valid JSON
-
-      -H            drop any HTTP header block (as from `curl -i ...`)
-      -a, --array   process input as an array of separate inputs
-                    and output in tabular form
-      -d DELIM      delimiter string for tabular output (default is ' ')
-
-      -o, --output MODE   Specify an output mode. One of
-                      jsony (default): JSON with string quotes elided
-                      json: JSON output, 2-space indent
-                      json-N: JSON output, N-space indent, e.g. 'json-4'
-                      inspect: node.js `util.inspect` output
-      -i            shortcut for `-o inspect`
-      -j            shortcut for `-o json`
-
-    Examples:
-      curl -s http://search.twitter.com/search.json?q=node.js | json
-      curl -s http://search.twitter.com/search.json?q=node.js | json results
-
-    See <https://github.com/trentm/json#readme> for more complete docs.
+    ...
 
 
 
@@ -219,6 +194,45 @@ The **`-d` option can be used to specify a delimiter**:
     104,1640,https://github.com/mishoo/UglifyJS
     ...
 
+# Auto-arrayification
+
+Adjacent objects or arrays are 'arrayified'. To attempt to avoid false
+positives inside JSON strings, *adjacent* elements must have either no
+whitespace separation or at least a newline separation. Examples:
+
+    $ echo '{"a":1}{"b":2}' | json
+    [
+      {
+        "a": 1
+      },
+      {
+        "b": 2
+      }
+    ]
+    $ echo '[1,2][3,4]' | json
+    [
+      1,
+      2,
+      3,
+      4
+    ]
+
+This can be useful when processing a number of JSON files, e.g.:
+
+    $ cat my_data/*.json | json ...
+
+Or when composing multiple JSON API response, e.g. this somewhat contrived
+search for node.js bugs mentioning "tty" or "windows":
+
+    $ echo tty windows | xargs -n1 -I{} curl -s \
+        http://github.com/api/v2/json/issues/search/joyent/node/open/{} \
+        | json -a issues | json -a number title
+    623 Non-userfacing native modules should be prefixed with _
+    861 child_process fails after stdin close
+    1157 `child_process` module should read / write password prompts
+    1180 Ctrl+Shift+BS can't be input.
+    ...
+
 
 # Output flavours
 
@@ -287,20 +301,7 @@ Or a hacked up "compact" output mode which prints the elements of an array on th
     ]
 
 
-# Multiple top-level JSON objects
 
-`json` supports "arrayifying" multiple top-level JSON objects on its input:
-
-    $ echo '{"one": 1}
-    {"two": 1}' | ./lib/jsontool.js
-    [
-      {
-        "one": 1
-      },
-      {
-        "two": 1
-      }
-    ]
 
 This can most often be useful when wanting to process the output of a command
 that generates JSON, run multiple times.

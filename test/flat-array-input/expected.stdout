@@ -1,59 +1,29 @@
 # simple
-[
-  {
-    "one": 1
-  },
-  {
-    "two": 2
-  }
-]
+[{"one":1},{"two":2}]
+
+# on same line
+[{"one":1},{"two":2}]
 
 # more complex
-[
-  {
-    "one": 1
-  },
-  {
-    "two": 1
-  },
-  [
-    "three",
-    3
-  ],
-  [
-    "four",
-    4
-  ],
-  {
-    "five": 5
-  },
-  {
-    "six": 6
-  },
-  {
-    "seven": 7
-  }
-]
+[{"one":1},{"two":2},{"three":3},{"four":4},{"five":5}]
 
-# on single line
-[
-  {
-    "one": 1
-  },
-  {
-    "two": 2
-  }
-]
+# simple arrays
+["a","b","c","d"]
+
+# on same line
+["a","b","c","d"]
+
+# more complex
+["one",1,"two",2,"three",3,"four",4,"five",5]
 
 # cat json files
-[
-  {
-    "a": "A"
-  },
-  {
-    "b": "B"
-  },
-  {
-    "c": "C"
-  }
-]
+[{"a":"A"},{"b":"B"},{"c":"C"}]
+
+# objects on same line (space FAIL)
+{"one": 1} {"two": 2}
+
+# arrays on same line (space FAIL)
+["a", "b"] ["c", "d"]
+
+# mixed objects and arrays FAIL
+{"one": 1} ["a", "b"] {"two": 2}
