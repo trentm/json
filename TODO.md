@@ -1,9 +1,5 @@
 # current
 
-- BUG: this doesn't return all content. Need to use a real fix for all stdout flush!
-    echo foo bar | xargs -n1 -I{} curl http://github.com/api/v2/json/issues/search/joyent/node/open/{} | bin/json
-  Aka:
-        cat foo-bar-github | bin/json
 - also arrayification doesn't work for:
     echo foo bar | xargs -n1 -I{} curl http://github.com/api/v2/json/issues/search/joyent/node/open/{} | bin/json
   Need to consider allowing '}{' on the same line -- despite possible false positive
