@@ -1,7 +1,7 @@
 {
   "name": "jsontool",
   "description": "a 'json' command for massaging JSON on your Unix command line",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/trentm/json.git"

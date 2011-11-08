@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.0.3 (not yet released)
+
+(nothing yet)
+
 ## json 2.0.2
 
 - Add node v0.6 support. Drop v0.2 and v0.3 support.
