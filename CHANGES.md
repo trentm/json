@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.0.4 (not yet released)
+
+(nothing yet)
+
 ## json 2.0.3
 
 - Auto-arrayification: Drop support for arrayifying an array adjacent to
