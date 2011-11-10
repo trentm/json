@@ -1,6 +1,13 @@
 A "json" command for massaging JSON on your Unix command line. This
 is a single-file node.js script.
 
+    $ echo '{"foo":"bar"}' | json
+    {
+      "foo": "bar"
+    }
+    $ echo '{"foo":"bar"}' | json foo
+    bar
+
 
 # Installation
 
@@ -17,26 +24,29 @@ is a single-file node.js script.
         curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
         chmod 755 json
 
+You should now have "json" on your PATH:
+
+    $ json --version
+    json 2.0.3
+
+
+# Test suite
+
+    make test
+
+I test against node 0.4, 0.5 and 0.6.
+
+
+# License
+
+MIT (see the fine LICENSE.txt file).
+
 
 # Command-Line Usage
 
-`json -h`:
+    <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
 
-    Usage:
-        <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
-
-    ...
-
-
-
-# Module Usage
-
-Since v1.3.1 you can using "jsontool" as a node.js module:
-
-    var jsontool = require('jsontool');
-
-However, so far the module API isn't that useful. This will improve in
-subsequent releases. For now the cli is the primary focus.
+See `json --help` output for full details.
 
 
 
@@ -194,6 +204,7 @@ The **`-d` option can be used to specify a delimiter**:
     104,1640,https://github.com/mishoo/UglifyJS
     ...
 
+
 # Auto-arrayification
 
 Adjacent objects or arrays are 'arrayified'. To attempt to avoid false
@@ -234,7 +245,7 @@ search for node.js bugs mentioning "tty" or "windows":
     ...
 
 
-# Output flavours
+# Output formatting
 
 You can use the '-o MODE' option (or '--output MODE') to control the output
 flavour. By default the output is "jsony" (JSON, except that a simple string
@@ -292,35 +303,16 @@ You can get colored (non-JSON) output using node.js's [`util.inspect`](http://no
     [ { name: 'Trent' },
       { name: 'Mark' } ]
 
-Or a hacked up "compact" output mode which prints the elements of an array on their own line:
-
-    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json -o compact
-    [
-      {"name":"Trent"},
-      {"name":"Mark"}
-    ]
 
 
+# Module Usage
 
+Since v1.3.1 you can using "jsontool" as a node.js module:
 
-This can most often be useful when wanting to process the output of a command
-that generates JSON, run multiple times.
+    var jsontool = require('jsontool');
 
-
-
-# Test suite
-
-    make test
-
-Note that the 'utf8' test fails with a V8 build before  [revision
-5399](http://code.google.com/p/v8/source/detail?r=5399), see
-<http://code.google.com/p/v8/issues/detail?id=855>. I'm not sure exactly what
-node versions this corresponds to, but at least: broken in node 0.2.5 and
-working in node 0.4.0.
-
-If you are stuck with an older node and don't want the utf8 failure in your face:
-
-    TEST_ONLY=-utf8 make test
+However, so far the module API isn't that useful. This will improve in
+subsequent releases. For now the cli is the primary focus.
 
 
 
