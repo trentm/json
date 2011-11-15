@@ -24,7 +24,7 @@
           ]
         ]
 
-  and now:
+    and now:
 
         $ echo '[1,2][3,4]' | bin/json
         [
@@ -34,17 +34,17 @@
           4
         ]
 
-  This is expected to be more useful in practice.
+    This is expected to be more useful in practice.
 
-- Auto-arrayification: Allow JSON objects (or arrays) to be "arrayified"
-  if not separated by any space. Previously a newline (at least) separation
-  was required. So, for example, the following now works:
+-   Auto-arrayification: Allow JSON objects (or arrays) to be "arrayified"
+    if not separated by any space. Previously a newline (at least) separation
+    was required. So, for example, the following now works:
 
         $ echo '{"a":1}{"b":2}' | bin/json -o json-0
         [{"a":1},{"b":2}]
 
-  The rules for auto-arrayification then are: Objects and arrays only,
-  separated by no space or space including a newline.
+    The rules for auto-arrayification then are: Objects and arrays only,
+    separated by no space or space including a newline.
 
 - Fix stdout flushing in some cases.
 
