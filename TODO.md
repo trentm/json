@@ -65,4 +65,8 @@
   Is the error location on the JSON exception object? Don't think so.
   Consider using: https://github.com/jesusabdullah/json-san or the equivalent use of jshint
   for better error reporting.
+  
+  v8: http://code.google.com/p/v8/issues/detail?id=1480
+  spidermonkey has it: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/SyntaxError
+  
 
