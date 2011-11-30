@@ -21,7 +21,8 @@
   "engines": ["node >=0.2.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
   "devDependencies": {
-    "nodeunit": "0.6",
+    "uglify-js": "1.1.x",
+    "nodeunit": "0.6.x",
     "ronn": "0.3.6"
   }
 }

@@ -1,14 +1,14 @@
-help:
-	@echo "jsontool Makefile"
-	@echo ""
-	@echo "docs     rebuild the man page (from ronn source)"
-	@echo "test     run the test suite"
-	@echo "tag      create a git tag for current version"
+all:
 
 node_modules/.bin/ronn:
 	npm install
 node_modules/.bin/nodeunit:
 	npm install
+node_modules/.bin/uglifyjs:
+	npm install
+deps/JSON-js/json_parse.js:
+	git submodule update --init
+
 
 # Ensure jsontool.js and package.json have the same version.
 versioncheck:
@@ -27,4 +27,8 @@ testall:
 cut_a_release: versioncheck
 	./support/cut_a_release.py -f package.json -f lib/jsontool.js
 
-.PHONY: test cut_a_release
+# Update the embedded minified "function json_parse" in lib/jsontool.js.
+update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
+	@./support/update_json_parse.js
+
+.PHONY: test cut_a_release update_json_parse
