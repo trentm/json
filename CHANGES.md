@@ -1,8 +1,17 @@
 # json (aka jsontool) Changelog
 
-## json 2.0.4 (not yet released)
+## json 2.1.0 (not yet released)
 
-(nothing yet)
+- Improve error message when input is not JSON to include context and line
+  and column position. This is implemented using a JSON parser from
+  (<https://github.com/douglascrockford/JSON-js>). Example:
+
+        $ echo "[1,,2]" | json
+        json: error: input is not JSON: Unexpected ',' at line 1, column 4:
+            [1,,2]
+            ...^
+        [1,,2]
+
 
 ## json 2.0.3
 
