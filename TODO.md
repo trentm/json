@@ -54,19 +54,3 @@
         ]
 
 
-- The JSON syntax error sucks because it doesn't show where in the document the syntax error is. Sometimes it is hard to find.
-
-        json: error: doesn't look like JSON: SyntaxError: Unexpected token { (buffer="{...
-
-  Compare to Python's json module:
-
-        ValueError: Expecting : delimiter: line 7 column 18 (char 216)
-
-  Is the error location on the JSON exception object? Don't think so.
-  Consider using: https://github.com/jesusabdullah/json-san or the equivalent use of jshint
-  for better error reporting.
-  
-  v8: http://code.google.com/p/v8/issues/detail?id=1480
-  spidermonkey has it: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/SyntaxError
-  
-
