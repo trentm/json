@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.1.1 (not yet released)
+
+(nothing yet)
+
 ## json 2.1.0
 
 - Improve error message when input is not JSON to include context and line
