@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 2.1.0 (not yet released)
+## json 2.1.0
 
 - Improve error message when input is not JSON to include context and line
   and column position. This is implemented using a JSON parser from
