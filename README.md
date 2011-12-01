@@ -1,5 +1,6 @@
-A "json" command for massaging JSON on your Unix command line. This
-is a single-file node.js script.
+A "json" command for working with JSON on the command line. It is a
+single-file node.js script with no external deps (other than
+[node](https://github.com/joyent/node) itself). Here is a taste:
 
     $ echo '{"foo":"bar"}' | json
     {
@@ -8,12 +9,20 @@ is a single-file node.js script.
     $ echo '{"foo":"bar"}' | json foo
     bar
 
+Use it to:
+
+- pretty-print JSON to help read it
+- extract particular values
+- get details on JSON syntax errors (handy for config files)
+
+Read on for many more examples.
+
 
 # Installation
 
 1. Get [node](http://nodejs.org) and [npm](http://npmjs.org).
 
-2. `npm install -g jsontool`.
+2. `npm install -g jsontool`
 
 **OR manually**:
 
@@ -27,7 +36,7 @@ is a single-file node.js script.
 You should now have "json" on your PATH:
 
     $ json --version
-    json 2.0.3
+    json 2.1.0
 
 
 # Test suite
@@ -139,8 +148,8 @@ JSON data and eval'd.)
 
 # Array processing with `-a`
 
-`json` includes `-a` (aka `--array`) option for **processing each element of
-an input JSON array independently** and **using tabular output**. Let'sContinuing
+`json` includes the `-a` (aka `--array`) option for **processing each element of
+an input JSON array independently** and **using tabular output**. Continuing
 our example above, let's first get a list of repositories for a "nodejs"
 search on github:
 
@@ -168,7 +177,7 @@ We can then print a table with just some fields as follows:
     292 https://github.com/LearnBoost/socket.io
 
 Ultimately this can be useful for then using other command-line tools. For
-example, we could get the list of top-five most forks "nodejs" github
+example, we could get the list of top-five most forked "nodejs" github
 repos:
 
     $ curl -s http://github.com/api/v2/json/repos/search/nodejs \
@@ -304,10 +313,27 @@ You can get colored (non-JSON) output using node.js's [`util.inspect`](http://no
       { name: 'Mark' } ]
 
 
+# Validating JSON
+
+Since v1.2.0 `json` will give position information and context for JSON
+syntax errors (`SyntaxError`). This can be handy for validating data and
+config files:
+
+    $ cat config.json | json
+    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+                , { "name": "smartos64-1.4.7"
+            ....^
+    {
+        "use-proxy": false
+    ...
+    $ echo $?
+    1
+
+
 
 # Module Usage
 
-Since v1.3.1 you can using "jsontool" as a node.js module:
+Since v1.3.1 you can use "jsontool" as a node.js module:
 
     var jsontool = require('jsontool');
 
