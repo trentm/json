@@ -43,6 +43,11 @@ You should now have "json" on your PATH:
 
     make test
 
+You can also limit (somewhat) which tests are run with the `TEST_ONLY` envvar,
+e.g.:
+
+    cd test && TEST_ONLY=executable nodeunit test.js
+
 I test against node 0.4, 0.5 and 0.6.
 
 
@@ -329,6 +334,33 @@ config files:
     $ echo $?
     1
 
+
+# Executing code snippets on input
+
+You can use the `-e CODE` option to execute small code snippets to massage
+the input data. Some examples (generally use `this.<key>` to refer to a key):
+
+    $ echo '{"foo": "bar"}' | json -e 'this.foo="baz"'
+    {"foo":"baz"}
+
+Or omit the `this.` as a shortcut:
+
+    $ echo '{"foo": "bar"}' | json -e 'foo="baz"'
+    {"foo":"baz"}
+    $ echo '{"age": 38}' | json -e 'age++'
+    {"age":39}
+
+Set a key to `undefined` to remove it:
+    
+    $ echo '{"one": 1, "two": 2}' | json -e 'this.one=undefined'
+    {"two":2}
+
+Arrays can be finnicky:
+
+    $ echo '[1,1]' | json -e 'this[0]++'
+    [2,1]
+    $ echo '["a", "b"]' | json -e 'this[3]="d"'
+    ["a","b",null,"d"]
 
 
 # Module Usage

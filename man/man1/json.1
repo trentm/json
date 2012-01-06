@@ -1,7 +1,7 @@
 .\" Generated with Ronnjs/v0.1
 .\" http://github.com/kapouer/ronnjs/
 .
-.TH "JSON" "1" "October 2011" "" ""
+.TH "JSON" "1" "January 2012" "" ""
 .
 .SH "NAME"
 \fBjson\fR \-\- JSON love for your command line
@@ -76,6 +76,17 @@ output:
 .P
 \fB\-d DELIM\fR
   Delimiter string for tabular output (default is \' \')\.
+.
+.P
+You can process the input before filtering is done:
+.
+.P
+\fB\-e CODE\fR
+  Execute the given code on input, on each array item if \'\-a\' is used\.
+  Generally refer to a key as \fBthis\.<key>\fR\|\.
+  If datum is an object, then a shortcut is \fB<key>\fR\|\.
+  To remove a key, use \fB<key> = undefined\fR\|\.
+  For array items: \fBthis[<index>] = 42\fR\|\.
 .
 .P
 Miscellaneous options:

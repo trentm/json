@@ -1,5 +1,6 @@
 # top
 
+- 'make man'? Add to platform?
 - edit support:
     $ json -e foo=bar
     {
@@ -42,15 +43,34 @@
         {
           "age": 38
         }
-        $ echo '[{"age":38}, {"age":21}]' | json -c 'this.age > 30'
+        $ echo '[{"age":38}, {"age": 42}, {"age":21}]' | json -a -c 'this.age > 30'
         {
           "age": 38
         }
-        # or this (???):
-        [
-          {
-            "age": 38
-          }
-        ]
+        {
+          "age": 42
+        }
+
+
+echo '{"foo": "bar"}' | jsondev -e 'this.foo="baz"'
+        {
+          "foo": "baz"
+        }
+echo '{"age": 38}' | jsondev -e 'this.age++'
+        {
+          "age": 39
+        }
+
+echo '{"age": 38}' | jsondev -c 'this.age > 30'
+        {
+          "age": 38
+        }
+echo '[{"age":38}, {"age": 42}, {"age":21}]' | jsondev -a -c 'this.age > 30'
+        {
+          "age": 38
+        }
+        {
+          "age": 42
+        }
 
 

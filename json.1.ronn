@@ -59,6 +59,16 @@ output:
   Delimiter string for tabular output (default is ' ').
 
 
+You can process the input before filtering is done:
+
+`-e CODE`
+  Execute the given code on input, on each array item if '-a' is used.
+  Generally refer to a key as `this.<key>`.
+  If datum is an object, then a shortcut is `<key>`.
+  To remove a key, use `<key> = undefined`.
+  For array items: `this[<index>] = 42`.
+
+
 Miscellaneous options:
 
 `-h, --help`
