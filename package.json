@@ -18,7 +18,7 @@
   "scripts": {
     "test": "make test"
   },
-  "engines": ["node >=0.2.0"],
+  "engines": ["node >=0.4.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
   "devDependencies": {
     "uglify-js": "1.1.x",
