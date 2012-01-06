@@ -1,6 +1,6 @@
 # json (aka jsontool) Changelog
 
-## json 2.2.0 (not yet released)
+## json 2.2.0
 
 - New "-e CODE" option to execute the given code on the input object; or,
   if '-a/--array' is given, then on each item in the input array. Execution
