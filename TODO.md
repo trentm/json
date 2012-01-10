@@ -1,23 +1,7 @@
 # top
 
-- 'make man'? Add to platform?
-- edit support:
-    $ json -e foo=bar
-    {
-      "foo": "bar"
-    }
-    $ echo '{"foo": "bar"}' | json -e foo=baz
-    {
-      "foo": "baz"
-    }
-  jsawk is especially nice (https://github.com/micha/jsawk)
-  Jsawk-y version here would be:
-    $ echo '{"foo": "bar"}' | json -e 'this.foo="baz"'
-    {
-      "foo": "baz"
-    }
-
-  Think about conditionals as well. There is json-command
+- Add man page to platform?
+- Think about conditionals as well. There is json-command
   (https://github.com/zpoley/json-command) but I'm having difficulty groking
   that.
     

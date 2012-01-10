@@ -1,5 +1,10 @@
 # json (aka jsontool) Changelog
 
+## json 2.2.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 2.2.0
 
 - New "-e CODE" option to execute the given code on the input object; or,

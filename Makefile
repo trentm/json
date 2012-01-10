@@ -12,7 +12,7 @@ deps/JSON-js/json_parse.js:
 
 # Ensure jsontool.js and package.json have the same version.
 versioncheck:
-	@[[ `cat package.json | bin/json version` == `grep '^var VERSION' lib/jsontool.js | awk -F'"' '{print $$2}'` ]]
+	[[ `cat package.json | bin/json version` == `grep '^var VERSION' lib/jsontool.js | awk -F'"' '{print $$2}'` ]]
 
 docs: node_modules/.bin/ronn
 	mkdir -p man/man1
