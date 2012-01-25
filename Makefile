@@ -24,11 +24,11 @@ test: node_modules/.bin/nodeunit
 testall:
 	(cd test && make testall)
 
-cut_a_release: versioncheck
-	./support/cut_a_release.py -f package.json -f lib/jsontool.js
+cutarelease: versioncheck
+	./support/cutarelease.py -f package.json -f lib/jsontool.js
 
 # Update the embedded minified "function json_parse" in lib/jsontool.js.
 update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
 	@./support/update_json_parse.js
 
-.PHONY: test cut_a_release update_json_parse
+.PHONY: test cutarelease update_json_parse

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2011 Trent Mick
+# Copyright (c) 2009-2012 Trent Mick
 
-"""cut_a_release -- Cut a release of your project.
+"""cutarelease -- Cut a release of your project.
 
 A script that will help cut a release for a git-based project that follows
 a few conventions. It'll update your changelog (CHANGES.md), add a git
@@ -13,7 +13,7 @@ Conventions:
 - XXX
 """
 
-__version_info__ = (1, 0, 0)
+__version_info__ = (1, 0, 1)
 __version__ = '.'.join(map(str, __version_info__))
 
 import sys
@@ -30,7 +30,7 @@ import json
 
 #---- globals and config
 
-log = logging.getLogger("cut_a_release")
+log = logging.getLogger("cutarelease")
     
 class Error(Exception):
     pass
@@ -39,7 +39,7 @@ class Error(Exception):
 
 #---- main functionality
 
-def cut_a_release(project_name, version_files, dry_run=False):
+def cutarelease(project_name, version_files, dry_run=False):
     """Cut a release.
     
     @param project_name {str}
@@ -120,7 +120,7 @@ def cut_a_release(project_name, version_files, dry_run=False):
         raise Error("'%s' not found" % changes_path)
     changes_txt = changes_txt_before = codecs.open(changes_path, 'r', 'utf-8').read()
     
-    changes_parser = re.compile(r'^## %s (?P<ver>[\d\.abc]+)'
+    changes_parser = re.compile(r'^## (?:%s )?(?P<ver>[\d\.abc]+)'
         r'(?P<nyr>\s+\(not yet released\))?'
         r'(?P<body>.*?)(?=^##|\Z)' % project_name, re.M | re.S)
     changes_sections = changes_parser.findall(changes_txt)
@@ -394,7 +394,7 @@ def main(argv):
     log.setLevel(logging.INFO)
 
     # Parse options.
-    parser = optparse.OptionParser(prog="cut_a_release", usage='',
+    parser = optparse.OptionParser(prog="cutarelease", usage='',
         version="%prog " + __version__, description=__doc__,
         formatter=_NoReflowFormatter())
     parser.add_option("-v", "--verbose", dest="log_level",
@@ -419,7 +419,7 @@ def main(argv):
     opts, args = parser.parse_args()
     log.setLevel(opts.log_level)
     
-    cut_a_release(opts.project_name, opts.version_files, dry_run=opts.dry_run)
+    cutarelease(opts.project_name, opts.version_files, dry_run=opts.dry_run)
 
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r5)
