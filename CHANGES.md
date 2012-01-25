@@ -3,7 +3,8 @@
 ## json 2.2.1 (not yet released)
 
 - Hack workaround for issue #24 to not get a spurious "process.stdout cannot be
-  closed" from current node 0.6 versions.
+  closed" from current node 0.6 versions. Note: currently this guard is only
+  applied for node v0.6.0..v0.6.8 inclusive.
 
 
 ## json 2.2.0
