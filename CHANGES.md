@@ -1,5 +1,9 @@
 # json (aka jsontool) Changelog
 
+## json 2.2.2 (not yet released)
+
+(nothing yet)
+
 ## json 2.2.1
 
 - Hack workaround for issue #24 to not get a spurious "process.stdout cannot be
