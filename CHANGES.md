@@ -1,8 +1,10 @@
 # json (aka jsontool) Changelog
 
-## json 2.2.2 (not yet released)
+## json 3.0.0 (not yet released)
 
-(nothing yet)
+- Switched to json 3.x dev on master. "2.x" branch created for any
+  necessary 2.x releases.
+
 
 ## json 2.2.1
 
