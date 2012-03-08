@@ -19,8 +19,6 @@ echo '["a", "b"]' | $JSON0 -e 'this[0]="A"'
 #    ["A","b"]
 echo '[1,1]' | $JSON0 -e 'this[0]++'
 #    [2,1]
-echo '["a", "b"]' | $JSON0 -e 'this[3]="d"'
-#    ["a","b",null,"d"]
 
 echo ''
 echo '{"one": 1, "two": 2}' | $JSON0 -e 'one++' -e 'two++'

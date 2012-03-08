@@ -2,6 +2,9 @@
 
 - Add man page to platform?
 - '-c' and json 3 (see below)
+        +  util.puts("  -c TEST       Filter the input object on the given TEST. If");
+        +  util.puts("                input is an array, then filter on each item.");
+        +  util.puts("                This is run just after '-e' execution.");
 
 
 # Feeling out '-c'
@@ -187,6 +190,13 @@ to force "treat array as a single object".
     possibility to:
         $ echo '["a","b","c"]' | jsondev -e 'this+=this'
         ["aa","bb","cc"]
+  - DWIM the same so this works:
+        $ echo '["a", "b"]' | node6 ../lib/jsontool.js -e 'this.push("c")'
+
+        /Users/trentm/tm/json/lib/jsontool.js:678
+                vm.runInNewContext(code, datum);
+                   ^
+        TypeError: Object #<error> has no method 'push'
   - Support a negative index into an array:
         $ echo '["a","b","c"]' | jsondev -- -1    # ditto `json '[-1]'`
         c

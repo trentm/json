@@ -13,9 +13,8 @@
  */
 
 var path = require('path');
-var sys  = require('sys');
 var exec = require('child_process').exec;
-var fs   = require('fs');
+var fs = require('fs');
 var testCase = require('nodeunit').testCase;
 var warn = console.warn;
 
@@ -31,15 +30,15 @@ var data = {
     test.deepEqual(parseLookup("a"), ["a"]);
     test.deepEqual(parseLookup("a.b"), ["a", "b"]);
     test.deepEqual(parseLookup("a.b.c"), ["a", "b", "c"]);
-    
+
     test.deepEqual(parseLookup("[42]"), ["[42]"]);
     test.deepEqual(parseLookup("['a']"), ["['a']"]);
     test.deepEqual(parseLookup('["a"]'), ['["a"]']);
-    
+
     test.deepEqual(parseLookup("b[42]"), ["b", "[42]"]);
     test.deepEqual(parseLookup("b['a']"), ["b", "['a']"]);
     test.deepEqual(parseLookup('b["a"]'), ["b", '["a"]']);
-    
+
     test.deepEqual(parseLookup("[42].b"), ["[42]", "b"]);
     test.deepEqual(parseLookup("['a'].b"), ["['a']", "b"]);
     test.deepEqual(parseLookup('["a"].b'), ['["a"]', "b"]);
@@ -52,7 +51,7 @@ var data = {
     test.deepEqual(parseLookup('["a[b"]'), ['["a[b"]']);
     test.deepEqual(parseLookup("['a]b']"), ["['a]b']"]);
     test.deepEqual(parseLookup('["a]b"]'), ['["a]b"]']);
-    
+
     test.deepEqual(parseLookup("['a\\'[b']"), ["['a\\'[b']"]);
     test.deepEqual(parseLookup("['a\\'[b'].c"), ["['a\\'[b']", "c"]);
 

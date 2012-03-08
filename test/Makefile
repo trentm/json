@@ -7,7 +7,7 @@ test:
 
 # Test will all node versions (presumes install locations I use on my machine).
 .PHONY: testall
-testall: test06 test04 test05
+testall: test06 test04 testmaster test05
 
 
 #XXX Add to testall when have fix for nodeunit on master (can't use sys).

@@ -351,7 +351,7 @@ Or omit the `this.` as a shortcut:
     {"age":39}
 
 Set a key to `undefined` to remove it:
-    
+
     $ echo '{"one": 1, "two": 2}' | json -e 'this.one=undefined'
     {"two":2}
 
@@ -359,8 +359,6 @@ Arrays can be finnicky:
 
     $ echo '[1,1]' | json -e 'this[0]++'
     [2,1]
-    $ echo '["a", "b"]' | json -e 'this[3]="d"'
-    ["a","b",null,"d"]
 
 
 # Module Usage
