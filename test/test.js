@@ -16,8 +16,12 @@ var path = require('path');
 var exec = require('child_process').exec;
 var fs = require('fs');
 var testCase = require('nodeunit').testCase;
+var ansidiff = require('ansidiff');
 var warn = console.warn;
 
+
+
+//---- test cases
 
 var data = {
   //setUp: function(callback) {
@@ -128,10 +132,19 @@ for (var i=0; i < names.length; ++i) {
         test.expect(numTests);
         exec("bash cmd", {"cwd": dir}, function(error, stdout, stderr) {
           var errmsg = ("\n-- return value:\n" + (error && error.code)
-            + "\n-- stdout:\n" + stdout
             + "\n-- expected stdout:\n" + expectedStdout
-            + "\n-- stderr:\n" + stderr
-            + "\n-- expected stderr:\n" + expectedStderr);
+            + "\n-- stdout:\n" + stdout
+            + "\n-- stdout diff:\n" + ansidiff.chars(expectedStdout, stdout));
+          if (expectedStderr !== null) {
+            errmsg += "\n-- expected stderr:\n" + expectedStderr;
+          }
+          if (stderr !== null) {
+            errmsg += "\n-- stderr:\n" + stderr;
+          }
+          if (expectedStderr !== null) {
+            errmsg += "\n-- stderr diff:\n" + ansidiff.chars(expectedStderr, stderr);
+          }
+
           if (expectedExitCode !== null) {
             test.equal(expectedExitCode, error && error.code || 0,
               "\n\nunexpected exit code"+errmsg);

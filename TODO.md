@@ -1,43 +1,58 @@
 # todos
 
+- var DWIM
+      # E.g., append to an array.
+      echo ''
+      echo '["a","b","c"]' | $JSON -A -e 'this[3]="d"'
+      #      ["a","b","c","d"]
+- other "extra features" from below
 - Add man page to platform?
-- '-c' and json 3 (see below)
-        +  util.puts("  -c TEST       Filter the input object on the given TEST. If");
-        +  util.puts("                input is an array, then filter on each item.");
-        +  util.puts("                This is run just after '-e' execution.");
 
 
-# Feeling out '-c'
 
-echo '{"age": 38}' | jsondev -c 'this.age > 30'
-        {
-          "age": 38
-        }
-echo '{"age": 38}' | jsondev -c 'this.age < 30'
+# node-master diff
 
-# -c switches mode to look at each array item if top-level input is an array
-echo '[{"age":38}, {"age": 42}, {"age":21}]' | jsondev -c 'this.age > 30'
-        [
-            {
-              "age": 38
-            },
-            {
-              "age": 42
-            }
-        ]
+    $ nodemaster    # build in node "master"
+    > a = ['a', 'b', 'c', 'd']
+    [ 'a', 'b', 'c', 'd' ]
+    > var vm = require('vm')
+    undefined
+    > vm.runInNewContext('this[4]="e"', a);
+    'e'
+    > a
+    [ 'a', 'b', 'c', 'd' ]
 
-# -a still does its thing (flatten)
-echo '[{"age":38}, {"age": 42}, {"age":21}]' | jsondev -a -c 'this.age > 30'
-        {
-          "age": 38
-        }
-        {
-          "age": 42
-        }
-echo '[{"age":38}, {"age": 42}, {"age":21}]' | jsondev -a -c 'this.age > 30' age
-        38
-        42
+    $ node6       # node v0.6.11
+    > var vm = require('vm')
+    undefined
+    > a = ["a", 'b', 'c', 'd']
+    [ 'a', 'b', 'c', 'd' ]
+    > vm.runInNewContext('this[4]="e"', a);
+    'e'
+    > a
+    [ 'a',
+      'b',
+      'c',
+      'd',
+      'e' ]
 
+TODO: implement the "var" DWIM below to see if can avoid this. Yup, works fine:
+
+    $ nodemaster
+    > a = ['a', 'b', 'c', 'd']
+    [ 'a', 'b', 'c', 'd' ]
+    > var vm = require('vm')
+    undefined
+    > sandbox = {_VAR: a};
+    { _VAR: [ 'a', 'b', 'c', 'd' ] }
+    > vm.runInNewContext('_VAR[4] = "e"', sandbox, 'foo.vm');
+    'e'
+    > a
+    [ 'a',
+      'b',
+      'c',
+      'd',
+      'e' ]
 
 
 # json 3 planning
@@ -166,7 +181,56 @@ to force "treat array as a single object".
     ["aa","bb","cc"]
 
 
+# Still fuzzy on '-j -a field'
 
+    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -j -a name   # json
+    [{"name": "trent"}, {"name": "ewan"}]  # yes
+    # OR
+    ["trent", "ewan"]
+    [["trent"], ["ewan"]]
+
+    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -j -a name age
+    # One of:
+    [{"name":"trent", "age":38}, {"name":"ewan", "age":4}]   # yes. useful? for '-e' and '-c' usage, yes
+    ["trent", 38, "ewan", 4]  # no
+    [["trent", 38], ["ewan", 4]]  # awkward?
+
+    echo '[{"name":{"first":"trent","last":"mick"}, "age":38}]' | jsondev -j -a name.first   # json
+    [{"name": {"first": "trent"}}]
+    ["trent"]
+    [["trent"]]
+    [{"name.first": "trent"}]   # yes
+
+So '-a' processing first builds the table: array of row items, each is
+an object with `{<lookup-string>: <lookup-result>}`. Then passes that
+table to output. If in "table" output mode (or just in 'jsony'???), then
+output as currently. Else output as normal: JSON, inspect, whatever.
+
+How should this change then too?
+
+    # json2
+    $ echo '{"name":"trent", "age":38}' | jsondev name age
+    trent
+    38
+    $ echo '{"name":"trent", "age":38}' | jsondev name age -j
+    "trent"
+    38
+
+    # json3: Can't break this from json2
+    $ echo '{"name":"trent", "age":38}' | jsondev name age
+    trent
+    38
+
+    #CHANGE XXX add to json3 test
+    $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j
+    {"name":"trent", "age":38}
+
+    # Essentially then, '-kv' is the default (emit whole item).
+    # XXX add to json3 test when implemented
+    $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j -k
+    ["name", "age"]
+    $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j -v
+    ["trent", 38]
 
 
 # Intended json 3 behaviour
@@ -180,6 +244,10 @@ to force "treat array as a single object".
   mode for tabular output and (b) set array processing. Use '-A' to
   explicitly do "object processing", i.e. treat the input as a single datum.
   Default output mode is "jsony" in this case.
+  TODO: Justify implicit array processing. Instead of requiring '-aj'.
+    Because: it is more convenient for the common case. I.e. using `-e`
+    and `-c` on a list of things and NOT array processing is rare. At least
+    that is the expectation.
 - "lookups" do NOT automatically switch to array processing. Yes this is
   inconsistent from '-e' and '-c' handling but is required for backward
   compat with json 2. Hopefully using indexing `0.name` isn't too
@@ -215,6 +283,7 @@ to force "treat array as a single object".
         echo '{"errors":[{"code":42,"msg":"boom"},{"code":3,"msg":"hi"}]}' | jsondev -s errors -a code msg
         42 boom
         3 hi
+  - '-f' arg to take a file to process
 
 Examples ("CHANGE" means different behaviour for same options from json 2):
 
@@ -267,7 +336,7 @@ Examples ("CHANGE" means different behaviour for same options from json 2):
     [{"name":"trent","age":38}]
 
     echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -c 'age>30' 0  # auto json
-    [{"name":"trent","age":38}]
+    {"name":"trent","age":38}
 
     # Use '-A' to avoid auto array processing.
     # E.g., a list of input commands in an SMTP session.
@@ -277,6 +346,6 @@ Examples ("CHANGE" means different behaviour for same options from json 2):
     echo '[{"cmd":"GET /"}, {"cmd":"..."}]' | jsondev -A -c 'this[0].cmd === "EHLO"'  # not SMTP
     # (empty output)
 
-    # E.g., append to an array.
+    # E.g., append to an array.  -> VAR DWIM'ing
     echo '["a","b","c"]' | jsondev -A -e 'this[3]="d"'
     ["a","b","c","d"]

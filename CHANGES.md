@@ -2,8 +2,48 @@
 
 ## json 3.0.0 (not yet released)
 
+Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
+
 - Switched to json 3.x dev on master. "2.x" branch created for any
-  necessary 2.x releases.
+  necessary 2.x releases. See the
+  [2.x changelog here](https://github.com/trentm/json/blob/2.x/CHANGES.md).
+
+- [Backward incompatible] A significant change to 'jsony' default output and
+  some use cases to increase utility. These changes necessitated a few
+  backward incompatible changes. However, care was take to only break
+  compat for (a) rare use cases and (b) where utility was much improved.
+  See <https://github.com/trentm/json/wiki/backward-incompat-json-3-changes>
+  for full details of backward incompatible changes.
+
+  For convenience for the first few json3 releases a "json2" command is
+  installed to be able to test/compare new vs. old behaviour.
+
+- New "conditional filtering" via the `-c CODE` option. If the input is an
+  array, then `-c` will automatically switch to processing each element
+  of the array. Example:
+
+        $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
+            | json3 -c 'age>21'
+        [
+          {
+            "name": "trent",
+            "age": 38
+          }
+        ]
+
+- Change `-e CODE` option to automatically switch to array processing if
+  the input is an array. This matches the behaviour of the new `-c CODE`
+  option. Example:
+
+        $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
+            | json3 -e 'age++' -o json-0
+        [{"name":"trent","age":39},{"name":"ewan","age":5}]
+
+- New '-A' option to force `-e` and `-c` to process an input array as a
+  single item.
+
+- Add [ansidiff](https://github.com/trentm/ansidiff)-based colored diffs
+  for test suite failures.
 
 
 ## json 2.2.1
@@ -45,7 +85,7 @@
 
 - Auto-arrayification: Change "arrayification" of adjacent *arrays* to be
   a single flat arrays of the input arrays' elements. Before:
-  
+
         $ echo '[1,2][3,4]' | bin/json
         [
           [
@@ -97,14 +137,14 @@
 ## json 2.0.0
 
 -   '-o | --output MODE' support. Supported modes:
-  
+
         jsony (default): JSON with string quotes elided
         json: JSON output, 2-space indent
         json-N: JSON output, N-space indent, e.g. 'json-4'
         inspect: node.js `util.inspect` output
 
 -   '-a|--array' for independently processing each element of an input array.
-  
+
         $ echo '[
         {
           "name": "Trent",
@@ -122,9 +162,9 @@
 
     This example shows that '-a' results in tabular output. The '-d' option
     can be used to specify a delimiter other than the default single space, e.g.:
-  
+
         json -d, -a field1 field2
-  
+
     [Backward Incompatibility] This is a replacement for the experimental '*'
     syntax in the lookup strings (previously enabled via '-x|--experimental').
     That syntax and option has been removed.
@@ -134,7 +174,7 @@
 
 -   Support multiple top-level JSON objects as input to mean a list of
     these object:
-  
+
         $ echo '{"one": 1}
         {"two": 1}' | ./lib/jsontool.js
         [
@@ -145,10 +185,10 @@
             "two": 1
           }
         ]
-    
+
     This can be nice to process a stream of JSON objects generated from
     multiple calls to another tool or `cat *.json | json`. Rules:
-    
+
     -   Only JS objects and arrays. Don't see strong need for basic
         JS types right now and this limitation simplifies.
     -   The break between JS objects has to include a newline. I.e. good:
@@ -222,7 +262,7 @@
   Note: For command-line usage, the main module has moved from "json" to
   "lib/jsontool.js". So, if you are not using npm, you can setup the `json`
   command via something like:
-  
+
         alias json='.../json/lib/jsontool.js'
 
 
@@ -231,7 +271,7 @@
 - package.json and publish to npm as "jsontool" ("json" name is taken)
 - Add experimental support for '*' in the lookup. This will extract all
   the elements of an array. Examples:
-        
+
         $ echo '["a", "b", "c"]' | json -x '*'
         a
         b
@@ -246,16 +286,16 @@
         $ echo '[{"foo": "bar"}, {"foo": "baz"}]' | json -x '*.foo'
         bar
         baz
-  
+
   This is still experimental because I want to feel it out (is it useful?
   does it cause problems for regular usage?) and it is incomplete. The
   second example above shows that with '\*', json can emit multiple JSON
   documents. `json` needs to change to support *accepting* multiple JSON
   documents.
-  
+
   Also, a limitation: How to extract *multiple* fields from a list of
   objects? Is this even a necessary feature? Thinking out loud:
-    
+
         '*.{name,version}'      # a la bash. Josh likes it. What else do you need?
 
 - Add '-x|--experimental' option to turn on incomplete/experimental features.
@@ -290,7 +330,7 @@
 
   `json` is now doing much better lookup string parsing. Because escapes are
   now handled properly you can do the equivalent a little more easily:
-  
+
         $ echo '{"foo.bar": 42}' | json foo\\.bar
         42
 

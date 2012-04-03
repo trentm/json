@@ -12,8 +12,9 @@ single-file node.js script with no external deps (other than
 Use it to:
 
 - pretty-print JSON to help read it
-- extract particular values
+- extract particular values (see `LOOKUPS` in usage)
 - get details on JSON syntax errors (handy for config files)
+- filter input JSON (see `-e` and `-c` options)
 
 Read on for many more examples.
 
@@ -36,7 +37,7 @@ Read on for many more examples.
 You should now have "json" on your PATH:
 
     $ json --version
-    json 2.1.0
+    json 3.0.0
 
 
 # Test suite
@@ -48,7 +49,7 @@ e.g.:
 
     cd test && TEST_ONLY=executable nodeunit test.js
 
-I test against node 0.4, 0.5 and 0.6.
+I test against node 0.4, 0.6, 0.7 and (occassionally) node master.
 
 
 # License
@@ -275,10 +276,10 @@ is printed *without the quotes*):
       }
     ]
 
-    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json '[0].name'
+    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json '0.name'
     Trent
 
-    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json '[0].name' -o jsony
+    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json '0.name' -o jsony
     Trent
 
 Or for strict JSON output:
@@ -292,9 +293,6 @@ Or for strict JSON output:
         "name": "Mark"
       }
     ]
-
-    $ echo '[{"name": "Trent"},{"name": "Mark"}]' | json '[0].name' -o json
-    "Trent"
 
 By default this uses a 2-space indent. That can be changed with a "-N" suffix:
 
@@ -355,10 +353,44 @@ Set a key to `undefined` to remove it:
     $ echo '{"one": 1, "two": 2}' | json -e 'this.one=undefined'
     {"two":2}
 
-Arrays can be finnicky:
+If the input is an array, then `-e` will automatically process each element
+separately (use `-A` to override this):
 
-    $ echo '[1,1]' | json -e 'this[0]++'
-    [2,1]
+    $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | json3 -e 'age++'
+    [
+      {
+        "name": "trent",
+        "age": 39
+      },
+      {
+        "name": "ewan",
+        "age": 5
+      }
+    ]
+
+
+# Filtering with `-c CODE`
+
+You can use the `-c CODE` option to filter the input:
+
+    $ echo '{"name":"trent", "age":38}' | json3 -c 'age>21'
+    {
+      "name": "trent",
+      "age": 38
+    }
+    $ echo '{"name":"trent", "age":38}' | json3 -c 'age==16'
+    $
+
+If the input is an array, then `-c` will automatically process each element
+separately (use `-A` to override this):
+
+    $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | json3 -c 'age>21'
+    [
+      {
+        "name": "trent",
+        "age": 38
+      }
+    ]
 
 
 # Module Usage

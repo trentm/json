@@ -10,7 +10,6 @@
 {"one":2,"two":3}
 2
 
-{"name":"Trent Mick"}
-{"name":"Andrew Dlugan"}
+[{"name":"Trent Mick"},{"name":"Andrew Dlugan"}]
 
 SyntaxError: Unexpected identifier

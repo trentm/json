@@ -17,5 +17,12 @@ Mark,mark@example.com
 }
 bar
 baz
-"bar"
-"baz"
+
+[
+  {
+    "foo": "bar"
+  },
+  {
+    "foo": "baz"
+  }
+]

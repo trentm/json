@@ -11,7 +11,8 @@
   ],
   "bin": {
     "json": "./lib/jsontool.js",
-    "json3": "./lib/jsontool.js"
+    "json3": "./lib/jsontool.js",
+    "json2": "./node_modules/.bin/json2"
   },
   "main": "./lib/jsontool.js",
   "man": "./man/man1/json.1",
@@ -20,10 +21,13 @@
   },
   "engines": ["node >=0.4.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
+  "dependencies": {
+    "json": "2.x",
+  },
   "devDependencies": {
     "uglify-js": "1.1.x",
     "nodeunit": "0.7.x",
-    "ronn": "0.3.6"
+    "ronn": "0.3.6",
+    "ansidiff": "1.0"
   }
 }
-
