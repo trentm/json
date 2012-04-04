@@ -2,6 +2,11 @@
 
 Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
 
+## json 3.0.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 3.0.0
 
 - Switched to json 3.x dev on master. "2.x" branch created for any
