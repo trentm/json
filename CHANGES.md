@@ -2,7 +2,7 @@
 
 Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
 
-## json 3.0.1 (not yet released)
+## json 3.0.1
 
 - Fix a bogus 'json' dep.
 
