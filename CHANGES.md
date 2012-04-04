@@ -1,5 +1,10 @@
 # json (aka jsontool) Changelog
 
+This is the changelog for the "2.x" branch. "2.x" is no longer the latest
+version of jsontool. See
+<https://github.com/trentm/json/blob/master/CHANGES.md>.
+
+
 ## json 2.2.3 (not yet released)
 
 (nothing yet)
