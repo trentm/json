@@ -1,12 +1,42 @@
 # todos
 
-- var DWIM
-      # E.g., append to an array.
-      echo ''
-      echo '["a","b","c"]' | $JSON -A -e 'this[3]="d"'
-      #      ["a","b","c","d"]
-- other "extra features" from below
-- Add man page to platform?
+- update man page
+- pick off extra intended json 3 features:
+  - DWIM `this` in '-e' and '-c' code when the datum is a simple type.
+    Basically s/this/var/ and make 'var=item' the context? This gives
+    possibility to:
+        $ echo '["a","b","c"]' | jsondev -e 'this+=this'
+        ["aa","bb","cc"]
+        $ echo '["a","b","c"]' | jsondev -A -e 'this[3]="d"'
+        ["a","b","c","d"]
+  - DWIM the same so this works:
+        $ echo '["a", "b"]' | node6 ../lib/jsontool.js -e 'this.push("c")'
+
+        /Users/trentm/tm/json/lib/jsontool.js:678
+                vm.runInNewContext(code, datum);
+                   ^
+        TypeError: Object #<error> has no method 'push'
+  - Support a negative index into an array:
+        $ echo '["a","b","c"]' | jsondev -- -1    # ditto `json '[-1]'`
+        c
+  - Support slice indexing into an array:
+        $ echo '["a","b","c"]' | jsondev '[1:]'
+        ["b", "c"]
+  - Add -k|--keys to extract the keys:
+        echo '{"name":"trent", "age":38}' | jsondev -k
+        ["name", "age"]
+    Would -v|--values be useful?
+        echo '{"name":"trent", "age":38}' | jsondev -v
+        ["trent", 38]
+  - Add '-s' (or '-S'?) option for 'starting point' in the given JSON doc.
+    The use case is that you care about a subfield of an object and want to
+    do array processing on it
+        echo '{"errors":[{"code":42,"msg":"boom"},{"code":3,"msg":"hi"}]}' | jsondev -s errors -a code msg
+        42 boom
+        3 hi
+  - '-f' arg to take a file to process
+  - '-C CODE' to exclude the matching items?
+- Add man page to platform
 
 
 
@@ -231,121 +261,3 @@ How should this change then too?
     ["name", "age"]
     $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j -v
     ["trent", 38]
-
-
-# Intended json 3 behaviour
-
-- '-j' means you'll always get JSON output (unless non-zero exit from
-  invalid input)
-- You have to have 'jsony' output mode to get tabular output from '-a'.
-- '-e' and '-c' processing will switch to "array processing" automatically
-  for array inputs. In *implicit* "array processing" the default output mode
-  is switched to "json". Add '-a' to explicitly (a) switch to jsony output
-  mode for tabular output and (b) set array processing. Use '-A' to
-  explicitly do "object processing", i.e. treat the input as a single datum.
-  Default output mode is "jsony" in this case.
-  TODO: Justify implicit array processing. Instead of requiring '-aj'.
-    Because: it is more convenient for the common case. I.e. using `-e`
-    and `-c` on a list of things and NOT array processing is rare. At least
-    that is the expectation.
-- "lookups" do NOT automatically switch to array processing. Yes this is
-  inconsistent from '-e' and '-c' handling but is required for backward
-  compat with json 2. Hopefully using indexing `0.name` isn't too
-  obtuse.
-- More features:
-  - DWIM `this` in '-e' and '-c' code when the datum is a simple type.
-    Basically s/this/var/ and make 'var=item' the context? This gives
-    possibility to:
-        $ echo '["a","b","c"]' | jsondev -e 'this+=this'
-        ["aa","bb","cc"]
-  - DWIM the same so this works:
-        $ echo '["a", "b"]' | node6 ../lib/jsontool.js -e 'this.push("c")'
-
-        /Users/trentm/tm/json/lib/jsontool.js:678
-                vm.runInNewContext(code, datum);
-                   ^
-        TypeError: Object #<error> has no method 'push'
-  - Support a negative index into an array:
-        $ echo '["a","b","c"]' | jsondev -- -1    # ditto `json '[-1]'`
-        c
-  - Support slice indexing into an array:
-        $ echo '["a","b","c"]' | jsondev '[1:]'
-        ["b", "c"]
-  - Add -k|--keys to extract the keys:
-        echo '{"name":"trent", "age":38}' | jsondev -k
-        ["name", "age"]
-    Would -v|--values be useful?
-        echo '{"name":"trent", "age":38}' | jsondev -v
-        ["trent", 38]
-  - Add '-s' (or '-S'?) option for 'starting point' in the given JSON doc.
-    The use case is that you care about a subfield of an object and want to
-    do array processing on it
-        echo '{"errors":[{"code":42,"msg":"boom"},{"code":3,"msg":"hi"}]}' | jsondev -s errors -a code msg
-        42 boom
-        3 hi
-  - '-f' arg to take a file to process
-
-Examples ("CHANGE" means different behaviour for same options from json 2):
-
-    #CHANGE
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -j -a name   # json
-    [{"name": "trent"}, {"name": "ewan"}]
-
-    # Can't break this from json 2.
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -a name   # jsony
-    trent
-    ewan
-
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -a    # jsony
-    {
-      "name": "trent",
-      "age": 38
-    }
-    {
-      "name": "ewan",
-      "age": 4
-    }
-
-    #CHANGE
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -aj   # json
-    [
-      {
-        "name": "trent",
-        "age": 38
-      },
-      {
-        "name": "ewan",
-        "age": 4
-      }
-    ]
-
-    # Can't break this from json 2.
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev 0  # jsony
-    {
-      "name": "trent",
-      "age": 38
-    }
-
-
-    # Showing auto array processing (and change to 'json' output mode).
-    #CHANGE
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -e 'age++'   # auto json
-    [{"name":"trent", "age":39}, {"name":"ewan", "age":5}]
-
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -c 'age>30'  # auto json
-    [{"name":"trent","age":38}]
-
-    echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | jsondev -c 'age>30' 0  # auto json
-    {"name":"trent","age":38}
-
-    # Use '-A' to avoid auto array processing.
-    # E.g., a list of input commands in an SMTP session.
-    echo '[{"cmd":"EHLO"}, {"cmd":"..."}]' | jsondev -A -c 'this[0].cmd === "EHLO"'
-    [{"cmd":"EHLO"}, {"cmd":"..."}]
-
-    echo '[{"cmd":"GET /"}, {"cmd":"..."}]' | jsondev -A -c 'this[0].cmd === "EHLO"'  # not SMTP
-    # (empty output)
-
-    # E.g., append to an array.  -> VAR DWIM'ing
-    echo '["a","b","c"]' | jsondev -A -e 'this[3]="d"'
-    ["a","b","c","d"]
