@@ -45,6 +45,13 @@ Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
 - Add [ansidiff](https://github.com/trentm/ansidiff)-based colored diffs
   for test suite failures.
 
+- [issue #26] Add support for escapes in the delimiter given by `-d DELIM`:
+
+        $ echo '[{"one":"un","two":"deux"},{"one":"uno","two":"dos"}]' \
+            | jsondev -a -d'\t' one two
+        un	deux
+        uno	dos
+
 
 ## json 2.2.1
 
