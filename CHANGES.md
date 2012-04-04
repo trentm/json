@@ -1,8 +1,8 @@
 # json (aka jsontool) Changelog
 
-## json 3.0.0 (not yet released)
-
 Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
+
+## json 3.0.0 (not yet released)
 
 - Switched to json 3.x dev on master. "2.x" branch created for any
   necessary 2.x releases. See the
