@@ -4,7 +4,7 @@ Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
 
 ## json 3.0.1 (not yet released)
 
-(nothing yet)
+- Fix a bogus 'json' dep.
 
 
 ## json 3.0.0
