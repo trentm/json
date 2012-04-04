@@ -2,7 +2,13 @@
 
 ## json 2.2.2 (not yet released)
 
-(nothing yet)
+- [issue #26] Add support for escapes in the delimiter given by `-d DELIM`:
+
+        $ echo '[{"one":"un","two":"deux"},{"one":"uno","two":"dos"}]' \
+            | jsondev -a -d'\t' one two
+        un	deux
+        uno	dos
+
 
 ## json 2.2.1
 

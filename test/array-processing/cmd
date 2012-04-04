@@ -46,6 +46,16 @@ echo '[
 }
 ]' | $JSON -d, -a name email     # TODO: how to spec '\0' as delim (a la -print0)?
 
+# Delims (issue #26)
+echo ''
+echo '# comma'
+echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d ,
+echo '# tab'
+echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\t'
+echo '# newline'
+echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\n'
+echo '# nul to xargs'
+echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\0' | xargs -0 && echo 'end-of-xargs-output'
 
 echo ""
 echo '[{"foo": "bar"}, {"foo": "baz"}]' | $JSON -a
