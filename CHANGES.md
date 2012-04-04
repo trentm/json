@@ -1,5 +1,10 @@
 # json (aka jsontool) Changelog
 
+## json 2.2.3 (not yet released)
+
+(nothing yet)
+
+
 ## json 2.2.2
 
 - [issue #26] Add support for escapes in the delimiter given by `-d DELIM`:
