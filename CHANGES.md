@@ -2,6 +2,11 @@
 
 Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
 
+## json 3.0.2 (not yet released)
+
+(nothing yet)
+
+
 ## json 3.0.1
 
 - Fix a bogus 'json' dep.
