@@ -1,6 +1,9 @@
 # json (aka jsontool) Changelog
 
 Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
+For convenience for the first few json3 releases a "json2" command is
+installed to be able to test/compare new vs. old behaviour.
+
 
 ## json 3.0.2 (not yet released)
 
@@ -24,9 +27,6 @@ Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
   compat for (a) rare use cases and (b) where utility was much improved.
   See <https://github.com/trentm/json/wiki/backward-incompat-json-3-changes>
   for full details of backward incompatible changes.
-
-  For convenience for the first few json3 releases a "json2" command is
-  installed to be able to test/compare new vs. old behaviour.
 
 - New "conditional filtering" via the `-c CODE` option. If the input is an
   array, then `-c` will automatically switch to processing each element
