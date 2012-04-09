@@ -5,7 +5,7 @@ For convenience for the first few json3 releases a "json2" command is
 installed to be able to test/compare new vs. old behaviour.
 
 
-## json 3.0.2 (not yet released)
+## json 3.0.2
 
 - [issue #27] Fix issue handling multi-level lookups (e.g. 'json foo.bar').
 
