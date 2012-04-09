@@ -7,7 +7,7 @@ installed to be able to test/compare new vs. old behaviour.
 
 ## json 3.0.2 (not yet released)
 
-(nothing yet)
+- [issue #27] Fix issue handling multi-level lookups (e.g. 'json foo.bar').
 
 
 ## json 3.0.1

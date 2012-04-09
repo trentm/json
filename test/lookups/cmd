@@ -1,0 +1,19 @@
+JSON=../../lib/jsontool.js
+
+echo '{"name":"trent", "age":38}' | $JSON name
+echo '{"name":"trent", "age":38}' | $JSON name age
+
+echo ''
+echo '{"name":"trent", "age":38}' | $JSON name missing
+
+echo ''
+echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -a name
+echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -a name age
+
+echo ''
+echo '{"error":{"code":42,"message":"answer"}}' | $JSON error.code
+echo '{"error":{"code":42,"message":"answer"}}' | $JSON error.code error.message
+
+echo ''
+echo '[{"error":{"code":42,"message":"answer"}}]' | $JSON -a error.code
+echo '[{"error":{"code":42,"message":"answer"}}]' | $JSON -a error.code error.message
