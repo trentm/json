@@ -18,6 +18,9 @@ Use it to:
 
 Read on for many more examples.
 
+Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
+for updates to jsontool.
+
 
 # Installation
 
