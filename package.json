@@ -6,9 +6,7 @@
     "type": "git",
     "url": "git://github.com/trentm/json.git"
   },
-  "contributors": [
-    "Trent Mick <trentm@gmail.com>"
-  ],
+  "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "bin": {
     "json": "./lib/jsontool.js",
     "json3": "./lib/jsontool.js",
