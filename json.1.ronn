@@ -36,25 +36,25 @@ double-quotes. Other output formats are supported:
 
 `-o, --output MODE`
   Specify an output mode. One of:
-      
+
       jsony (default): JSON with string quotes elided
       json: JSON output, 2-space indent
       json-N: JSON output, N-space indent, e.g. 'json-4'
       inspect: node.js `util.inspect` output
-  
+
 `-i`
   shortcut for `-o inspect`
 
 `-j`
   shortcut for `-o json`
-  
+
 
 You can process elements of an input array separately and generate tabular
 output:
-  
+
 `-a, --array`
   Process input as an array of separate inputs and output in tabular form.
-  
+
 `-d DELIM`
   Delimiter string for tabular output (default is ' ').
 
@@ -131,7 +131,7 @@ to <https://github.com/trentm/json/issues>.
 
 ## COPYRIGHT
 
-json is Copyright (c) 2011 Trent Mick
+json is Copyright (c) 2012 Trent Mick
 
 
 ## SEE ALSO
