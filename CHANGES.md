@@ -5,7 +5,7 @@ For convenience for the first few json3 releases a "json2" command is
 installed to be able to test/compare new vs. old behaviour.
 
 
-## json 3.0.3 (not yet released)
+## json 3.0.3
 
 - [issue #30] Fix lookup strings with multiple double-quotes.
 - [issue #28] Don't error on a multi-level lookup where one of the components
