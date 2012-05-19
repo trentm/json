@@ -7,6 +7,7 @@ installed to be able to test/compare new vs. old behaviour.
 
 ## json 3.0.3 (not yet released)
 
+- [issue #30] Fix lookup strings with multiple double-quotes.
 - [issue #28] Don't error on a multi-level lookup where one of the components
   is undefined. E.g., the following is no longer an error:
 

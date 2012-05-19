@@ -19,3 +19,6 @@ answer
 # lookup errors
 bar
 done
+
+# double-quotes in lookup (issue 30)
+first letter

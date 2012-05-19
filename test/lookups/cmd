@@ -27,3 +27,8 @@ echo '{"foo": "bar"}' | $JSON 'fool'
 echo '{"foo": "bar"}' | $JSON 'fool.bar'
 #   (empty)
 echo 'done'
+
+echo ''
+echo '# double-quotes in lookup (issue 30)'
+echo '{"\"a\"": "first letter"}' | $JSON '"a"'
+#    first letter
