@@ -24,7 +24,7 @@ for updates to jsontool.
 
 # Installation
 
-1. Get [node](http://nodejs.org) and [npm](http://npmjs.org).
+1. Get [node](http://nodejs.org).
 
 2. `npm install -g jsontool`
 

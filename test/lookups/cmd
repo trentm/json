@@ -17,3 +17,13 @@ echo '{"error":{"code":42,"message":"answer"}}' | $JSON error.code error.message
 echo ''
 echo '[{"error":{"code":42,"message":"answer"}}]' | $JSON -a error.code
 echo '[{"error":{"code":42,"message":"answer"}}]' | $JSON -a error.code error.message
+
+echo ''
+echo '# lookup errors'
+echo '{"foo": "bar"}' | $JSON 'foo'
+#   bar
+echo '{"foo": "bar"}' | $JSON 'fool'
+#   (empty)
+echo '{"foo": "bar"}' | $JSON 'fool.bar'
+#   (empty)
+echo 'done'
