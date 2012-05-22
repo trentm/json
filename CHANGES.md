@@ -5,6 +5,11 @@ For convenience for the first few json3 releases a "json2" command is
 installed to be able to test/compare new vs. old behaviour.
 
 
+## json 3.1.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 3.1.0
 
 - [pull #29] Add '-D' option to set a delimiter for lookups (default is '.'),
