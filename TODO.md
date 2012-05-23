@@ -1,7 +1,8 @@
 # todos
 
-- update man page
-
+- update man page: start with `json -h`, add examples from README, mention
+  changelog
+- ronn and github pages, and reduce the README deferring to man page
 - Add man page to platform
 
 
