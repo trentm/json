@@ -7,7 +7,7 @@ installed to be able to test/compare new vs. old behaviour.
 
 ## json 3.1.2 (not yet released)
 
-(nothing yet)
+- [issue #31] Fix error message for `json -o`.
 
 
 ## json 3.1.1
