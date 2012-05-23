@@ -7,7 +7,7 @@ installed to be able to test/compare new vs. old behaviour.
 
 ## json 3.1.1 (not yet released)
 
-(nothing yet)
+- [issue #32] Fix '-D' option processing so `json -D/` works (no space).
 
 
 ## json 3.1.0
@@ -15,7 +15,7 @@ installed to be able to test/compare new vs. old behaviour.
 - [pull #29] Add '-D' option to set a delimiter for lookups (default is '.'),
   so that this example works:
 
-      $ echo '{"a.b": {"b": 1}}' | jsondev -D / a.b/b
+      $ echo '{"a.b": {"b": 1}}' | json -D / a.b/b
       1
 
   By Yaniv Aknin.
