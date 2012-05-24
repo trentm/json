@@ -20,6 +20,17 @@ docs:
 	ronn --date=$(shell git log -1 --pretty=format:%cd --date=short) --roff --html docs/json.1.ronn
 	@echo "# test with 'man ./docs/json.1' and 'open ./docs/json.1.html'"
 
+.PHONY: publish
+publish:
+	mkdir -p tmp
+	[[ -d tmp/json-gh-pages ]] || git clone git@github.com:trentm/json.git tmp/json-gh-pages
+	cd tmp/json-gh-pages && git checkout gh-pages && git pull --rebase origin gh-pages
+	cp docs/json.1.html tmp/json-gh-pages/index.html
+	cd tmp/json-gh-pages \
+		&& [[ -z "$(shell git status --short)" ]] \
+		|| (git commit -a -m "publish latest docs" \
+			&& git push origin gh-pages)
+
 .PHONY: test testall
 test: node_modules/.bin/nodeunit
 	(cd test && make test)

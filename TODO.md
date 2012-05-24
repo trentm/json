@@ -1,9 +1,7 @@
 # todos
 
-- update man page: start with `json -h`, add examples from README, mention
-  changelog
-- ronn and github pages, and reduce the README deferring to man page
-- Add man page to platform
+- custom styling for html proj page: sidebar toc a la ronn man page,
+  github project prominent link?
 
 
 

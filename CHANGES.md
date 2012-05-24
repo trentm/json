@@ -9,7 +9,8 @@ installed to be able to test/compare new vs. old behaviour.
 
 - Update man page and move bulk examples from README to man page. Use ronn (the
   ruby one) instead of ronnjs: better and more reliable formatting. Add 'make
-  docs'.
+  docs' and 'make publish' (the latter to push to GH pages at
+  <http://trentm.com/json>).
 - [issue #31] Fix error message for `json -o`.
 
 

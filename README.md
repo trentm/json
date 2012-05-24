@@ -16,10 +16,10 @@ Use it to:
 - get details on JSON syntax errors (handy for config files)
 - filter input JSON (see `-e` and `-c` options)
 
-Read on for many more examples.
-
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to jsontool.
+
+See <http://trentm.com/json> for full docs and many examples.
 
 
 # Installation
