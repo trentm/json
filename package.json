@@ -25,7 +25,6 @@
   "devDependencies": {
     "uglify-js": "1.1.x",
     "nodeunit": "0.7.x",
-    "ronn": "0.3.6",
     "ansidiff": "1.0"
   }
 }

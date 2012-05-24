@@ -7,6 +7,9 @@ installed to be able to test/compare new vs. old behaviour.
 
 ## json 3.1.2 (not yet released)
 
+- Update man page and move bulk examples from README to man page. Use ronn (the
+  ruby one) instead of ronnjs: better and more reliable formatting. Add 'make
+  docs'.
 - [issue #31] Fix error message for `json -o`.
 
 
