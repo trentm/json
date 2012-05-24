@@ -4,7 +4,7 @@
 .TH "JSON" "1" "May 2012" "" ""
 .
 .SH "NAME"
-\fBjson\fR \- JSON love for your command line
+\fBjson\fR \- JSON love for your command line\. A\.k\.a\. "jsontool"\.
 .
 .SH "SYNOPSIS"
 something\-generating\-JSON\-on\-stdout | \fBjson\fR [OPTIONS] [LOOKUPS]
@@ -208,7 +208,7 @@ Let\'s use the Github API to look at the node \fIhttps://github/joyent/node\fR p
 .nf
 
 $ curl \-s http://github\.com/api/v2/json/repos/show/joyent/node
-{"repository":{"organization":"joyent","watchers":15172,"has_downloads":false,"url":"https://github\.com/joyent/node","homepage":"http://nodejs\.org/","fork":false,"has_issues":true,"has_wiki":true,"forks":1835,"size":28000,"private":false,"name":"node","owner":"joyent","open_issues":443,"description":"evented I/O for v8 javascript","language":"JavaScript","created_at":"2009/05/27 09:29:46 \-0700","pushed_at":"2012/05/24 09:55:29 \-0700"}}
+{"repository":{"organization":"joyent","watchers":15172,\.\.\.
 .
 .fi
 .
@@ -682,7 +682,8 @@ If the input is an array, then \fB\-e\fR will automatically process each element
 .
 .nf
 
-$ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' | json \-e \'age++\'
+$ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' \e
+    | json \-e \'age++\'
 [
   {
     "name": "trent",
@@ -724,7 +725,8 @@ If the input is an array, then \fB\-c\fR will automatically process each element
 .
 .nf
 
-$ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' | json \-c \'age>21\'
+$ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' \e
+    | json \-c \'age>21\'
 [
   {
     "name": "trent",

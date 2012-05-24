@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>json(1) - JSON love for your command line</title>
+  <title>json(1) - JSON love for your command line. A.k.a. &quot;jsontool&quot;.</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -71,7 +71,7 @@
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>json</code> - <span class="man-whatis">JSON love for your command line</span>
+  <code>json</code> - <span class="man-whatis">JSON love for your command line. A.k.a. "jsontool".</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
@@ -232,7 +232,7 @@ string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
 project:</p>
 
 <pre><code>$ curl -s http://github.com/api/v2/json/repos/show/joyent/node
-{"repository":{"organization":"joyent","watchers":15172,"has_downloads":false,"url":"https://github.com/joyent/node","homepage":"http://nodejs.org/","fork":false,"has_issues":true,"has_wiki":true,"forks":1835,"size":28000,"private":false,"name":"node","owner":"joyent","open_issues":443,"description":"evented I/O for v8 javascript","language":"JavaScript","created_at":"2009/05/27 09:29:46 -0700","pushed_at":"2012/05/24 09:55:29 -0700"}}
+{"repository":{"organization":"joyent","watchers":15172,...
 </code></pre>
 
 <p><strong>Nice output by default</strong>:</p>
@@ -550,7 +550,8 @@ $ echo '{"age": 38}' | json -e 'age++'
 <p>If the input is an array, then <code>-e</code> will automatically process each element
 separately (use <code>-A</code> to override this):</p>
 
-<pre><code>$ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | json -e 'age++'
+<pre><code>$ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
+    | json -e 'age++'
 [
   {
     "name": "trent",
@@ -579,7 +580,8 @@ $
 <p>If the input is an array, then <code>-c</code> will automatically process each element
 separately (use <code>-A</code> to override this):</p>
 
-<pre><code>$ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | json -c 'age&gt;21'
+<pre><code>$ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
+    | json -c 'age&gt;21'
 [
   {
     "name": "trent",
