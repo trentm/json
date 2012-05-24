@@ -40,7 +40,7 @@ See <http://trentm.com/json> for full docs and many examples.
 You should now have "json" on your PATH:
 
     $ json --version
-    json 3.0.0
+    json 3.1.2
 
 
 # Test suite
