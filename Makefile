@@ -17,7 +17,8 @@ versioncheck:
 docs:
 	@[[ `which ronn` ]] || (echo "No 'ronn' on your PATH. Install with 'gem install ronn'" && exit 2)
 	mkdir -p man/man1
-	ronn --date=$(shell git log -1 --pretty=format:%cd --date=short) --roff --html docs/json.1.ronn
+	ronn --style=toc --manual="json tool manual" --date=$(shell git log -1 --pretty=format:%cd --date=short) --roff --html docs/json.1.ronn
+	python -c 'import sys; h = open("docs/json.1.html").read(); h = h.replace("</body>", """<a href="https://github.com/trentm/json"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a></body>"""); open("docs/json.1.html", "w").write(h)'
 	@echo "# test with 'man ./docs/json.1' and 'open ./docs/json.1.html'"
 
 .PHONY: publish

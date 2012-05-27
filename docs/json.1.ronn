@@ -1,4 +1,4 @@
-# json(1) -- JSON love for your command line. A.k.a. "jsontool".
+# json(1) -- (aka "jsontool") JSON love for your command line.
 
 
 ## SYNOPSIS

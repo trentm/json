@@ -1,10 +1,3 @@
-# todos
-
-- custom styling for html proj page: sidebar toc a la ronn man page,
-  github project prominent link?
-
-
-
 # node-master diff
 
     $ nodemaster    # build in node "master"
