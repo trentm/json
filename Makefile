@@ -35,7 +35,7 @@ publish:
 .PHONY: test testall
 test: node_modules/.bin/nodeunit
 	(cd test && make test)
-testall:
+testall: node_modules/.bin/nodeunit
 	(cd test && make testall)
 
 .PHONY: cutarelease
