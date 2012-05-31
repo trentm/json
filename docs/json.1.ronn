@@ -60,6 +60,19 @@ Use `-a` for *array processing* of lookups and *tabular output*:
     trent 38
     ewan 4
 
+Integral values work for array index lookups:
+
+    $ echo '["a", "b", "c"]' | json 1
+    b
+
+Negative array indeces are also supported:
+
+    $ echo '["a", "b", "c"]' | json -1
+    c
+    $ echo '["a", "b", "c"]' | json -2
+    b
+
+
 ### Pretty-printing
 
 Output is "jsony" by default: 2-space indented JSON with one exception, a

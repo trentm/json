@@ -22,3 +22,12 @@ done
 
 # double-quotes in lookup (issue 30)
 first letter
+
+# negative array indeces
+a
+b
+c
+c
+b
+a
+# this one is undefined, i.e. no output

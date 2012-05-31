@@ -97,6 +97,36 @@ ewan 4
 .
 .IP "" 0
 .
+.P
+Integral values work for array index lookups:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'["a", "b", "c"]\' | json 1
+b
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Negative array indeces are also supported:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'["a", "b", "c"]\' | json \-1
+c
+$ echo \'["a", "b", "c"]\' | json \-2
+b
+.
+.fi
+.
+.IP "" 0
+.
 .SS "Pretty\-printing"
 Output is "jsony" by default: 2\-space indented JSON with one exception, a single string value is printed without quotes\.
 .

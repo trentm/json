@@ -5,9 +5,12 @@ For convenience for the first few json3 releases a "json2" command is
 installed to be able to test/compare new vs. old behaviour.
 
 
-## json 3.1.3 (not yet released)
+## json 3.2.0 (not yet released)
 
-(nothing yet)
+- Support negative array indeces (a la Python list indeces), e.g.:
+
+        $ echo '["a", "b", "c"]' | json -- -1
+        c
 
 
 ## json 3.1.2

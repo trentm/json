@@ -47,10 +47,6 @@ TODO: implement the "var" DWIM below to see if can avoid this. Yup, works fine:
 
 - '-f' arg to take a file to process
 
-- Support a negative index into an array:
-      $ echo '["a","b","c"]' | jsondev -- -1    # ditto `json '[-1]'`
-      c
-
 - Support slice indexing into an array:
       $ echo '["a","b","c"]' | jsondev '[1:]'
       ["b", "c"]
