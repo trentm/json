@@ -239,7 +239,7 @@ def cutarelease(project_name, version_files, dry_run=False):
     if not dry_run:
         run('git commit %s %s -m "prep for future dev"' % (
             changes_path, ' '.join(version_files)))
-        run('git push')
+        run('git push origin master')
 
 
 
