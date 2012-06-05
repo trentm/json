@@ -45,6 +45,10 @@ TODO: implement the "var" DWIM below to see if can avoid this. Yup, works fine:
 
 # someday/maybe
 
+- json5.org support?
+
+- jsontool.org?
+
 - '-f' arg to take a file to process
 
 - Support slice indexing into an array:

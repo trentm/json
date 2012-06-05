@@ -1,13 +1,11 @@
 # json (aka jsontool) Changelog
 
-Note: json3 is still pretty new. Use accordingly. Feedback very welcome!
-For convenience for the first few json3 releases a "json2" command is
-installed to be able to test/compare new vs. old behaviour.
-
 
 ## json 3.2.1 (not yet released)
 
-(nothing yet)
+- Drop jsontool v2 dependency. This had been added for the first few json3
+  releases to provide a `json2` for comparison. `json` v3 is fairing well
+  enough now to not bother.
 
 
 ## json 3.2.0

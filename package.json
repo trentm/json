@@ -9,8 +9,7 @@
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "bin": {
     "json": "./lib/jsontool.js",
-    "json3": "./lib/jsontool.js",
-    "json2": "./node_modules/.bin/json2"
+    "json3": "./lib/jsontool.js"
   },
   "main": "./lib/jsontool.js",
   "man": "./man/man1/json.1",
@@ -19,9 +18,6 @@
   },
   "engines": ["node >=0.4.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
-  "dependencies": {
-    "jsontool": "2.x"
-  },
   "devDependencies": {
     "uglify-js": "1.1.x",
     "nodeunit": "0.7.x",
