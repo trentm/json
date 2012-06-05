@@ -143,6 +143,20 @@ trent 38
 ewan 4
 </code></pre>
 
+<p>Integral values work for array index lookups:</p>
+
+<pre><code>$ echo '["a", "b", "c"]' | json 1
+b
+</code></pre>
+
+<p>Negative array indeces are also supported:</p>
+
+<pre><code>$ echo '["a", "b", "c"]' | json -1
+c
+$ echo '["a", "b", "c"]' | json -2
+b
+</code></pre>
+
 <h3 id="Pretty-printing">Pretty-printing</h3>
 
 <p>Output is "jsony" by default: 2-space indented JSON with one exception, a
