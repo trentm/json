@@ -18,6 +18,9 @@
   },
   "engines": ["node >=0.4.0"],
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
+  "dependencies": {
+    "prettyjson": "= 0.5.0"
+  },
   "devDependencies": {
     "uglify-js": "1.1.x",
     "nodeunit": "0.7.x",
