@@ -1,53 +1,36 @@
-# node-master diff
-
-    $ nodemaster    # build in node "master"
-    > a = ['a', 'b', 'c', 'd']
-    [ 'a', 'b', 'c', 'd' ]
-    > var vm = require('vm')
-    undefined
-    > vm.runInNewContext('this[4]="e"', a);
-    'e'
-    > a
-    [ 'a', 'b', 'c', 'd' ]
-
-    $ node6       # node v0.6.11
-    > var vm = require('vm')
-    undefined
-    > a = ["a", 'b', 'c', 'd']
-    [ 'a', 'b', 'c', 'd' ]
-    > vm.runInNewContext('this[4]="e"', a);
-    'e'
-    > a
-    [ 'a',
-      'b',
-      'c',
-      'd',
-      'e' ]
-
-TODO: implement the "var" DWIM below to see if can avoid this. Yup, works fine:
-
-    $ nodemaster
-    > a = ['a', 'b', 'c', 'd']
-    [ 'a', 'b', 'c', 'd' ]
-    > var vm = require('vm')
-    undefined
-    > sandbox = {_VAR: a};
-    { _VAR: [ 'a', 'b', 'c', 'd' ] }
-    > vm.runInNewContext('_VAR[4] = "e"', sandbox, 'foo.vm');
-    'e'
-    > a
-    [ 'a',
-      'b',
-      'c',
-      'd',
-      'e' ]
+- Add -k|--keys to extract the keys:
+        echo '{"name":"trent", "age":38}' | jsondev -k
+        ["name", "age"]
 
 
 # someday/maybe
 
+- better than ronnjs for man pages. E.g. should have this:
+
+        Index: /Users/trentm/tm/json/docs/json.1
+        index 45f625f..7230bc5 100644
+        --- a/docs/json.1
+        +++ b/docs/json.1
+        @@ -407,7 +407,7 @@ $ curl \-s http://github\.com/api/v2/json/repos/search/nodejs | json repositorie
+             "created_at": "2009/06/26 11:56:01 \-0700",
+             "pushed": "2011/09/28 10:27:26 \-0700",
+             "forks": 345,
+        -\.\.\.
+        +\&\.\.\.
+         .
+         .fi
+         .
+
+  Tips from mdocml.
+
 - json5.org support?
 
 - jsontool.org?
+
+-     This tool takes 2 json files and print out a merged version of the files
+    with the right hand side file taking precedence (see impl in usb-headnode)
+
+        ./json-merge left.json right.json
 
 - '-f' arg to take a file to process
 
@@ -71,10 +54,7 @@ TODO: implement the "var" DWIM below to see if can avoid this. Yup, works fine:
                  ^
       TypeError: Object #<error> has no method 'push'
 
-- Add -k|--keys to extract the keys:
-        echo '{"name":"trent", "age":38}' | jsondev -k
-        ["name", "age"]
-  Would -v|--values be useful?
+- Would -v|--values be useful?
         echo '{"name":"trent", "age":38}' | jsondev -v
         ["trent", 38]
   Essentially then, '-kv' is the default (emit whole item).
