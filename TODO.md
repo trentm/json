@@ -5,7 +5,7 @@
 
 # someday/maybe
 
-- better than ronnjs for man pages. E.g. should have this:
+- fix this in man page (ronn fix?):
 
         Index: /Users/trentm/tm/json/docs/json.1
         index 45f625f..7230bc5 100644

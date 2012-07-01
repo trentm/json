@@ -177,6 +177,21 @@ single string value is printed without quotes.</p>
 
 <p>Use <code>-H</code> to exclude a leading HTTP header block as from <code>curl -i</code>.</p>
 
+<h3 id="Listing-keys">Listing keys</h3>
+
+<p>Sometimes you want the list of keys for an object. Use <code>-k</code> or <code>--keys</code> for
+that:</p>
+
+<pre><code>$ echo '{"name": "trent", "age": 38}' | json -k
+[
+  "name",
+  "age"
+]
+$ echo '{"name": "trent", "age": 38}' | json -ka
+name
+age
+</code></pre>
+
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
@@ -228,6 +243,13 @@ This can be overridden:</p>
 <dl>
 <dt><code>-D DELIM</code></dt><dd>Delimiter char between LOOKUPS (default is '.'). For example:
 <code>$ echo '{"a.b": {"b": 1}}' | json -D / a.b/b</code></dd>
+</dl>
+
+
+<p>An alternative to lookups is to output the keys of the input object:</p>
+
+<dl>
+<dt><code>-k</code>, <code>--keys</code></dt><dd>Output the input object's keys.</dd>
 </dl>
 
 
@@ -634,7 +656,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>May 2012</li>
+    <li class='tc'>June 2012</li>
     <li class='tr'>json(1)</li>
   </ol>
 

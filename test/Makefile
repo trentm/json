@@ -7,17 +7,21 @@ test:
 
 # Test will all node versions (presumes install locations I use on my machine).
 .PHONY: testall
-testall: test06 test04 test07 testmaster
+testall: test08 test06 test04 test09 testmaster
 
 
 .PHONY: testmaster
 testmaster:
 	@echo "# Test node master (with node `$(HOME)/opt/node-master/bin/node --version`)"
 	PATH="$(HOME)/opt/node-master/bin:$(PATH)" $(NODEUNIT) test.js
-.PHONY: test07
-test07:
-	@echo "# Test node 0.7.x (with node `$(HOME)/opt/node-0.7/bin/node --version`)"
-	PATH="$(HOME)/opt/node-0.7/bin:$(PATH)" $(NODEUNIT) test.js
+.PHONY: test08
+test08:
+	@echo "# Test node 0.8.x (with node `$(HOME)/opt/node-0.8/bin/node --version`)"
+	PATH="$(HOME)/opt/node-0.8/bin:$(PATH)" $(NODEUNIT) test.js
+.PHONY: test09
+test09:
+	@echo "# Test node 0.9.x (with node `$(HOME)/opt/node-0.9/bin/node --version`)"
+	PATH="$(HOME)/opt/node-0.9/bin:$(PATH)" $(NODEUNIT) test.js
 .PHONY: test06
 test06:
 	@echo "# Test node 0.6.x (with node `$(HOME)/opt/node-0.6/bin/node --version`)"

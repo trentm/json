@@ -1,7 +1,18 @@
 # json (aka jsontool) Changelog
 
 
-## json 3.2.1 (not yet released)
+## json 3.3.0 (not yet released)
+
+- Add `-k|--keys` option to output the input objects keys:
+
+        $ echo '{"name": "trent", "age": 38}' | json -k
+        [
+          "name",
+          "age"
+        ]
+        $ echo '{"name": "trent", "age": 38}' | json -ka
+        name
+        age
 
 - Drop jsontool v2 dependency. This had been added for the first few json3
   releases to provide a `json2` for comparison. `json` v3 is fairing well

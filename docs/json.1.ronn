@@ -92,6 +92,21 @@ Use `-o json` for explicit JSON, `-o json-N` for N-space indent:
 Use `-H` to exclude a leading HTTP header block as from `curl -i`.
 
 
+### Listing keys
+
+Sometimes you want the list of keys for an object. Use `-k` or `--keys` for
+that:
+
+    $ echo '{"name": "trent", "age": 38}' | json -k
+    [
+      "name",
+      "age"
+    ]
+    $ echo '{"name": "trent", "age": 38}' | json -ka
+    name
+    age
+
+
 
 ## OPTIONS
 
@@ -150,6 +165,12 @@ This can be overridden:
   * `-D DELIM`:
     Delimiter char between LOOKUPS (default is '.'). For example:
     `$ echo '{"a.b": {"b": 1}}' | json -D / a.b/b`
+
+
+An alternative to lookups is to output the keys of the input object:
+
+  * `-k`, `--keys`:
+    Output the input object's keys.
 
 
 By default `json` outputs in "jsony" mode. Basically this is JSON output,

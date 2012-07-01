@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "May 2012" "" "json tool manual"
+.TH "JSON" "1" "June 2012" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- (aka "jsontool") JSON love for your command line\.
@@ -161,6 +161,26 @@ $ echo \'{"name": "trent", "age": 38}\' | json \-o json\-0
 .P
 Use \fB\-H\fR to exclude a leading HTTP header block as from \fBcurl \-i\fR\.
 .
+.SS "Listing keys"
+Sometimes you want the list of keys for an object\. Use \fB\-k\fR or \fB\-\-keys\fR for that:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"name": "trent", "age": 38}\' | json \-k
+[
+  "name",
+  "age"
+]
+$ echo \'{"name": "trent", "age": 38}\' | json \-ka
+name
+age
+.
+.fi
+.
+.IP "" 0
+.
 .SH "OPTIONS"
 .
 .TP
@@ -214,6 +234,13 @@ Finally, if \fBLOOKUP\fR arguments are given, these are extracted from the JSON\
 .TP
 \fB\-D DELIM\fR
 Delimiter char between LOOKUPS (default is \'\.\')\. For example: \fB$ echo \'{"a\.b": {"b": 1}}\' | json \-D / a\.b/b\fR
+.
+.P
+An alternative to lookups is to output the keys of the input object:
+.
+.TP
+\fB\-k\fR, \fB\-\-keys\fR
+Output the input object\'s keys\.
 .
 .P
 By default \fBjson\fR outputs in "jsony" mode\. Basically this is JSON output, with the exception that a single string output value is emitted without the quotes\. The intention here is to be of most use to the UNIX command\-line\. Other output formats are supported:
