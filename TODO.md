@@ -1,7 +1,3 @@
-- Add -k|--keys to extract the keys:
-        echo '{"name":"trent", "age":38}' | jsondev -k
-        ["name", "age"]
-
 
 # someday/maybe
 
