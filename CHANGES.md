@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 3.3.0 (not yet released)
+## json 3.3.0
 
 - Add `-k|--keys` option to output the input objects keys:
 
