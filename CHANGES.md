@@ -1,9 +1,10 @@
 # json (aka jsontool) Changelog
 
 
-## json 3.3.1 (not yet released)
+## json 4.0.0 (not yet released)
 
-(nothing yet)
+- Use 8 space indent for syntax error message on stderr instead of '\t'.
+  Minor change. Tabs are evil.
 
 
 ## json 3.3.0
