@@ -202,6 +202,13 @@ Print version of this command and exit\.
 Don\'t warn if input isn\'t valid JSON\.
 .
 .P
+By default \fBjson\fR will process input from stdin\. Alternative, an input file (or files) can be specified:
+.
+.TP
+\fB\-f FILE\fR
+Specify an input file (instead of stdin)\.
+.
+.P
 If your JSON output is a REST API response, it might include the headers (e\.g\. when calling with \fBcurl \-i\fR)\. By default \fBjson\fR will pass those headers through (without choking on them)\. However if you want then stripped you can use:
 .
 .TP
@@ -247,6 +254,13 @@ An alternative to lookups is to output the keys of the input object:
 .TP
 \fB\-k\fR, \fB\-\-keys\fR
 Output the input object\'s keys\.
+.
+.P
+\fBjson\fR can be restricting to just validating its input, i\.e\. processing and output of the input is skipped:
+.
+.TP
+\fB\-\-validate\fR
+Just validate the input, no processing or output of the JSON content\.
 .
 .P
 By default \fBjson\fR outputs in "jsony" mode\. Basically this is JSON output, with the exception that a single string output value is emitted without the quotes\. The intention here is to be of most use to the UNIX command\-line\. Other output formats are supported:
@@ -663,7 +677,7 @@ $ echo \'[{"name": "Trent"},{"name": "Ewan"}]\' | json \-o inspect
 .
 .IP "" 0
 .
-.SS "Validating JSON"
+.SS "Validation"
 Since v1\.2\.0 \fBjson\fR will give position information and context for JSON syntax errors (\fBSyntaxError\fR)\. This can be handy for validating data and config files:
 .
 .IP "" 4
@@ -677,6 +691,37 @@ json: error: input is not JSON: Unexpected \',\' at line 17, column 5:
 {
     "use\-proxy": false
 \.\.\.
+$ echo $?
+1
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Processing and output of the input JSON can be suppressed with the \fB\-\-validate\fR option:
+.
+.IP "" 4
+.
+.nf
+
+$ cat config\.json | json \-\-validate
+json: error: input is not JSON: Unexpected \',\' at line 17, column 5:
+            , { "name": "smartos64\-1\.4\.7"
+        \.\.\.\.^
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Together with the \fB\-q\fR you can get silent, exit\-status\-only, JSON validation:
+.
+.IP "" 4
+.
+.nf
+
+$ cat config\.json | json \-\-validate \-q
 $ echo $?
 1
 .

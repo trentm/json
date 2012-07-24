@@ -3,6 +3,21 @@
 
 ## json 4.0.0 (not yet released)
 
+- Add `--validate` option to just validate (no processing and output)
+
+        $ echo '{"foo" "bar"}' | json
+        json: error: input is not JSON: Expected ':' instead of '"' at line 1, column 8:
+                {"foo" "bar"}
+                .......^
+        {"foo" "bar"}
+        $ echo '{"foo" "bar"}' | json --validate
+        json: error: input is not JSON: Expected ':' instead of '"' at line 1, column 8:
+                {"foo" "bar"}
+                .......^
+        $ echo '{"foo" "bar"}' | json --validate -q
+        $ echo $?
+        1
+
 - Add `-f FILE` option for specifying an input file (or files) instead of
   stdin:
 

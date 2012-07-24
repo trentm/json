@@ -41,6 +41,7 @@ Use the `-e CODE` option to execute code on the input JSON.
 If input is an array, this will automatically process each
 item separately.
 
+
 ### Conditional filtering
 
 Use the `-c CODE` option to filter the input JSON.
@@ -50,6 +51,7 @@ Use the `-c CODE` option to filter the input JSON.
 
 If input is an array, this will automatically process each
 item separately.
+
 
 ### Lookups
 
@@ -127,6 +129,13 @@ that:
     Don't warn if input isn't valid JSON.
 
 
+By default `json` will process input from stdin. Alternative, an input file
+(or files) can be specified:
+
+  * `-f FILE`:
+    Specify an input file (instead of stdin).
+
+
 If your JSON output is a REST API response, it might include the headers
 (e.g. when calling with `curl -i`). By default `json` will pass those headers
 through (without choking on them). However if you want then stripped you
@@ -178,6 +187,13 @@ An alternative to lookups is to output the keys of the input object:
 
   * `-k`, `--keys`:
     Output the input object's keys.
+
+
+`json` can be restricting to just validating its input, i.e. processing
+and output of the input is skipped:
+
+  * `--validate`:
+    Just validate the input, no processing or output of the JSON content.
 
 
 By default `json` outputs in "jsony" mode. Basically this is JSON output,
@@ -450,7 +466,7 @@ You can get colored (non-JSON) output using node.js's
       { name: 'Ewan' } ]
 
 
-### Validating JSON
+### Validation
 
 Since v1.2.0 `json` will give position information and context for JSON
 syntax errors (`SyntaxError`). This can be handy for validating data and
@@ -463,6 +479,20 @@ config files:
     {
         "use-proxy": false
     ...
+    $ echo $?
+    1
+
+Processing and output of the input JSON can be suppressed with the
+`--validate` option:
+
+    $ cat config.json | json --validate
+    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+                , { "name": "smartos64-1.4.7"
+            ....^
+
+Together with the `-q` you can get silent, exit-status-only, JSON validation:
+
+    $ cat config.json | json --validate -q
     $ echo $?
     1
 

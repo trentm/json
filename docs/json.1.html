@@ -13,7 +13,7 @@
   .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
   .mp h3 {margin:0 0 0 4ex}
   .mp dt {margin:0;clear:left}
-  .mp dt.flush {float:left;width:8ex}
+  
   .mp dd {margin:0 0 0 9ex}
   .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
   .mp pre {margin-bottom:20px}
@@ -207,6 +207,14 @@ age
 </dl>
 
 
+<p>By default <code>json</code> will process input from stdin. Alternative, an input file
+(or files) can be specified:</p>
+
+<dl>
+<dt class="flush"><code>-f FILE</code></dt><dd>Specify an input file (instead of stdin).</dd>
+</dl>
+
+
 <p>If your JSON output is a REST API response, it might include the headers
 (e.g. when calling with <code>curl -i</code>). By default <code>json</code> will pass those headers
 through (without choking on them). However if you want then stripped you
@@ -256,6 +264,14 @@ This can be overridden:</p>
 
 <dl>
 <dt><code>-k</code>, <code>--keys</code></dt><dd>Output the input object's keys.</dd>
+</dl>
+
+
+<p><code>json</code> can be restricting to just validating its input, i.e. processing
+and output of the input is skipped:</p>
+
+<dl>
+<dt><code>--validate</code></dt><dd>Just validate the input, no processing or output of the JSON content.</dd>
 </dl>
 
 
@@ -540,7 +556,7 @@ $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o json-0
   { name: 'Ewan' } ]
 </code></pre>
 
-<h3 id="Validating-JSON">Validating JSON</h3>
+<h3 id="Validation">Validation</h3>
 
 <p>Since v1.2.0 <code>json</code> will give position information and context for JSON
 syntax errors (<code>SyntaxError</code>). This can be handy for validating data and
@@ -553,6 +569,22 @@ json: error: input is not JSON: Unexpected ',' at line 17, column 5:
 {
     "use-proxy": false
 ...
+$ echo $?
+1
+</code></pre>
+
+<p>Processing and output of the input JSON can be suppressed with the
+<code>--validate</code> option:</p>
+
+<pre><code>$ cat config.json | json --validate
+json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+            , { "name": "smartos64-1.4.7"
+        ....^
+</code></pre>
+
+<p>Together with the <code>-q</code> you can get silent, exit-status-only, JSON validation:</p>
+
+<pre><code>$ cat config.json | json --validate -q
 $ echo $?
 1
 </code></pre>

@@ -1,8 +1,5 @@
 # json 4
 
-- -f argument to take a file
-- --validate to not print out the json, just validate it. Also with -q to
-  have no output, but just exit value for valid.
 - `json --merge`
 
 
