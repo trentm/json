@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 4.0.0 (not yet released)
+## json 4.0.0
 
 - Add `--validate` option to just validate (no processing and output)
 
