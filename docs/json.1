@@ -16,7 +16,7 @@ something\-generating\-JSON\-on\-stdout | \fBjson\fR [OPTIONS] [LOOKUPS]
 Pipe in your JSON for pretty\-printing, JSON validation, filtering, and modification\. Supply one or more \fBLOOKUPS\fR to extract a subset of the JSON\. HTTP header blocks are skipped by default\.
 .
 .SS "Grouping"
-Use \'\-g\' or \'\-\-group\' to group objects or arrays separated by no space or by a newline\. This can be helpful for, e\.g\.:
+(Added in json v4\.) Use \'\-g\' or \'\-\-group\' to group objects (into an array of objects) or concatenate arrays (into a single array) separated by no space or by a newline\. This can be helpful for, e\.g\.:
 .
 .IP "" 4
 .
@@ -33,6 +33,41 @@ and similar\.
 .
 .P
 In json v3 and earlier, this used to be called "auto\-arrayification" and was implicit\. See the \fICOMPATIBILITY\fR section below\.
+.
+.SS "Merging"
+(Added in json v4\.) Use \'\-\-merge\' or \'\-\-deep\-merge\' to merge adjacent JSON objects in the input\. Keys in the last object win\.
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"one":"un","two":"deux"}
+{"one":"uno","three":"tres"}\' | json \-\-merge
+{
+  "one": "uno",
+  "two": "deux",
+  "three": "tres"
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+This could be useful for merging multiple config files, e\.g\.:
+.
+.IP "" 4
+.
+.nf
+
+$ cat /opt/app/etc/defaults\.json \e
+    /etc/app/config\.json \e
+    ~/\.app/config\.json | json \-\-merge
+\.\.\.
+.
+.fi
+.
+.IP "" 0
 .
 .SS "Execution"
 Use the \fB\-e CODE\fR option to execute code on the input JSON\.
@@ -209,11 +244,22 @@ By default \fBjson\fR will process input from stdin\. Alternative, an input file
 Specify an input file (instead of stdin)\.
 .
 .P
-If your JSON output is a REST API response, it might include the headers (e\.g\. when calling with \fBcurl \-i\fR)\. By default \fBjson\fR will pass those headers through (without choking on them)\. However if you want then stripped you can use:
+If your JSON output is a REST API response, it might include the headers (e\.g\. when calling with \fBcurl \-i\fR)\. By default \fBjson\fR will pass those headers through (without choking on them)\. However if you want them stripped you can use:
 .
 .TP
 \fB\-H\fR
 drop any HTTP header block (as from \fBcurl \-i \.\.\.\fR)
+.
+.P
+Other pre\-JSON input handling:
+.
+.TP
+\fB\-g\fR, \fB\-\-group\fR
+Group adjacent objects into an array of objects, or concatenate adjacent arrays into a single array\.
+.
+.TP
+\fB\-\-merge\fR, \fB\-\-deep\-merge\fR
+Merge adjacent objects into a single object with merged keys\. Values in later objects win\. Use \fB\-\-deep\-merge\fR to recursively merge keys in objects\.
 .
 .P
 You can process elements of an input array separately and generate tabular output:

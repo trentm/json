@@ -95,8 +95,9 @@ subset of the JSON. HTTP header blocks are skipped by default.</p>
 
 <h3 id="Grouping">Grouping</h3>
 
-<p>Use '-g' or '--group' to group objects or arrays separated
-by no space or by a newline. This can be helpful for, e.g.:</p>
+<p>(Added in json v4.) Use '-g' or '--group' to group objects (into an array of
+objects) or concatenate arrays (into a single array) separated by no space or
+by a newline. This can be helpful for, e.g.:</p>
 
 <pre><code>$ cat *.json | json -g ...
 </code></pre>
@@ -105,6 +106,28 @@ by no space or by a newline. This can be helpful for, e.g.:</p>
 
 <p>In json v3 and earlier, this used to be called "auto-arrayification" and
 was implicit. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+
+<h3 id="Merging">Merging</h3>
+
+<p>(Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
+objects in the input. Keys in the last object win.</p>
+
+<pre><code>$ echo '{"one":"un","two":"deux"}
+{"one":"uno","three":"tres"}' | json --merge
+{
+  "one": "uno",
+  "two": "deux",
+  "three": "tres"
+}
+</code></pre>
+
+<p>This could be useful for merging multiple config files, e.g.:</p>
+
+<pre><code>$ cat /opt/app/etc/defaults.json \
+    /etc/app/config.json \
+    ~/.app/config.json | json --merge
+...
+</code></pre>
 
 <h3 id="Execution">Execution</h3>
 
@@ -217,11 +240,22 @@ age
 
 <p>If your JSON output is a REST API response, it might include the headers
 (e.g. when calling with <code>curl -i</code>). By default <code>json</code> will pass those headers
-through (without choking on them). However if you want then stripped you
+through (without choking on them). However if you want them stripped you
 can use:</p>
 
 <dl>
 <dt class="flush"><code>-H</code></dt><dd>drop any HTTP header block (as from <code>curl -i ...</code>)</dd>
+</dl>
+
+
+<p>Other pre-JSON input handling:</p>
+
+<dl>
+<dt><code>-g</code>, <code>--group</code></dt><dd><p>Group adjacent objects into an array of objects, or concatenate adjacent
+arrays into a single array.</p></dd>
+<dt><code>--merge</code>, <code>--deep-merge</code></dt><dd><p>Merge adjacent objects into a single object with merged keys. Values
+in later objects win. Use <code>--deep-merge</code> to recursively merge keys in
+objects.</p></dd>
 </dl>
 
 

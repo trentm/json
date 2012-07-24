@@ -1,8 +1,3 @@
-# json 4
-
-- `json --merge`
-
-
 # someday/maybe
 
 - fix this in man page (ronn fix?):
@@ -23,15 +18,6 @@
 
   Tips from mdocml.
 
-- jsontool.org?
-
-- This tool takes 2 json files and print out a merged version of the files
-  with the right hand side file taking precedence (see impl in usb-headnode)
-
-        ./json-merge left.json right.json
-
-- '-f' arg to take a file to process
-
 - Support slice indexing into an array:
       $ echo '["a","b","c"]' | jsondev '[1:]'
       ["b", "c"]
@@ -51,19 +37,3 @@
               vm.runInNewContext(code, datum);
                  ^
       TypeError: Object #<error> has no method 'push'
-
-- Would -v|--values be useful?
-        echo '{"name":"trent", "age":38}' | jsondev -v
-        ["trent", 38]
-  Essentially then, '-kv' is the default (emit whole item).
-        $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j -k
-        ["name", "age"]
-        $ echo '{"name":"trent", "age":38, "lang": "english"}' | jsondev name age -j -v
-        ["trent", 38]
-
-- Add '-s' (or '-S'?) option for 'starting point' in the given JSON doc.
-  The use case is that you care about a subfield of an object and want to
-  do array processing on it
-      echo '{"errors":[{"code":42,"msg":"boom"},{"code":3,"msg":"hi"}]}' | jsondev -s errors -a code msg
-      42 boom
-      3 hi
