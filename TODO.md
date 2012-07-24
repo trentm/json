@@ -1,3 +1,6 @@
+- `make check`
+
+
 # someday/maybe
 
 - fix this in man page (ronn fix?):
