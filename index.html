@@ -13,7 +13,7 @@
   .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
   .mp h3 {margin:0 0 0 4ex}
   .mp dt {margin:0;clear:left}
-  .mp dt.flush {float:left;width:8ex}
+  
   .mp dd {margin:0 0 0 9ex}
   .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
   .mp pre {margin-bottom:20px}
@@ -64,6 +64,7 @@
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#COMPATIBILITY">COMPATIBILITY</a>
     <a href="#PROJECT-BUGS">PROJECT &amp; BUGS</a>
     <a href="#LICENSE">LICENSE</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -84,21 +85,49 @@
 
 <p>something-generating-JSON-on-stdout | <code>json</code> [OPTIONS] [LOOKUPS]</p>
 
+<p><code>json</code> -f FILE [OPTIONS] [LOOKUPS...]</p>
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>Pipe in your JSON for pretty-printing, JSON validation, filtering,
 and modification. Supply one or more <code>LOOKUPS</code> to extract a
 subset of the JSON. HTTP header blocks are skipped by default.</p>
 
-<h3 id="Auto-arrayification">Auto-arrayification</h3>
+<h3 id="Grouping">Grouping</h3>
 
-<p>Adjacent objects or arrays separated by no space or by a
-newline are "arrayified". This can be helpful for, e.g.:</p>
+<p>(Added in json v4.) Use '-g' or '--group' to group objects (into an array of
+objects) or concatenate arrays (into a single array) separated by no space or
+by a newline. This can be helpful for, e.g.:</p>
 
-<pre><code>$ cat *.json | json ...
+<pre><code>$ cat *.json | json -g ...
 </code></pre>
 
 <p>and similar.</p>
+
+<p>In json v3 and earlier, this used to be called "auto-arrayification" and
+was implicit. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+
+<h3 id="Merging">Merging</h3>
+
+<p>(Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
+objects in the input. Keys in the last object win.</p>
+
+<pre><code>$ echo '{"one":"un","two":"deux"}
+{"one":"uno","three":"tres"}' | json --merge
+{
+  "one": "uno",
+  "two": "deux",
+  "three": "tres"
+}
+</code></pre>
+
+<p>This could be useful for merging multiple config files, e.g.:</p>
+
+<pre><code>$ cat /opt/app/etc/defaults.json \
+    /etc/app/config.json \
+    ~/.app/config.json | json --merge
+...
+</code></pre>
 
 <h3 id="Execution">Execution</h3>
 
@@ -201,13 +230,32 @@ age
 </dl>
 
 
+<p>By default <code>json</code> will process input from stdin. Alternative, an input file
+(or files) can be specified:</p>
+
+<dl>
+<dt class="flush"><code>-f FILE</code></dt><dd>Specify an input file (instead of stdin).</dd>
+</dl>
+
+
 <p>If your JSON output is a REST API response, it might include the headers
 (e.g. when calling with <code>curl -i</code>). By default <code>json</code> will pass those headers
-through (without choking on them). However if you want then stripped you
+through (without choking on them). However if you want them stripped you
 can use:</p>
 
 <dl>
 <dt class="flush"><code>-H</code></dt><dd>drop any HTTP header block (as from <code>curl -i ...</code>)</dd>
+</dl>
+
+
+<p>Other pre-JSON input handling:</p>
+
+<dl>
+<dt><code>-g</code>, <code>--group</code></dt><dd><p>Group adjacent objects into an array of objects, or concatenate adjacent
+arrays into a single array.</p></dd>
+<dt><code>--merge</code>, <code>--deep-merge</code></dt><dd><p>Merge adjacent objects into a single object with merged keys. Values
+in later objects win. Use <code>--deep-merge</code> to recursively merge keys in
+objects.</p></dd>
 </dl>
 
 
@@ -253,6 +301,14 @@ This can be overridden:</p>
 </dl>
 
 
+<p><code>json</code> can be restricting to just validating its input, i.e. processing
+and output of the input is skipped:</p>
+
+<dl>
+<dt><code>--validate</code></dt><dd>Just validate the input, no processing or output of the JSON content.</dd>
+</dl>
+
+
 <p>By default <code>json</code> outputs in "jsony" mode. Basically this is JSON output,
 with the exception that a single string output value is emitted without the
 quotes. The intention here is to be of most use to the UNIX command-line.
@@ -270,155 +326,140 @@ string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
-<p>Let's use the Github API to look at the <a href="https://github/joyent/node">node</a>
-project:</p>
+<p>A typical JSON REST API response:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/show/joyent/node
-{"repository":{"organization":"joyent","watchers":15172,...
+<pre><code>$ curl -s http://ifconfig.me/all.json
+{"connection":"","ip_addr":"216.57.203.67","lang":"","remote_host":...
 </code></pre>
 
 <p><strong>Nice output by default</strong>:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/show/joyent/node | json
+<pre><code>$ curl -s http://ifconfig.me/all.json | json
 {
-  "repository": {
-    "organization": "joyent",
-    "watchers": 15172,
-    "has_downloads": false,
-    "url": "https://github.com/joyent/node",
-    "homepage": "http://nodejs.org/",
-    "fork": false,
-    "has_issues": true,
-    "has_wiki": true,
-    "forks": 1835,
-    "size": 28000,
-    "private": false,
-    "name": "node",
-    "owner": "joyent",
-    "open_issues": 443,
-    "description": "evented I/O for v8 javascript",
-    "language": "JavaScript",
-    "created_at": "2009/05/27 09:29:46 -0700",
-    "pushed_at": "2012/05/24 09:55:29 -0700"
-  }
+  "connection": "",
+  "ip_addr": "201.73.103.12",
+  "lang": "",
+  "remote_host": "",
+  "user_agent": "curl/7.23.1 (i386-sun-solaris2.11) libcurl/7.23.1 OpenSSL/0.9.8w zlib/1.2.3 libidn/1.23 libssh2/1.2.2",
+  "charset": "",
+  "port": "63713",
+  "via": "",
+  "forwarded": "",
+  "mime": "*/*",
+  "keep_alive": "",
+  "encoding": ""
 }
 </code></pre>
 
 <p>Say you just want to <strong>extract one value</strong>:</p>
 
-<pre><code>$ curl -s https://github.com/api/v2/json/repos/show/joyent/node \
-  | json repository.open_issues
-443
+<pre><code>$ curl -s http://ifconfig.me/all.json | json ip_addr
+201.73.103.12
+</code></pre>
+
+<p>Or, looking at the <a href="https://github.com/joyent/node">node.js project</a> using
+the Github API:</p>
+
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node | json open_issues
+517
 </code></pre>
 
 <p>If you use <code>curl -i</code> to get HTTP headers (because perhaps they contain
 relevant information), <strong>json will skip the HTTP headers automatically</strong>:</p>
 
-<pre><code>$ curl -is https://github.com/api/v2/json/repos/show/joyent/node \
-  | json repository
+<pre><code>$ curl -is https://api.github.com/repos/joyent/node | json
 HTTP/1.1 200 OK
 Server: nginx/1.0.13
-Date: Thu, 24 May 2012 17:25:59 GMT
+Date: Tue, 24 Jul 2012 04:01:08 GMT
 Content-Type: application/json; charset=utf-8
 Connection: keep-alive
 Status: 200 OK
-X-RateLimit-Limit: 60
-ETag: "7e9ae0fd892a197256419a180af28f79"
-X-Frame-Options: deny
-X-RateLimit-Remaining: 58
-X-Runtime: 14
-Content-Length: 439
-Cache-Control: private, max-age=0, must-revalidate
+ETag: "1a21d980a01768dde42145ce2b58694c"
+X-RateLimit-Remaining: 4997
+Content-Length: 1513
+Cache-Control: public, max-age=60
+Vary: Accept
+X-RateLimit-Limit: 5000
+Last-Modified: Tue, 24 Jul 2012 03:50:11 GMT
 
 {
-  "organization": "joyent",
-  "watchers": 15172,
-  "has_downloads": false,
-  "url": "https://github.com/joyent/node",
-  "homepage": "http://nodejs.org/",
-  "fork": false,
+  "master_branch": "master",
   "has_issues": true,
-  "has_wiki": true,
-  "forks": 1835,
-  "size": 28000,
-  "private": false,
-  "name": "node",
-  "owner": "joyent",
-  "open_issues": 443,
-  "description": "evented I/O for v8 javascript",
-  "language": "JavaScript",
-  "created_at": "2009/05/27 09:29:46 -0700",
-  "pushed_at": "2012/05/24 09:55:29 -0700"
-}
+  "has_downloads": false,
+  "homepage": "http://nodejs.org/",
+  "html_url": "https://github.com/joyent/node",
+...
 </code></pre>
 
-<p>Or, say you are stuck with the headers in your pipeline, <strong>'json -H' will drop HTTP headers</strong>:</p>
+<p>Or, say you are stuck with the headers in your pipeline, <strong>'json -H' will
+drop HTTP headers</strong>:</p>
 
-<pre><code>$ curl -is https://github.com/api/v2/json/repos/show/joyent/node \
-  | json -H repository.watchers
-15172
+<pre><code>$ curl -is https://api.github.com/repos/joyent/node | json -H forks
+2158
 </code></pre>
 
 <p>Here is <strong>an example that shows indexing a list</strong>. (The given "lookup"
 argument is basically JavaScript code appended, with '.' if necessary, to the
 JSON data and eval'd.)</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-  | json 'repositories[2].description'
-Connect is a middleware layer for Node.js
+<pre><code>$ curl -s https://api.github.com/legacy/repos/search/nodejs \
+    | json 'repositories[2].name'
+socket.io
 </code></pre>
 
 <p>Having the quote to avoid shell interpretation of '[' is annoying, so <code>json</code>
 allows a special case for an integer lookup:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-  | json 'repositories.2.description'
-Connect is a middleware layer for Node.js
+<pre><code>$ curl -s https://api.github.com/legacy/repos/search/nodejs \
+    | json 'repositories.2.name'
+socket.io
 </code></pre>
 
 <h3 id="Array-processing-with-a">Array processing with -a</h3>
 
 <p><code>json</code> includes the <code>-a</code> (aka <code>--array</code>) option for <strong>processing each element of
-an input JSON array independently</strong> and <strong>using tabular output</strong>. Continuing
-our example above, let's first get a list of repositories for a "nodejs"
-search on github:</p>
+an input JSON array independently</strong> and <strong>using tabular output</strong>. Let's first
+get a list of open node.js issues (note that this is a subset because of
+<a href="http://developer.github.com/v3/#pagination">GH API pagination</a>):</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs | json repositories
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&amp;per_page=100
 [
   {
-    "type": "repo",
-    "followers": 3922,
-    "watchers": 3922,
-    "has_issues": true,
-    "description": "Sinatra inspired web development framework ...",
-    "url": "https://github.com/visionmedia/express",
-    "has_downloads": true,
-    "created_at": "2009/06/26 11:56:01 -0700",
-    "pushed": "2011/09/28 10:27:26 -0700",
-    "forks": 345,
+    "number": 3757,
+    "html_url": "https://github.com/joyent/node/issues/3757",
+    "body": "Fix #3756.\n\nReview, please: @TooTallNate",
+    "milestone": null,
+    "user": {
+      "gravatar_id": "73a2b24daecb976af81e010b7a3ce3c6",
+      "login": "isaacs",
+      "avatar_url": "https://secure.gravatar.com/avatar/73a2b24dae...
 ...
 </code></pre>
 
 <p>We can then print a table with just some fields as follows:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-    | json repositories | json -a forks url
-345 https://github.com/visionmedia/express
-136 https://github.com/unconed/TermKit
-292 https://github.com/LearnBoost/socket.io
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&amp;per_page=100 \
+    | json -a comments number title
+0 3757 readline: Remove event listeners on close
+0 3756 readline: No way to completely unhook interface from input/output
+1 3755 node-v0.6.20 hello example segfaults on RaspberryPi (w/Arch + bash)
+0 3753 Prohibit same listeners in EventEmitter. Closes #964.
+1 3752 Auto-detect hardfloat eabi and armv7 variables on ARM based on compiler
+3 3751 persistent REPL history
+0 3749 glibc errors on SheevaPlug / Debian Squeeze
+...
 </code></pre>
 
 <p>Ultimately this can be useful for then using other command-line tools. For
-example, we could get the list of top-five most forked "nodejs" github
-repos:</p>
+example, we could get the list of top-five most commented open node issues:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-    | json repositories | json -a forks url | sort -n | tail -5
-269 https://github.com/visionmedia/jade
-298 https://github.com/senchalabs/connect
-539 https://github.com/blueimp/jQuery-File-Upload
-552 https://github.com/LearnBoost/socket.io
-634 https://github.com/visionmedia/express
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&amp;per_page=100 \
+    | json -a comments number title | sort -n  | tail -5
+9 3510 Automatically `.toString()` functions in REPL.
+11 3668 JSON documentation index listing
+12 3624 Add a return value to Buffer.write* methods that returns the ...
+12 3655 defer dgram listening event
+14 3613 Connections closed by node stay permanently in FIN_WAIT2
 </code></pre>
 
 <p>Or get a breakdown by ISO language code of the recent tweets mentioning "nodejs":</p>
@@ -436,25 +477,24 @@ repos:</p>
 
 <p>The <strong><code>-d</code> option can be used to specify a delimiter</strong>:</p>
 
-<pre><code>$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-    | json repositories | json -a forks url -d,
-
-$ curl -s http://github.com/api/v2/json/repos/search/nodejs \
-    | json repositories | json -a forks watchers url -d,
-345,3922,https://github.com/visionmedia/express
-136,3128,https://github.com/unconed/TermKit
-292,2777,https://github.com/LearnBoost/socket.io
-104,1640,https://github.com/mishoo/UglifyJS
-...
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node/issues?state=open \
+        | json -a created_at number title -d,
+2012-07-24T03:45:03Z,3757,readline: Remove event listeners on close
+2012-07-24T03:32:10Z,3756,readline: No way to completely unhook inte...
+2012-07-23T21:17:50Z,3755,node-v0.6.20 hello example segfaults on Ra...
+2012-07-22T16:17:49Z,3753,Prohibit same listeners in EventEmitter. C...
+2012-07-22T13:43:40Z,3752,Auto-detect hardfloat eabi and armv7 varia...
 </code></pre>
 
-<h3 id="Auto-arrayification">Auto-arrayification</h3>
+<h3 id="Grouping">Grouping</h3>
 
-<p>Adjacent objects or arrays are 'arrayified'. To attempt to avoid false
-positives inside JSON strings, <em>adjacent</em> elements must have either no
-whitespace separation or at least a newline separation. Examples:</p>
+<p>You can use the <strong>'-g' or '--group' option to group adjacent objects</strong> into
+an array of those objects; or to concatenate adjacent arrays into a single
+array. To attempt to avoid false positives inside JSON strings, <em>adjacent</em>
+elements must have either no whitespace separation or at least a newline
+separation. Examples:</p>
 
-<pre><code>$ echo '{"a":1}{"b":2}' | json
+<pre><code>$ echo '{"a":1}{"b":2}' | json -g       # group into array of objects
 [
   {
     "a": 1
@@ -463,7 +503,7 @@ whitespace separation or at least a newline separation. Examples:</p>
     "b": 2
   }
 ]
-$ echo '[1,2][3,4]' | json
+$ echo '[1,2][3,4]' | json -g           # concantenate into one array
 [
   1,
   2,
@@ -474,15 +514,15 @@ $ echo '[1,2][3,4]' | json
 
 <p>This can be useful when processing a number of JSON files, e.g.:</p>
 
-<pre><code>$ cat my_data/*.json | json ...
+<pre><code>$ cat my_data/*.json | json -g ...
 </code></pre>
 
 <p>Or when composing multiple JSON API response, e.g. this somewhat contrived
 search for node.js bugs mentioning "tty" or "windows":</p>
 
 <pre><code>$ echo tty windows | xargs -n1 -I{} curl -s \
-    http://github.com/api/v2/json/issues/search/joyent/node/open/{} \
-    | json -a issues | json -a number title
+    https://api.github.com/legacy/issues/search/joyent/node/open/{} \
+    | json -g -a issues | json -g -a number title
 623 Non-userfacing native modules should be prefixed with _
 861 child_process fails after stdin close
 1157 `child_process` module should read / write password prompts
@@ -542,14 +582,15 @@ $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o json-0
 [{"name":"Trent"},{"name":"Ewan"}]
 </code></pre>
 
-<p>You can get colored (non-JSON) output using node.js's <a href="http://nodejs.org/docs/latest/api/all.html#util.inspect"><code>util.inspect</code></a>:</p>
+<p>You can get colored (non-JSON) output using node.js's
+<a href="http://nodejs.org/docs/latest/api/all.html#util.inspect"><code>util.inspect</code></a>:</p>
 
 <pre><code>$ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o inspect
 [ { name: 'Trent' },
   { name: 'Ewan' } ]
 </code></pre>
 
-<h3 id="Validating-JSON">Validating JSON</h3>
+<h3 id="Validation">Validation</h3>
 
 <p>Since v1.2.0 <code>json</code> will give position information and context for JSON
 syntax errors (<code>SyntaxError</code>). This can be handy for validating data and
@@ -562,6 +603,22 @@ json: error: input is not JSON: Unexpected ',' at line 17, column 5:
 {
     "use-proxy": false
 ...
+$ echo $?
+1
+</code></pre>
+
+<p>Processing and output of the input JSON can be suppressed with the
+<code>--validate</code> option:</p>
+
+<pre><code>$ cat config.json | json --validate
+json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+            , { "name": "smartos64-1.4.7"
+        ....^
+</code></pre>
+
+<p>Together with the <code>-q</code> you can get silent, exit-status-only, JSON validation:</p>
+
+<pre><code>$ cat config.json | json --validate -q
 $ echo $?
 1
 </code></pre>
@@ -632,6 +689,23 @@ separately (use <code>-A</code> to override this):</p>
 ]
 </code></pre>
 
+<h2 id="COMPATIBILITY">COMPATIBILITY</h2>
+
+<p>This is json version 4. The major version is incremented when there is a
+backward incompatible change.</p>
+
+<ul>
+<li>v4: Made "auto-arrayification" require an explicit '-g' or '--group' option
+to prefer that implicit processing never magically fix otherwise invalid
+JSON. The feature is now called grouping.</li>
+<li>v3: Cleaned up json and "jsony" output formatting to be more consistent,
+especially for array processing.</li>
+</ul>
+
+
+<p>See the <a href="https://github.com/trentm/json/blob/master/CHANGES.md">changelog</a>
+for full compatibility and change details.</p>
+
 <h2 id="PROJECT-BUGS">PROJECT &amp; BUGS</h2>
 
 <p><code>json</code> is written in JavaScript and requires node.js (<code>node</code>).
@@ -656,7 +730,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>June 2012</li>
+    <li class='tc'>July 2012</li>
     <li class='tr'>json(1)</li>
   </ol>
 
