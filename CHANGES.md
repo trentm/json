@@ -3,6 +3,36 @@
 
 ## json 4.0.0 (not yet released)
 
+- [Backward incompatible] Move "auto-arrayification" to require explicitly
+  using the "-g" or "--group" option:
+
+        $ echo '{"one":"two"}{"three":"four"}' | json
+        json: error: input is not JSON: Syntax error at line 1, column 14:
+                {"one":"two"}{"three":"four"}
+                .............^
+        {"one":"two"}{"three":"four"}
+        $ echo '{"one":"two"}{"three":"four"}' | json -g -o json-0
+        [{"one":"two"},{"three":"four"}]
+
+  This is to avoid auto-arrayification accidentally making an invalid JSON
+  object (with a missing comma) be transformed to a valid array:
+
+        $ cat oops.json
+        {
+          "a": {
+            "b": [
+                {"foo": "bar"}
+                {"foo": "bar"}
+            ]
+          }
+        }
+        $ cat oops.json | json3 -o json-0
+        [{"a":{"b":[{"foo":"bar"},{"foo":"bar"}]}}]
+
+  Basically the jusitification for this breaking change is that the
+  invariant of `json` validating the input JSON is more important than the
+  occassional convenience of grouping.
+
 - Use 8 space indent for syntax error message on stderr instead of '\t'.
   Minor change. Tabs are evil.
 

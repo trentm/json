@@ -1,4 +1,4 @@
-JSON="node ../../lib/jsontool.js -q -o json-0"
+JSON="node ../../lib/jsontool.js -q -o json-0 --group"
 
 echo "# simple"
 cat objects.input | $JSON
