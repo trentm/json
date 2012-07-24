@@ -85,6 +85,8 @@
 
 <p>something-generating-JSON-on-stdout | <code>json</code> [OPTIONS] [LOOKUPS]</p>
 
+<p><code>json</code> -f FILE [OPTIONS] [LOOKUPS...]</p>
+
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
 <p>Pipe in your JSON for pretty-printing, JSON validation, filtering,
@@ -274,8 +276,7 @@ string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
-<p>Let's use the Github API to look at the <a href="https://github/joyent/node">node</a>
-project:</p>
+<p>A typical JSON REST API response:</p>
 
 <pre><code>$ curl -s http://ifconfig.me/all.json
 {"connection":"","ip_addr":"216.57.203.67","lang":"","remote_host":...
@@ -304,7 +305,12 @@ project:</p>
 
 <pre><code>$ curl -s http://ifconfig.me/all.json | json ip_addr
 201.73.103.12
-$ curl -s https://api.github.com/repos/joyent/node | json open_issues
+</code></pre>
+
+<p>Or, looking at the <a href="https://github.com/joyent/node">node.js project</a> using
+the Github API:</p>
+
+<pre><code>$ curl -s https://api.github.com/repos/joyent/node | json open_issues
 517
 </code></pre>
 
@@ -432,8 +438,8 @@ example, we could get the list of top-five most commented open node issues:</p>
 
 <h3 id="Grouping">Grouping</h3>
 
-<p>You can use the '-g' or '--group' option to group adjacent objects into an
-array of those objects; or to concatenate adjacent arrays into a single
+<p>You can use the <strong>'-g' or '--group' option to group adjacent objects</strong> into
+an array of those objects; or to concatenate adjacent arrays into a single
 array. To attempt to avoid false positives inside JSON strings, <em>adjacent</em>
 elements must have either no whitespace separation or at least a newline
 separation. Examples:</p>

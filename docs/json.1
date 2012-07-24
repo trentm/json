@@ -9,6 +9,9 @@
 .SH "SYNOPSIS"
 something\-generating\-JSON\-on\-stdout | \fBjson\fR [OPTIONS] [LOOKUPS]
 .
+.P
+\fBjson\fR \-f FILE [OPTIONS] [LOOKUPS\.\.\.]
+.
 .SH "DESCRIPTION"
 Pipe in your JSON for pretty\-printing, JSON validation, filtering, and modification\. Supply one or more \fBLOOKUPS\fR to extract a subset of the JSON\. HTTP header blocks are skipped by default\.
 .
@@ -261,7 +264,7 @@ Shortcut for \fB\-o inspect\fR\.
 Shortcut for \fB\-o json\fR\.
 .
 .SH "EXAMPLES"
-Let\'s use the Github API to look at the node \fIhttps://github/joyent/node\fR project:
+A typical JSON REST API response:
 .
 .IP "" 4
 .
@@ -310,6 +313,18 @@ Say you just want to \fBextract one value\fR:
 
 $ curl \-s http://ifconfig\.me/all\.json | json ip_addr
 201\.73\.103\.12
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Or, looking at the node\.js project \fIhttps://github\.com/joyent/node\fR using the Github API:
+.
+.IP "" 4
+.
+.nf
+
 $ curl \-s https://api\.github\.com/repos/joyent/node | json open_issues
 517
 .
@@ -501,7 +516,7 @@ $ curl \-s https://api\.github\.com/repos/joyent/node/issues?state=open \e
 .IP "" 0
 .
 .SS "Grouping"
-You can use the \'\-g\' or \'\-\-group\' option to group adjacent objects into an array of those objects; or to concatenate adjacent arrays into a single array\. To attempt to avoid false positives inside JSON strings, \fIadjacent\fR elements must have either no whitespace separation or at least a newline separation\. Examples:
+You can use the \fB\'\-g\' or \'\-\-group\' option to group adjacent objects\fR into an array of those objects; or to concatenate adjacent arrays into a single array\. To attempt to avoid false positives inside JSON strings, \fIadjacent\fR elements must have either no whitespace separation or at least a newline separation\. Examples:
 .
 .IP "" 4
 .

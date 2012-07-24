@@ -1,6 +1,15 @@
 # simple
 [{"one":1},{"two":2}]
 
+# simple (-f)
+[{"one":1},{"two":2}]
+
+# separate
+[{"one":1},{"two":2}]
+
+# separate (-f)
+[{"one":1},{"two":2}]
+
 # on same line
 [{"one":1},{"two":2}]
 

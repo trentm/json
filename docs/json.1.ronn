@@ -5,12 +5,15 @@
 
 something-generating-JSON-on-stdout | `json` \[OPTIONS\] \[LOOKUPS\]
 
+`json` -f FILE \[OPTIONS\] \[LOOKUPS...\]
+
 
 ## DESCRIPTION
 
 Pipe in your JSON for pretty-printing, JSON validation, filtering,
 and modification. Supply one or more `LOOKUPS` to extract a
 subset of the JSON. HTTP header blocks are skipped by default.
+
 
 ### Grouping
 
@@ -198,8 +201,7 @@ Other output formats are supported:
 
 ## EXAMPLES
 
-Let's use the Github API to look at the [node](https://github/joyent/node)
-project:
+A typical JSON REST API response:
 
     $ curl -s http://ifconfig.me/all.json
     {"connection":"","ip_addr":"216.57.203.67","lang":"","remote_host":...
@@ -226,6 +228,10 @@ Say you just want to **extract one value**:
 
     $ curl -s http://ifconfig.me/all.json | json ip_addr
     201.73.103.12
+
+Or, looking at the [node.js project](https://github.com/joyent/node) using
+the Github API:
+
     $ curl -s https://api.github.com/repos/joyent/node | json open_issues
     517
 
@@ -347,8 +353,8 @@ The **`-d` option can be used to specify a delimiter**:
 
 ### Grouping
 
-You can use the '-g' or '--group' option to group adjacent objects into an
-array of those objects; or to concatenate adjacent arrays into a single
+You can use the **'-g' or '--group' option to group adjacent objects** into
+an array of those objects; or to concatenate adjacent arrays into a single
 array. To attempt to avoid false positives inside JSON strings, *adjacent*
 elements must have either no whitespace separation or at least a newline
 separation. Examples:

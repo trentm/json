@@ -3,6 +3,16 @@
 
 ## json 4.0.0 (not yet released)
 
+- Add `-f FILE` option for specifying an input file (or files) instead of
+  stdin:
+
+        $ json -f foo.json
+        {
+          "foo": "bar"
+        }
+        $ json -f foo.json foo
+        bar
+
 - [Backward incompatible] Move "auto-arrayification" to require explicitly
   using the "-g" or "--group" option:
 

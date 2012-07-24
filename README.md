@@ -63,6 +63,7 @@ MIT (see the fine LICENSE.txt file).
 # Command-Line Usage
 
     <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
+    json -f FILE [OPTIONS] [LOOKUPS...]
 
 See `json --help` output for full details.
 
