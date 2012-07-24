@@ -9,7 +9,7 @@
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "bin": {
     "json": "./lib/jsontool.js",
-    "json3": "./lib/jsontool.js"
+    "json4": "./lib/jsontool.js"
   },
   "main": "./lib/jsontool.js",
   "man": "./man/man1/json.1",
