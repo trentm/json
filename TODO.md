@@ -1,14 +1,9 @@
 # json 4
 
-- "auto-arrayification" -> "grouping" and requires '-g|--group' option
-
-        cat *.json |
-
-  Jusitifcation for break is false positive on valid JSON. Show the targets.json.
-
 - -f argument to take a file
 - --validate to not print out the json, just validate it. Also with -q to
   have no output, but just exit value for valid.
+- `json --merge`
 
 
 # someday/maybe
@@ -31,12 +26,10 @@
 
   Tips from mdocml.
 
-- json5.org support?
-
 - jsontool.org?
 
--     This tool takes 2 json files and print out a merged version of the files
-    with the right hand side file taking precedence (see impl in usb-headnode)
+- This tool takes 2 json files and print out a merged version of the files
+  with the right hand side file taking precedence (see impl in usb-headnode)
 
         ./json-merge left.json right.json
 
