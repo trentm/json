@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.0.0 (not yet released)
+## json 5.0.0
 
 - [**backward incompatible**, issue #35] Special case the output for **a single
   lookup AND JSON output** (i.e. `-j` or `-o json*`) to only output the value
