@@ -3,7 +3,8 @@
 
 ## json 4.0.1 (not yet released)
 
-(nothing yet)
+- [issue #36] Turn off coloring for inspect output (`json -i`, `json -o
+  inspect`) if stdout is not a TTY.
 
 
 ## json 4.0.0
