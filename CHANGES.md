@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 5.0.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 5.0.0
 
 - [**backward incompatible**, issue #35] Special case the output for **a single
