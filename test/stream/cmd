@@ -1,7 +1,0 @@
-JSON=../../lib/jsontool.js
-
-node ../docstream.js 3 | $JSON -ga >stream.log &
-#node ../docstream.js 3 >stream.log &
-sleep 2.5
-cat stream.log
-
