@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 4.0.1 (not yet released)
+## json 4.0.1
 
 - [issue #36] Turn off coloring for inspect output (`json -i`, `json -o
   inspect`) if stdout is not a TTY.
