@@ -77,7 +77,12 @@ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -o json-0 
 #   [{"name":"trent", "age":38}, {"name":"ewan", "age":4}]
 echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -o json-0 0 2
 #   [{"name":"trent", "age":38}]
+echo -n 'index 2:'
 echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -o json-0 2
+echo
+#   (empty)
+echo -n 'index 2,3:'
+echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -o json-0 2 3
 #   []
 echo '{"0": "zero", "1": "one"}' | $JSON 0 1
 #   zero
