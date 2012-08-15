@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 4.0.2 (not yet released)
+
+(nothing yet)
+
+
 ## json 4.0.1
 
 - [issue #36] Turn off coloring for inspect output (`json -i`, `json -o
