@@ -3,6 +3,8 @@
 
 # someday/maybe
 
+- pjson-like coloring of JSON output: http://igorgue.com/pjson/
+
 - fix this in man page (ronn fix?):
 
         Index: /Users/trentm/tm/json/docs/json.1
