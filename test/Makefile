@@ -7,13 +7,9 @@ test:
 
 # Test will all node versions (presumes install locations I use on my machine).
 .PHONY: testall
-testall: test08 test06 test04 test09 testmaster
+testall: test08 test06 test04 test09
 
 
-.PHONY: testmaster
-testmaster:
-	@echo "# Test node master (with node `$(HOME)/opt/node-master/bin/node --version`)"
-	PATH="$(HOME)/opt/node-master/bin:$(PATH)" $(NODEUNIT) test.js
 .PHONY: test08
 test08:
 	@echo "# Test node 0.8.x (with node `$(HOME)/opt/node-0.8/bin/node --version`)"

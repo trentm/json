@@ -1,9 +1,64 @@
 # json (aka jsontool) Changelog
 
 
-## json 4.0.1 (not yet released)
+## json 5.0.1 (not yet released)
 
 (nothing yet)
+
+
+## json 5.0.0
+
+- [**backward incompatible**, issue #35] Special case the output for **a single
+  lookup AND JSON output** (i.e. `-j` or `-o json*`) to only output the value
+  instead of the more general array or table that is necessary for multiple
+  lookups. For objects:
+
+        # Before:
+        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | json -j one
+        {
+          "one": "un"
+        }
+
+        # After:
+        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | jsondev -j one
+        "un"
+
+        # Unchanged:
+        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | jsondev -j one two
+        {
+          "one": "un",
+          "two": "deux"
+        }
+
+  For arrays:
+
+        # Before:
+        $ echo '["a", "b", "c"]' | json -j 0
+        [
+          "a"
+        ]
+
+        # After:
+        $ echo '["a", "b", "c"]' | jsondev -j 0
+        "a"
+
+        # Unchanged:
+        $ echo '["a", "b", "c"]' | jsondev -j 0 1
+        [
+          "a",
+          "b"
+        ]
+
+  The motivation for this change was (a) the WTF of the first example above and
+  (b) issue #36 where one could no longer extract a single value using '-j' to
+  explicitly get JSON string quoting.
+
+
+
+## json 4.0.1
+
+- [issue #36] Turn off coloring for inspect output (`json -i`, `json -o
+  inspect`) if stdout is not a TTY.
 
 
 ## json 4.0.0
