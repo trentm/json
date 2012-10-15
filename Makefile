@@ -41,9 +41,9 @@ testall: node_modules/.bin/nodeunit
 
 .PHONY: cutarelease
 cutarelease: versioncheck
-	./support/cutarelease.py -f package.json -f lib/jsontool.js
+	./tools/cutarelease.py -f package.json -f lib/jsontool.js
 
 # Update the embedded minified "function json_parse" in lib/jsontool.js.
 .PHONY: update_json_parse
 update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
-	@./support/update_json_parse.js
+	@./tools/update_json_parse.js
