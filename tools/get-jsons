@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -o errexit
+
+TOP=$(cd $(dirname $0)/../ >/dev/null; pwd)
+DIR=$TOP/tmp/jsons
+
+mkdir -p $DIR
+cd $DIR
+rm -rf ./repo
+git clone $TOP ./repo
+
+
+versions=$(cd ./repo && git tag -l)
+for version in $versions; do
+    if [[ ! -d $version ]]; then
+        (cd ./repo && git checkout $version)
+        mkdir $version
+        if [[ -f ./repo/lib/jsontool.js ]]; then
+            cp ./repo/lib/jsontool.js $version/json
+        elif [[ -f ./repo/json ]]; then
+            cp ./repo/json $version/json
+        fi
+    fi
+done
+
+rm -rf repo
+
+cd $TOP
+find ./tmp/jsons -type f
