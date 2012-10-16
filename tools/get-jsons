@@ -5,26 +5,39 @@ set -o errexit
 TOP=$(cd $(dirname $0)/../ >/dev/null; pwd)
 DIR=$TOP/tmp/jsons
 
+rm -rf $DIR
 mkdir -p $DIR
 cd $DIR
-rm -rf ./repo
 git clone $TOP ./repo
 
 
-versions=$(cd ./repo && git tag -l)
-for version in $versions; do
-    if [[ ! -d $version ]]; then
-        (cd ./repo && git checkout $version)
-        mkdir $version
-        if [[ -f ./repo/lib/jsontool.js ]]; then
-            cp ./repo/lib/jsontool.js $version/json
-        elif [[ -f ./repo/json ]]; then
-            cp ./repo/json $version/json
-        fi
+# Remove known dud releases (at least they cause failures in some of the
+# time-*.js scripts that I don't care to deal with).
+versions=$(cd ./repo && git tag -l |
+    grep -v '^1.3.3$' |
+    grep -v '^1.3.4$' |
+    grep -v '^1.4.0$' |
+    grep -v '^1.4.1$' |
+    grep -v '^2.0.0$' |
+    grep -v '^2.0.1$')
+major_vers=$(echo "$versions" | cut -d. -f1 | sort -n | uniq)
+
+for major_ver in $major_vers; do
+    latest_ver=$(echo "$versions" | grep "^$major_ver\." |
+        xargs $TOP/node_modules/.bin/semver -v | tail -n1)
+    echo "# get latest $major_ver.x: $latest_ver"
+    (cd ./repo && git checkout $latest_ver 2>/dev/null)
+    mkdir $latest_ver
+    if [[ -f ./repo/lib/jsontool.js ]]; then
+        cp ./repo/lib/jsontool.js $latest_ver/json
+    elif [[ -f ./repo/json ]]; then
+        cp ./repo/json $latest_ver/json
     fi
 done
 
 rm -rf repo
 
+echo ""
+echo "# available jsons:"
 cd $TOP
 find ./tmp/jsons -type f

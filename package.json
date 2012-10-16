@@ -21,6 +21,9 @@
   "devDependencies": {
     "uglify-js": "1.1.x",
     "nodeunit": "0.7.x",
-    "ansidiff": "1.0"
+    "ansidiff": "1.0",
+    "ben": "0.0.x",
+    "async": "0.1.22",
+    "semver": "1.1.0"
   }
 }

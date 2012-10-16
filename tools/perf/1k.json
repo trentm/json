@@ -1,0 +1,44 @@
+{
+  "Live Image": "20121012T190129Z",
+  "System Type": "SunOS",
+  "Boot Time": "1350083841",
+  "Datacenter Name": "bh1-kvm7",
+  "Headnode ID": 0,
+  "Manufacturer": "Dell Inc.",
+  "Product": "PowerEdge R610",
+  "Serial Number": "B2BMWR1",
+  "VM Capable": true,
+  "CPU Type": "Intel(R) Xeon(R) CPU E5645 @ 2.40GHz",
+  "CPU Virtualization": "vmx",
+  "CPU Physical Cores": 1,
+  "UUID": "44454c4c-3200-1042-804d-c2c04f575231",
+  "Hostname": "headnode",
+  "CPU Total Cores": 12,
+  "MiB of Memory": "32756",
+  "Zpool": "zones",
+  "Zpool Disks": "c0t5000C500471E71DFd0,c0t5000C500472032C7d0",
+  "Zpool Profile": "mirror",
+  "Zpool Size in GiB": 547,
+  "Disks": {
+    "c0t5000C500471E71DFd0": {"Size in GB": 600},
+    "c0t5000C50047201557d0": {"Size in GB": 600},
+    "c0t5000C500472032C7d0": {"Size in GB": 600}
+  },
+  "Boot Parameters": {
+    "console": "text",
+    "headnode": "true"
+  },
+  "Network Interfaces": {
+    "bnx0": {"MAC Address": "d4:be:d9:ae:8e:07", "ip4addr": "10.2.207.2", "Link Status": "up", "NIC Names": ["admin"]},
+    "bnx2": {"MAC Address": "d4:be:d9:ae:8e:0b", "ip4addr": "", "Link Status": "unknown", "NIC Names": []},
+    "bnx1": {"MAC Address": "d4:be:d9:ae:8e:09", "ip4addr": "", "Link Status": "unknown", "NIC Names": []},
+    "bnx3": {"MAC Address": "d4:be:d9:ae:8e:0d", "ip4addr": "", "Link Status": "unknown", "NIC Names": []},
+    "ixgbe0": {"MAC Address": "90:e2:ba:04:73:2c", "ip4addr": "", "Link Status": "up", "NIC Names": ["external"]},
+    "ixgbe1": {"MAC Address": "90:e2:ba:04:73:2d", "ip4addr": "", "Link Status": "unknown", "NIC Names": []}
+  },
+  "Virtual Network Interfaces": {
+    "external0": {"MAC Address": "02:08:20:56:9b:af", "ip4addr": "10.2.127.2", "Link Status": "up", "Host Interface": "ixgbe0", "VLAN": "127"}
+  },
+  "Link Aggregations": {
+  }
+}
