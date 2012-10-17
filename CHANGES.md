@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 5.1.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 5.1.0
 
 - [pull #39, issue #34] `json -ga` streams. (Largely by Fred Kuo, github.com/fkuo)
