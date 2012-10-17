@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "July 2012" "" "json tool manual"
+.TH "JSON" "1" "October 2012" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- (aka "jsontool") JSON love for your command line\.
@@ -30,6 +30,19 @@ $ cat *\.json | json \-g \.\.\.
 .
 .P
 and similar\.
+.
+.P
+As of json v5\.1, \fBjson \-ga\fR will \fBstream\fR, e\.g\.:
+.
+.IP "" 4
+.
+.nf
+
+$ yes \'{"foo":"bar"}\' | json \-ga
+.
+.fi
+.
+.IP "" 0
 .
 .P
 In json v3 and earlier, this used to be called "auto\-arrayification" and was implicit\. See the \fICOMPATIBILITY\fR section below\.

@@ -25,6 +25,10 @@ by a newline. This can be helpful for, e.g.:
 
 and similar.
 
+As of json v5.1, `json -ga` will **stream**, e.g.:
+
+    $ yes '{"foo":"bar"}' | json -ga
+
 In json v3 and earlier, this used to be called "auto-arrayification" and
 was implicit. See the [COMPATIBILITY][] section below.
 

@@ -1,9 +1,12 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.0.1 (not yet released)
+## json 5.1.0 (not yet released)
 
-(nothing yet)
+- [pull #39, issue #34] `json -ga` streams. (Largely by Fred Kuo, github.com/fkuo)
+  This means you can use `json` with an input stream of JSON objects. E.g.:
+
+        yes '{"foo":"bar"}' | json -ga
 
 
 ## json 5.0.0
