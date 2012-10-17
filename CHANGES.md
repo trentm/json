@@ -13,6 +13,16 @@
 
         yes '{"foo":"bar"}' | json -ga
 
+  Limitations: As was already a limitation of the '-g' switch, this only
+  supports JSON objects delimited by newlines or with no space:
+
+        {"a":1}{"b":2}          # good
+        {"a":1}\n{"b":2}        # good
+        {"a":1} {"b":2}         # bad
+
+  Additionally, currently only a stream of *objects* is supported, not
+  a stream of arrays. Such are the typical use cases I've encountered.
+
 
 ## json 5.0.0
 
