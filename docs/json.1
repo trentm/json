@@ -181,6 +181,36 @@ b
 .
 .IP "" 0
 .
+.P
+If your lookup isn\'t a number or a JS indentifier \fIhttps://developer\.mozilla\.org/en\-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables\fR you can always use JavaScript array\-style lookups like this:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"http://example\.com": "my\-value"} | json \'["http://example\.com"]\'
+my\-value
+.
+.fi
+.
+.IP "" 0
+.
+.P
+just like you would in JavaScript:
+.
+.IP "" 4
+.
+.nf
+
+$ node
+> var d = \'{"http://example\.com": "my\-value"}
+> d["http://example\.com"]
+\'my\-value\'
+.
+.fi
+.
+.IP "" 0
+.
 .SS "Pretty\-printing"
 Output is "jsony" by default: 2\-space indented JSON with one exception, a single string value is printed without quotes\.
 .

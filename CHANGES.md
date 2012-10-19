@@ -3,7 +3,8 @@
 
 ## json 5.1.1 (not yet released)
 
-(nothing yet)
+- [issue #40] Improve "Lookups" section of docs to show how to lookup
+  non-identifier keys.
 
 
 ## json 5.1.0
