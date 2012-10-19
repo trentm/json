@@ -191,6 +191,22 @@ $ echo '["a", "b", "c"]' | json -2
 b
 </code></pre>
 
+<p>If your lookup isn't a number or <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables">a JS
+indentifier</a>
+you can always use JavaScript array-style lookups like this:</p>
+
+<pre><code>$ echo '{"http://example.com": "my-value"} | json '["http://example.com"]'
+my-value
+</code></pre>
+
+<p>just like you would in JavaScript:</p>
+
+<pre><code>$ node
+&gt; var d = '{"http://example.com": "my-value"}
+&gt; d["http://example.com"]
+'my-value'
+</code></pre>
+
 <h3 id="Pretty-printing">Pretty-printing</h3>
 
 <p>Output is "jsony" by default: 2-space indented JSON with one exception, a
