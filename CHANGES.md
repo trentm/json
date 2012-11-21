@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 5.1.2 (not yet released)
+
+(nothing yet)
+
+
 ## json 5.1.1
 
 - [issue #44] Fix an edge case where a blank line would be emitted for
