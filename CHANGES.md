@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.1.1 (not yet released)
+## json 5.1.1
 
 - [issue #44] Fix an edge case where a blank line would be emitted for
   `... | json -ga -c COND` where the `COND` resulted in no matches.
