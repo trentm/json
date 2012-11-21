@@ -3,6 +3,8 @@
 
 ## json 5.1.1 (not yet released)
 
+- [issue #44] Fix an edge case where a blank line would be emitted for
+  `... | json -ga -c COND` where the `COND` resulted in no matches.
 - [issue #40] Improve "Lookups" section of docs to show how to lookup
   non-identifier keys.
 
