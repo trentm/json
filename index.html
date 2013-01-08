@@ -136,9 +136,9 @@ objects in the input. Keys in the last object win.</p>
 
 <h3 id="Execution">Execution</h3>
 
-<p>Use the <code>-e CODE</code> option to execute code on the input JSON.</p>
+<p>Use the <code>-e CODE</code> option to execute (JavaScript) code on the input JSON.</p>
 
-<pre><code>$ echo '{"name":"trent","age":38}' | json -e 'age++'
+<pre><code>$ echo '{"name":"trent","age":38}' | json -e 'this.age++'
 {
   "name": "trent",
   "age": 39
@@ -150,9 +150,10 @@ item separately.</p>
 
 <h3 id="Conditional-filtering">Conditional filtering</h3>
 
-<p>Use the <code>-c CODE</code> option to filter the input JSON.</p>
+<p>Use the <code>-c CODE</code> option to run JavaScript code ending with a statement
+returning a boolean to filter the input JSON.</p>
 
-<pre><code>$ echo '[{"age":38},{"age":4}]' | json -c 'age&gt;21'
+<pre><code>$ echo '[{"age":38},{"age":4}]' | json -c 'this.age &gt; 21'
 [{"age":38}]
 </code></pre>
 
@@ -297,11 +298,11 @@ LOOKUPS are processed, if any). If datum is an object, then a shortcut is
 <code>this[&lt;index>] = 42</code>.</p>
 
 <dl>
-<dt class="flush"><code>-e CODE</code></dt><dd><p>Execute the given code on the input. If input is an array, then each item
-of the array is processed separately (use <code>-A</code> to override).</p></dd>
-<dt class="flush"><code>-c CODE</code></dt><dd><p>Filter the input with <code>CODE</code>. If <code>CODE</code> returns false-y, then the item is
-filtered out. If input is an array, then each item of the array is
-processed separately (use <code>-A</code> to override).</p></dd>
+<dt class="flush"><code>-e CODE</code></dt><dd><p>Execute the given JavaScript code on the input. If input is an array, then
+each item of the array is processed separately (use <code>-A</code> to override).</p></dd>
+<dt class="flush"><code>-c CODE</code></dt><dd><p>Filter the input with JavaScript <code>CODE</code>. If <code>CODE</code> returns false-y, then
+the item is filtered out. If input is an array, then each item of the array
+is processed separately (use <code>-A</code> to override).</p></dd>
 </dl>
 
 
@@ -686,14 +687,14 @@ separately (use <code>-A</code> to override this):</p>
 
 <h3 id="Filtering-with-c-">Filtering with '-c'</h3>
 
-<p>You can use the <code>-c CODE</code> option to filter the input:</p>
+<p>You can use the <code>-c CODE</code> option to filter the input (this is JavaScript code):</p>
 
-<pre><code>$ echo '{"name":"trent", "age":38}' | json -c 'age&gt;21'
+<pre><code>$ echo '{"name":"trent", "age":38}' | json -c 'this.age &gt; 21'
 {
   "name": "trent",
   "age": 38
 }
-$ echo '{"name":"trent", "age":38}' | json -c 'age==16'
+$ echo '{"name":"trent", "age":38}' | json -c 'this.age==16'
 $
 </code></pre>
 
@@ -701,7 +702,7 @@ $
 separately (use <code>-A</code> to override this):</p>
 
 <pre><code>$ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
-    | json -c 'age&gt;21'
+    | json -c 'this.age&gt;21'
 [
   {
     "name": "trent",
@@ -751,7 +752,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>October 2012</li>
+    <li class='tc'>November 2012</li>
     <li class='tr'>json(1)</li>
   </ol>
 
