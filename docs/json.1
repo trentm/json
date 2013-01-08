@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "October 2012" "" "json tool manual"
+.TH "JSON" "1" "November 2012" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- (aka "jsontool") JSON love for your command line\.
@@ -83,13 +83,13 @@ $ cat /opt/app/etc/defaults\.json \e
 .IP "" 0
 .
 .SS "Execution"
-Use the \fB\-e CODE\fR option to execute code on the input JSON\.
+Use the \fB\-e CODE\fR option to execute (JavaScript) code on the input JSON\.
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'{"name":"trent","age":38}\' | json \-e \'age++\'
+$ echo \'{"name":"trent","age":38}\' | json \-e \'this\.age++\'
 {
   "name": "trent",
   "age": 39
@@ -103,13 +103,13 @@ $ echo \'{"name":"trent","age":38}\' | json \-e \'age++\'
 If input is an array, this will automatically process each item separately\.
 .
 .SS "Conditional filtering"
-Use the \fB\-c CODE\fR option to filter the input JSON\.
+Use the \fB\-c CODE\fR option to run JavaScript code ending with a statement returning a boolean to filter the input JSON\.
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'[{"age":38},{"age":4}]\' | json \-c \'age>21\'
+$ echo \'[{"age":38},{"age":4}]\' | json \-c \'this\.age > 21\'
 [{"age":38}]
 .
 .fi
@@ -324,11 +324,11 @@ You can execute code on (\fB\-e\fR) and filter (\fB\-c\fR) the input (this is do
 .
 .TP
 \fB\-e CODE\fR
-Execute the given code on the input\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
+Execute the given JavaScript code on the input\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
 .
 .TP
 \fB\-c CODE\fR
-Filter the input with \fBCODE\fR\. If \fBCODE\fR returns false\-y, then the item is filtered out\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
+Filter the input with JavaScript \fBCODE\fR\. If \fBCODE\fR returns false\-y, then the item is filtered out\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
 .
 .P
 Finally, if \fBLOOKUP\fR arguments are given, these are extracted from the JSON\. By default \fB\.\fR is used as a separator for nested object lookup\. This can be overridden:
@@ -887,18 +887,18 @@ $ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' \e
 .IP "" 0
 .
 .SS "Filtering with \'\-c\'"
-You can use the \fB\-c CODE\fR option to filter the input:
+You can use the \fB\-c CODE\fR option to filter the input (this is JavaScript code):
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'{"name":"trent", "age":38}\' | json \-c \'age>21\'
+$ echo \'{"name":"trent", "age":38}\' | json \-c \'this\.age > 21\'
 {
   "name": "trent",
   "age": 38
 }
-$ echo \'{"name":"trent", "age":38}\' | json \-c \'age==16\'
+$ echo \'{"name":"trent", "age":38}\' | json \-c \'this\.age==16\'
 $
 .
 .fi
@@ -913,7 +913,7 @@ If the input is an array, then \fB\-c\fR will automatically process each element
 .nf
 
 $ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' \e
-    | json \-c \'age>21\'
+    | json \-c \'this\.age>21\'
 [
   {
     "name": "trent",

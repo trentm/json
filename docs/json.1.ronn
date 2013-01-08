@@ -56,9 +56,9 @@ This could be useful for merging multiple config files, e.g.:
 
 ### Execution
 
-Use the `-e CODE` option to execute code on the input JSON.
+Use the `-e CODE` option to execute (JavaScript) code on the input JSON.
 
-    $ echo '{"name":"trent","age":38}' | json -e 'age++'
+    $ echo '{"name":"trent","age":38}' | json -e 'this.age++'
     {
       "name": "trent",
       "age": 39
@@ -70,9 +70,10 @@ item separately.
 
 ### Conditional filtering
 
-Use the `-c CODE` option to filter the input JSON.
+Use the `-c CODE` option to run JavaScript code ending with a statement
+returning a boolean to filter the input JSON.
 
-    $ echo '[{"age":38},{"age":4}]' | json -c 'age>21'
+    $ echo '[{"age":38},{"age":4}]' | json -c 'this.age > 21'
     [{"age":38}]
 
 If input is an array, this will automatically process each
@@ -215,13 +216,13 @@ LOOKUPS are processed, if any). If datum is an object, then a shortcut is
 `this[<index>] = 42`.
 
   * `-e CODE`:
-    Execute the given code on the input. If input is an array, then each item
-    of the array is processed separately (use `-A` to override).
+    Execute the given JavaScript code on the input. If input is an array, then
+    each item of the array is processed separately (use `-A` to override).
 
   * `-c CODE`:
-    Filter the input with `CODE`. If `CODE` returns false-y, then the item is
-    filtered out. If input is an array, then each item of the array is
-    processed separately (use `-A` to override).
+    Filter the input with JavaScript `CODE`. If `CODE` returns false-y, then
+    the item is filtered out. If input is an array, then each item of the array
+    is processed separately (use `-A` to override).
 
 
 Finally, if `LOOKUP` arguments are given, these are extracted from the
@@ -586,21 +587,21 @@ separately (use `-A` to override this):
 
 ### Filtering with '-c'
 
-You can use the `-c CODE` option to filter the input:
+You can use the `-c CODE` option to filter the input (this is JavaScript code):
 
-    $ echo '{"name":"trent", "age":38}' | json -c 'age>21'
+    $ echo '{"name":"trent", "age":38}' | json -c 'this.age > 21'
     {
       "name": "trent",
       "age": 38
     }
-    $ echo '{"name":"trent", "age":38}' | json -c 'age==16'
+    $ echo '{"name":"trent", "age":38}' | json -c 'this.age==16'
     $
 
 If the input is an array, then `-c` will automatically process each element
 separately (use `-A` to override this):
 
     $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
-        | json -c 'age>21'
+        | json -c 'this.age>21'
     [
       {
         "name": "trent",
