@@ -327,7 +327,7 @@ This can be overridden:</p>
 and output of the input is skipped:</p>
 
 <dl>
-<dt><code>--validate</code></dt><dd>Just validate the input, no processing or output of the JSON content.</dd>
+<dt><code>-n</code>, <code>--validate</code></dt><dd>Just validate the input, no processing or output of the JSON content.</dd>
 </dl>
 
 
@@ -630,7 +630,7 @@ $ echo $?
 </code></pre>
 
 <p>Processing and output of the input JSON can be suppressed with the
-<code>--validate</code> option:</p>
+<code>-n, --validate</code> option:</p>
 
 <pre><code>$ cat config.json | json --validate
 json: error: input is not JSON: Unexpected ',' at line 17, column 5:
@@ -752,7 +752,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>November 2012</li>
+    <li class='tc'>January 2013</li>
     <li class='tr'>json(1)</li>
   </ol>
 
