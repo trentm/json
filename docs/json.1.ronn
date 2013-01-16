@@ -243,7 +243,7 @@ An alternative to lookups is to output the keys of the input object:
 `json` can be restricting to just validating its input, i.e. processing
 and output of the input is skipped:
 
-  * `--validate`:
+  * `-n`, `--validate`:
     Just validate the input, no processing or output of the JSON content.
 
 
