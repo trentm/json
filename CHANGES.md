@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 5.1.3 (not yet released)
+
+(nothing yet)
+
+
 ## json 5.1.2
 
 - [pull #43] Add '-n' as a short alias for '--validate'. (By Bill Pijewski,
