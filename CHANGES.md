@@ -3,7 +3,8 @@
 
 ## json 5.1.2 (not yet released)
 
-(nothing yet)
+- [pull #43] Add '-n' as a short alias for '--validate'. (By Bill Pijewski,
+  github.com/pijewski).
 
 
 ## json 5.1.1

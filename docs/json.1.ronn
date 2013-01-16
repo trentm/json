@@ -534,7 +534,7 @@ config files:
     1
 
 Processing and output of the input JSON can be suppressed with the
-`--validate` option:
+`-n, --validate` option:
 
     $ cat config.json | json --validate
     json: error: input is not JSON: Unexpected ',' at line 17, column 5:
