@@ -1,5 +1,5 @@
-JSON="../../lib/jsontool.js"
-JSON0="../../lib/jsontool.js -o json-0"
+JSON="../../bin/json"
+JSON0="../../bin/json -o json-0"
 
 echo '{"foo": "bar"}' | $JSON0 -e 'this.foo="baz"'
 #    {"foo":"baz"}

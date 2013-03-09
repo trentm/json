@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../bin/json
 
 cat input | $JSON
 $JSON -f input

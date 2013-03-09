@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../bin/json
 
 # Change from json2: '-j' means JSON output.
 echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -j -a name   # json

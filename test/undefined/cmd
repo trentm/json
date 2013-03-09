@@ -1,5 +1,5 @@
 echo "# foo key output"
-cat input | ../../lib/jsontool.js foo
+cat input | ../../bin/json foo
 
 echo "# undefined key output"
-cat input | ../../lib/jsontool.js nosuchkey
+cat input | ../../bin/json nosuchkey

@@ -34,7 +34,8 @@ See <http://trentm.com/json> for full docs and many examples.
    with no external dependencies). For example:
 
         cd ~/bin
-        curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
+        echo '#!/usr/bin/env node' > json
+        curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js >> json
         chmod 755 json
 
 You should now have "json" on your PATH:

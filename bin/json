@@ -1,1 +1,5 @@
-../lib/jsontool.js
+#!/usr/bin/env node
+
+jsontool = require("../lib/jsontool");
+
+jsontool.main(process.argv);

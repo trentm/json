@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../bin/json
 
 $JSON -h | grep -- --help
 

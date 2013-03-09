@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../bin/json
 
 echo '# basic'
 echo '{"foo":"bar"}{"one":"two"}' | $JSON --merge
