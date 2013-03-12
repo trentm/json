@@ -1,1 +1,1 @@
-cat input | ../../lib/jsontool.js
+cat input | ../../bin/json

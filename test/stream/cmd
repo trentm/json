@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../bin/json
 
 node ../docstream.js 3 | $JSON -ga >stream.log &
 sleep 2.5

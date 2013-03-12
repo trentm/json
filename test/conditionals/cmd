@@ -1,5 +1,5 @@
-JSON="../../lib/jsontool.js"
-JSON0="../../lib/jsontool.js -o json-0"
+JSON="../../bin/json"
+JSON0="../../bin/json -o json-0"
 
 # Basic -c usage:
 # 1. Filter based on the check.

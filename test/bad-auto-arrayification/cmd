@@ -1,1 +1,1 @@
-cat invalid.json | ../../lib/jsontool.js
+cat invalid.json | ../../bin/json
