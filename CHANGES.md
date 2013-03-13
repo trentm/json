@@ -3,7 +3,10 @@
 
 ## json 5.1.3 (not yet released)
 
-(nothing yet)
+- Fix an issue with option parsing that resulted in this failing:
+
+        json -f foo.json -- -1.someKey
+
 
 
 ## json 5.1.2
