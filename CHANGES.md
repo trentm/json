@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.1.3 (not yet released)
+## json 5.1.3
 
 - Fix an issue with option parsing that resulted in this failing:
 
