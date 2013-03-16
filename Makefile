@@ -1,3 +1,15 @@
+
+#
+# Files, Vars, etc.
+#
+
+JSSTYLE_FILES := $(shell find lib test -name "*.js")
+
+
+#
+# Targets
+#
+
 all:
 
 node_modules/.bin/nodeunit:
@@ -47,3 +59,18 @@ cutarelease: versioncheck
 .PHONY: update_json_parse
 update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
 	@./tools/update_json_parse.js
+
+
+#---- check
+
+.PHONY: check-jsstyle
+check-jsstyle: $(JSSTYLE_FILES)
+	./tools/jsstyle -o indent=2,doxygen,unparenthesized-return=0,blank-after-start-comment=0,leading-right-paren-ok $(JSSTYLE_FILES)
+
+.PHONY: check
+check: check-jsstyle
+	@echo "Check ok."
+
+.PHONY: prepush
+prepush: check testall
+	@echo "Okay to push."
