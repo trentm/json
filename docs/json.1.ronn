@@ -101,11 +101,11 @@ Integral values work for array index lookups:
     $ echo '["a", "b", "c"]' | json 1
     b
 
-Negative array indeces are also supported:
+Negative array indices are also supported:
 
-    $ echo '["a", "b", "c"]' | json -1
+    $ echo '["a", "b", "c"]' | json -- -1
     c
-    $ echo '["a", "b", "c"]' | json -2
+    $ echo '["a", "b", "c"]' | json -- -2
     b
 
 If your lookup isn't a number or [a JS
