@@ -170,11 +170,20 @@ that:
     Don't warn if input isn't valid JSON.
 
 
-By default `json` will process input from stdin. Alternative, an input file
+By default `json` will process input from stdin. Alternatively, an input file
 (or files) can be specified:
 
   * `-f FILE`:
     Specify an input file (instead of stdin).
+
+
+By default `json` output is to stdout. Together with `-f FILE`, in-place
+editing can be done:
+
+  * `-I`, `--in-place`:
+    Edit the file given with `-f FILE` in-place. Lookups are not allowed
+    with in-place editing, because it is too easy to accidentally lose file
+    data.
 
 
 If your JSON output is a REST API response, it might include the headers
@@ -608,6 +617,45 @@ separately (use `-A` to override this):
         "age": 38
       }
     ]
+
+
+### In-place editing
+
+You can edit a file in place with `-I` and `-f FILE`:
+
+    $ cat config.json
+    {"hostname":"127.0.0.1"}
+
+    $ json -I -f config.json                   # format the file
+    json: updated "config.json" in-place
+    $ cat config.json
+    {
+      "hostname": "127.0.0.1"
+    }
+
+    $ json -I -f config.json -e 'this.port=8080'  # add bar field
+    json: updated "config.json" in-place
+    $ cat config.json
+    {
+      "hostname": "127.0.0.1",
+      "port": 8080
+    }
+
+Some limitations. Only one file at a time:
+
+    $ json -I -f foo.json -f bar.json
+    json: error: must specify exactly one file with '-f FILE' to use -I/--in-place
+
+Lookups are not allowed:
+
+    $ json -I -f foo.json key.subkey
+    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+
+because that can too easily result in data loss, e.g. with something like:
+
+    $ json -I -f *.json    # if there is more than match to the glob
+    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+
 
 
 ## COMPATIBILITY

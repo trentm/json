@@ -1,4 +1,8 @@
-- `make check`
+- finish in-place:
+    - man page update
+    - tests
+- 4-space indent
+- `make check`, jsstyle, add jsl
 
 
 # someday/maybe

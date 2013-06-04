@@ -252,11 +252,21 @@ age
 </dl>
 
 
-<p>By default <code>json</code> will process input from stdin. Alternative, an input file
+<p>By default <code>json</code> will process input from stdin. Alternatively, an input file
 (or files) can be specified:</p>
 
 <dl>
 <dt class="flush"><code>-f FILE</code></dt><dd>Specify an input file (instead of stdin).</dd>
+</dl>
+
+
+<p>By default <code>json</code> output is to stdout. Together with <code>-f FILE</code>, in-place
+editing can be done:</p>
+
+<dl>
+<dt><code>-I</code>, <code>--in-place</code></dt><dd>Edit the file given with <code>-f FILE</code> in-place. Lookups are not allowed
+with in-place editing, because it is too easy to accidentally lose file
+data.</dd>
 </dl>
 
 
@@ -711,6 +721,47 @@ separately (use <code>-A</code> to override this):</p>
 ]
 </code></pre>
 
+<h3 id="In-place-editing">In-place editing</h3>
+
+<p>You can edit a file in place with <code>-I</code> and <code>-f FILE</code>:</p>
+
+<pre><code>$ cat foo.json
+{"foo":1}
+
+$ json -I -f foo.json                   # format the file
+json: updated "foo.json" in-place
+$ cat foo.json
+{
+  "foo": 1
+}
+
+$ json -I -f foo.json -e 'this.bar=42'  # add bar field
+json: updated "foo.json" in-place
+$ cat foo.json
+{
+  "foo": 1,
+  "bar": 42
+}
+</code></pre>
+
+<p>Some limitations. Only one file at a time:</p>
+
+<pre><code>$ json -I -f foo.json -f bar.json
+json: error: must specify exactly one file with '-f FILE' to use -I/--in-place
+</code></pre>
+
+<p>Lookups are not allowed:</p>
+
+<pre><code>$ json -I -f foo.json key.subkey
+json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+</code></pre>
+
+<p>because that can too easily result in data loss, e.g. with something like:</p>
+
+<pre><code>$ json -I -f *.json    # if there is more than match to the glob
+json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+</code></pre>
+
 <h2 id="COMPATIBILITY">COMPATIBILITY</h2>
 
 <p>This is json version 4. The major version is incremented when there is a
@@ -752,7 +803,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2013</li>
+    <li class='tc'>June 2013</li>
     <li class='tr'>json(1)</li>
   </ol>
 

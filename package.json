@@ -1,15 +1,14 @@
 {
   "name": "jsontool",
   "description": "a 'json' command for massaging JSON on the command line",
-  "version": "5.1.4",
+  "version": "5.2.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/trentm/json.git"
   },
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "bin": {
-    "json": "./lib/jsontool.js",
-    "json4": "./lib/jsontool.js"
+    "json": "./lib/jsontool.js"
   },
   "main": "./lib/jsontool.js",
   "man": "./man/man1/json.1",

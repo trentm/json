@@ -1,9 +1,30 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.1.4 (not yet released)
+## json 5.2.0 (not yet released)
 
-(nothing yet)
+- New `-I/--in-place` option for in-place editing of given files with:
+
+        $ cat foo.json
+        {"foo":1}
+
+        $ json -I -f foo.json                   # format the file
+        json: updated "foo.json" in-place
+        $ cat foo.json
+        {
+          "foo": 1
+        }
+
+        $ json -I -f foo.json -e 'this.bar=42'  # add bar field
+        json: updated "foo.json" in-place
+        $ cat foo.json
+        {
+          "foo": 1,
+          "bar": 42
+        }
+
+  Note: I'd have loved to have used `-i` a la sed, but that is unfortunately
+  taken in this tool.
 
 
 ## json 5.1.3
@@ -60,11 +81,11 @@
         }
 
         # After:
-        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | jsondev -j one
+        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | json -j one
         "un"
 
         # Unchanged:
-        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | jsondev -j one two
+        $ echo '{"one": "un", "two": "deux", "three": "troix"}' | json -j one two
         {
           "one": "un",
           "two": "deux"
@@ -79,11 +100,11 @@
         ]
 
         # After:
-        $ echo '["a", "b", "c"]' | jsondev -j 0
+        $ echo '["a", "b", "c"]' | json -j 0
         "a"
 
         # Unchanged:
-        $ echo '["a", "b", "c"]' | jsondev -j 0 1
+        $ echo '["a", "b", "c"]' | json -j 0 1
         [
           "a",
           "b"
@@ -275,7 +296,7 @@
 - [issue #26] Add support for escapes in the delimiter given by `-d DELIM`:
 
         $ echo '[{"one":"un","two":"deux"},{"one":"uno","two":"dos"}]' \
-            | jsondev -a -d'\t' one two
+            | json -a -d'\t' one two
         un	deux
         uno	dos
 

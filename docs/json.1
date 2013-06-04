@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "March 2013" "" "json tool manual"
+.TH "JSON" "1" "June 2013" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- (aka "jsontool") JSON love for your command line\.
@@ -280,11 +280,18 @@ Print version of this command and exit\.
 Don\'t warn if input isn\'t valid JSON\.
 .
 .P
-By default \fBjson\fR will process input from stdin\. Alternative, an input file (or files) can be specified:
+By default \fBjson\fR will process input from stdin\. Alternatively, an input file (or files) can be specified:
 .
 .TP
 \fB\-f FILE\fR
 Specify an input file (instead of stdin)\.
+.
+.P
+By default \fBjson\fR output is to stdout\. Together with \fB\-f FILE\fR, in\-place editing can be done:
+.
+.TP
+\fB\-I\fR, \fB\-\-in\-place\fR
+Edit the file given with \fB\-f FILE\fR in\-place\. Lookups are not allowed with in\-place editing, because it is too easy to accidentally lose file data\.
 .
 .P
 If your JSON output is a REST API response, it might include the headers (e\.g\. when calling with \fBcurl \-i\fR)\. By default \fBjson\fR will pass those headers through (without choking on them)\. However if you want them stripped you can use:
@@ -920,6 +927,77 @@ $ echo \'[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]\' \e
     "age": 38
   }
 ]
+.
+.fi
+.
+.IP "" 0
+.
+.SS "In\-place editing"
+You can edit a file in place with \fB\-I\fR and \fB\-f FILE\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ cat foo\.json
+{"foo":1}
+
+$ json \-I \-f foo\.json                   # format the file
+json: updated "foo\.json" in\-place
+$ cat foo\.json
+{
+  "foo": 1
+}
+
+$ json \-I \-f foo\.json \-e \'this\.bar=42\'  # add bar field
+json: updated "foo\.json" in\-place
+$ cat foo\.json
+{
+  "foo": 1,
+  "bar": 42
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Some limitations\. Only one file at a time:
+.
+.IP "" 4
+.
+.nf
+
+$ json \-I \-f foo\.json \-f bar\.json
+json: error: must specify exactly one file with \'\-f FILE\' to use \-I/\-\-in\-place
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Lookups are not allowed:
+.
+.IP "" 4
+.
+.nf
+
+$ json \-I \-f foo\.json key\.subkey
+json: error: lookups cannot be specified with in\-place editing (\-I/\-\-in\-place), too easy to lose content
+.
+.fi
+.
+.IP "" 0
+.
+.P
+because that can too easily result in data loss, e\.g\. with something like:
+.
+.IP "" 4
+.
+.nf
+
+$ json \-I \-f *\.json    # if there is more than match to the glob
+json: error: lookups cannot be specified with in\-place editing (\-I/\-\-in\-place), too easy to lose content
 .
 .fi
 .
