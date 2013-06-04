@@ -1,8 +1,7 @@
-- finish in-place:
-    - man page update
-    - tests
+- json -nf foo.json:  includes filename in invalid output
 - 4-space indent
 - `make check`, jsstyle, add jsl
+- faster -C/-E per nate ticket
 
 
 # someday/maybe
