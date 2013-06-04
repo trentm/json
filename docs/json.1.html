@@ -184,11 +184,11 @@ ewan 4
 b
 </code></pre>
 
-<p>Negative array indeces are also supported:</p>
+<p>Negative array indices are also supported:</p>
 
-<pre><code>$ echo '["a", "b", "c"]' | json -1
+<pre><code>$ echo '["a", "b", "c"]' | json -- -1
 c
-$ echo '["a", "b", "c"]' | json -2
+$ echo '["a", "b", "c"]' | json -- -2
 b
 </code></pre>
 
@@ -640,7 +640,7 @@ json: error: input is not JSON: Unexpected ',' at line 17, column 5:
 
 <p>Together with the <code>-q</code> you can get silent, exit-status-only, JSON validation:</p>
 
-<pre><code>$ cat config.json | json --validate -q
+<pre><code>$ cat config.json | json -nq
 $ echo $?
 1
 </code></pre>
@@ -752,7 +752,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2013</li>
+    <li class='tc'>March 2013</li>
     <li class='tr'>json(1)</li>
   </ol>
 

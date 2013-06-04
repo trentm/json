@@ -543,7 +543,7 @@ Processing and output of the input JSON can be suppressed with the
 
 Together with the `-q` you can get silent, exit-status-only, JSON validation:
 
-    $ cat config.json | json --validate -q
+    $ cat config.json | json -nq
     $ echo $?
     1
 
