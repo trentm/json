@@ -95,14 +95,38 @@ subset of the JSON. HTTP header blocks are skipped by default.</p>
 
 <h3 id="Grouping">Grouping</h3>
 
-<p>(Added in json v4.) Use '-g' or '--group' to group objects (into an array of
-objects) or concatenate arrays (into a single array) separated by no space or
-by a newline. This can be helpful for, e.g.:</p>
+<p>(Added in json v4.) Use '-g' or '--group' to group adjacent objects into a
+single JSON array or to concatenate adjacent arrays into a single array. E.g.:</p>
+
+<pre><code>$ echo '{"a":1}
+{"b": 2}' | json -g
+[
+  {
+    "a": 1
+  },
+  {
+    "b": 2
+  }
+]
+
+$ echo '["one"]
+["two"]' | json -g
+[
+  "one",
+  "two"
+]
+</code></pre>
+
+<p>"Adjacent" objects means objects separated by a newline, or by no space at all.
+Adjacent <em>arrays</em> means separate by a newline. These conditions are chosen as
+a balance between (a) not being ambiguous to parse with a simple regex and
+(b) enough to be useful for common cases.</p>
+
+<p>Grouping can be helpful for "one JSON object per line" formats (like
+<a href="https://github.com/trentm/node-bunyan">Bunyan</a>) or for things such as:</p>
 
 <pre><code>$ cat *.json | json -g ...
 </code></pre>
-
-<p>and similar.</p>
 
 <p>As of json v5.1, <code>json -ga</code> will <strong>stream</strong>, e.g.:</p>
 
@@ -110,7 +134,10 @@ by a newline. This can be helpful for, e.g.:</p>
 </code></pre>
 
 <p>In json v3 and earlier, this used to be called "auto-arrayification" and
-was implicit. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+was implicit. In json v4 and v5 grouping of adjacent arrays separate by
+no space was allowed. That was dropped in v6 (see
+<a href="https://github.com/trentm/json/issues/55">issue #55</a>. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a>
+section below.</p>
 
 <h3 id="Merging">Merging</h3>
 
@@ -184,11 +211,11 @@ ewan 4
 b
 </code></pre>
 
-<p>Negative array indeces are also supported:</p>
+<p>Negative array indices are also supported:</p>
 
-<pre><code>$ echo '["a", "b", "c"]' | json -1
+<pre><code>$ echo '["a", "b", "c"]' | json -- -1
 c
-$ echo '["a", "b", "c"]' | json -2
+$ echo '["a", "b", "c"]' | json -- -2
 b
 </code></pre>
 
@@ -252,11 +279,21 @@ age
 </dl>
 
 
-<p>By default <code>json</code> will process input from stdin. Alternative, an input file
+<p>By default <code>json</code> will process input from stdin. Alternatively, an input file
 (or files) can be specified:</p>
 
 <dl>
 <dt class="flush"><code>-f FILE</code></dt><dd>Specify an input file (instead of stdin).</dd>
+</dl>
+
+
+<p>By default <code>json</code> output is to stdout. Together with <code>-f FILE</code>, in-place
+editing can be done:</p>
+
+<dl>
+<dt><code>-I</code>, <code>--in-place</code></dt><dd>Edit the file given with <code>-f FILE</code> in-place. Lookups are not allowed
+with in-place editing, because it is too easy to accidentally lose file
+data.</dd>
 </dl>
 
 
@@ -640,7 +677,7 @@ json: error: input is not JSON: Unexpected ',' at line 17, column 5:
 
 <p>Together with the <code>-q</code> you can get silent, exit-status-only, JSON validation:</p>
 
-<pre><code>$ cat config.json | json --validate -q
+<pre><code>$ cat config.json | json -nq
 $ echo $?
 1
 </code></pre>
@@ -711,12 +748,59 @@ separately (use <code>-A</code> to override this):</p>
 ]
 </code></pre>
 
+<h3 id="In-place-editing">In-place editing</h3>
+
+<p>You can edit a file in place with <code>-I</code> and <code>-f FILE</code>:</p>
+
+<pre><code>$ cat config.json
+{"hostname":"127.0.0.1"}
+
+$ json -I -f config.json                   # format the file
+json: updated "config.json" in-place
+$ cat config.json
+{
+  "hostname": "127.0.0.1"
+}
+
+$ json -I -f config.json -e 'this.port=8080'  # add bar field
+json: updated "config.json" in-place
+$ cat config.json
+{
+  "hostname": "127.0.0.1",
+  "port": 8080
+}
+</code></pre>
+
+<p>Some limitations. Only one file at a time:</p>
+
+<pre><code>$ json -I -f foo.json -f bar.json
+json: error: must specify exactly one file with '-f FILE' to use -I/--in-place
+</code></pre>
+
+<p>Lookups are not allowed:</p>
+
+<pre><code>$ json -I -f foo.json key.subkey
+json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+</code></pre>
+
+<p>because that can too easily result in data loss, e.g. with something like:</p>
+
+<pre><code>$ json -I -f *.json    # if there is more than match to the glob
+json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+</code></pre>
+
 <h2 id="COMPATIBILITY">COMPATIBILITY</h2>
 
-<p>This is json version 4. The major version is incremented when there is a
-backward incompatible change.</p>
+<p>The json tool major version is incremented when there is a backward incompatible
+change. An overview of those changes is here.</p>
 
 <ul>
+<li>v6: Grouping (via <code>-g</code> or <code>--group</code>) of adjacent <em>arrays</em> no longer groups
+arrays separated by no space. I.e. adjacent arrays must be separated by a
+newline.</li>
+<li>v5: Special case the output for <strong>a single lookup AND JSON output</strong> (i.e. <code>-j</code>
+or <code>-o json*</code>) to only output the value instead of the more general array or
+table that is necessary for multiple lookups.</li>
 <li>v4: Made "auto-arrayification" require an explicit '-g' or '--group' option
 to prefer that implicit processing never magically fix otherwise invalid
 JSON. The feature is now called grouping.</li>
@@ -752,7 +836,7 @@ npm as "jsontool" ("json" was already taken, boo).</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2013</li>
+    <li class='tc'>June 2013</li>
     <li class='tr'>json(1)</li>
   </ol>
 
