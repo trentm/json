@@ -1,6 +1,6 @@
-Test handling of a flat array of objects as input:
+Test handling of a grouping adjacent objects into an array:
 
-    $ echo '{"one": 1}{"two": 1}' | json
+    $ echo '{"one": 1}{"two": 1}' | json -g
     [
       {
         "one": 1

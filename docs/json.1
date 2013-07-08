@@ -16,7 +16,39 @@ something\-generating\-JSON\-on\-stdout | \fBjson\fR [OPTIONS] [LOOKUPS]
 Pipe in your JSON for pretty\-printing, JSON validation, filtering, and modification\. Supply one or more \fBLOOKUPS\fR to extract a subset of the JSON\. HTTP header blocks are skipped by default\.
 .
 .SS "Grouping"
-(Added in json v4\.) Use \'\-g\' or \'\-\-group\' to group objects (into an array of objects) or concatenate arrays (into a single array) separated by no space or by a newline\. This can be helpful for, e\.g\.:
+(Added in json v4\.) Use \'\-g\' or \'\-\-group\' to group adjacent objects into a single JSON array or to concatenate adjacent arrays into a single array\. E\.g\.:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"a":1}
+{"b": 2}\' | json \-g
+[
+  {
+    "a": 1
+  },
+  {
+    "b": 2
+  }
+]
+
+$ echo \'["one"]
+["two"]\' | json \-g
+[
+  "one",
+  "two"
+]
+.
+.fi
+.
+.IP "" 0
+.
+.P
+"Adjacent" objects means objects separated by a newline, or by no space at all\. Adjacent \fIarrays\fR means separate by a newline\. These conditions are chosen as a balance between (a) not being ambiguous to parse with a simple regex and (b) enough to be useful for common cases\.
+.
+.P
+Grouping can be helpful for "one JSON object per line" formats (like Bunyan \fIhttps://github\.com/trentm/node\-bunyan\fR) or for things such as:
 .
 .IP "" 4
 .
@@ -27,9 +59,6 @@ $ cat *\.json | json \-g \.\.\.
 .fi
 .
 .IP "" 0
-.
-.P
-and similar\.
 .
 .P
 As of json v5\.1, \fBjson \-ga\fR will \fBstream\fR, e\.g\.:
@@ -45,7 +74,7 @@ $ yes \'{"foo":"bar"}\' | json \-ga
 .IP "" 0
 .
 .P
-In json v3 and earlier, this used to be called "auto\-arrayification" and was implicit\. See the \fICOMPATIBILITY\fR section below\.
+In json v3 and earlier, this used to be called "auto\-arrayification" and was implicit\. In json v4 and v5 grouping of adjacent arrays separate by no space was allowed\. That was dropped in v6 (see issue #55 \fIhttps://github\.com/trentm/json/issues/55\fR\. See the \fICOMPATIBILITY\fR section below\.
 .
 .SS "Merging"
 (Added in json v4\.) Use \'\-\-merge\' or \'\-\-deep\-merge\' to merge adjacent JSON objects in the input\. Keys in the last object win\.
@@ -939,22 +968,22 @@ You can edit a file in place with \fB\-I\fR and \fB\-f FILE\fR:
 .
 .nf
 
-$ cat foo\.json
-{"foo":1}
+$ cat config\.json
+{"hostname":"127\.0\.0\.1"}
 
-$ json \-I \-f foo\.json                   # format the file
-json: updated "foo\.json" in\-place
-$ cat foo\.json
+$ json \-I \-f config\.json                   # format the file
+json: updated "config\.json" in\-place
+$ cat config\.json
 {
-  "foo": 1
+  "hostname": "127\.0\.0\.1"
 }
 
-$ json \-I \-f foo\.json \-e \'this\.bar=42\'  # add bar field
-json: updated "foo\.json" in\-place
-$ cat foo\.json
+$ json \-I \-f config\.json \-e \'this\.port=8080\'  # add bar field
+json: updated "config\.json" in\-place
+$ cat config\.json
 {
-  "foo": 1,
-  "bar": 42
+  "hostname": "127\.0\.0\.1",
+  "port": 8080
 }
 .
 .fi
@@ -1004,7 +1033,13 @@ json: error: lookups cannot be specified with in\-place editing (\-I/\-\-in\-pla
 .IP "" 0
 .
 .SH "COMPATIBILITY"
-This is json version 4\. The major version is incremented when there is a backward incompatible change\.
+The json tool major version is incremented when there is a backward incompatible change\. An overview of those changes is here\.
+.
+.IP "\(bu" 4
+v6: Grouping (via \fB\-g\fR or \fB\-\-group\fR) of adjacent \fIarrays\fR no longer groups arrays separated by no space\. I\.e\. adjacent arrays must be separated by a newline\.
+.
+.IP "\(bu" 4
+v5: Special case the output for \fBa single lookup AND JSON output\fR (i\.e\. \fB\-j\fR or \fB\-o json*\fR) to only output the value instead of the more general array or table that is necessary for multiple lookups\.
 .
 .IP "\(bu" 4
 v4: Made "auto\-arrayification" require an explicit \'\-g\' or \'\-\-group\' option to prefer that implicit processing never magically fix otherwise invalid JSON\. The feature is now called grouping\.

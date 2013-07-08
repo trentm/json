@@ -95,14 +95,38 @@ subset of the JSON. HTTP header blocks are skipped by default.</p>
 
 <h3 id="Grouping">Grouping</h3>
 
-<p>(Added in json v4.) Use '-g' or '--group' to group objects (into an array of
-objects) or concatenate arrays (into a single array) separated by no space or
-by a newline. This can be helpful for, e.g.:</p>
+<p>(Added in json v4.) Use '-g' or '--group' to group adjacent objects into a
+single JSON array or to concatenate adjacent arrays into a single array. E.g.:</p>
+
+<pre><code>$ echo '{"a":1}
+{"b": 2}' | json -g
+[
+  {
+    "a": 1
+  },
+  {
+    "b": 2
+  }
+]
+
+$ echo '["one"]
+["two"]' | json -g
+[
+  "one",
+  "two"
+]
+</code></pre>
+
+<p>"Adjacent" objects means objects separated by a newline, or by no space at all.
+Adjacent <em>arrays</em> means separate by a newline. These conditions are chosen as
+a balance between (a) not being ambiguous to parse with a simple regex and
+(b) enough to be useful for common cases.</p>
+
+<p>Grouping can be helpful for "one JSON object per line" formats (like
+<a href="https://github.com/trentm/node-bunyan">Bunyan</a>) or for things such as:</p>
 
 <pre><code>$ cat *.json | json -g ...
 </code></pre>
-
-<p>and similar.</p>
 
 <p>As of json v5.1, <code>json -ga</code> will <strong>stream</strong>, e.g.:</p>
 
@@ -110,7 +134,10 @@ by a newline. This can be helpful for, e.g.:</p>
 </code></pre>
 
 <p>In json v3 and earlier, this used to be called "auto-arrayification" and
-was implicit. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+was implicit. In json v4 and v5 grouping of adjacent arrays separate by
+no space was allowed. That was dropped in v6 (see
+<a href="https://github.com/trentm/json/issues/55">issue #55</a>. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a>
+section below.</p>
 
 <h3 id="Merging">Merging</h3>
 
@@ -725,22 +752,22 @@ separately (use <code>-A</code> to override this):</p>
 
 <p>You can edit a file in place with <code>-I</code> and <code>-f FILE</code>:</p>
 
-<pre><code>$ cat foo.json
-{"foo":1}
+<pre><code>$ cat config.json
+{"hostname":"127.0.0.1"}
 
-$ json -I -f foo.json                   # format the file
-json: updated "foo.json" in-place
-$ cat foo.json
+$ json -I -f config.json                   # format the file
+json: updated "config.json" in-place
+$ cat config.json
 {
-  "foo": 1
+  "hostname": "127.0.0.1"
 }
 
-$ json -I -f foo.json -e 'this.bar=42'  # add bar field
-json: updated "foo.json" in-place
-$ cat foo.json
+$ json -I -f config.json -e 'this.port=8080'  # add bar field
+json: updated "config.json" in-place
+$ cat config.json
 {
-  "foo": 1,
-  "bar": 42
+  "hostname": "127.0.0.1",
+  "port": 8080
 }
 </code></pre>
 
@@ -764,10 +791,16 @@ json: error: lookups cannot be specified with in-place editing (-I/--in-place), 
 
 <h2 id="COMPATIBILITY">COMPATIBILITY</h2>
 
-<p>This is json version 4. The major version is incremented when there is a
-backward incompatible change.</p>
+<p>The json tool major version is incremented when there is a backward incompatible
+change. An overview of those changes is here.</p>
 
 <ul>
+<li>v6: Grouping (via <code>-g</code> or <code>--group</code>) of adjacent <em>arrays</em> no longer groups
+arrays separated by no space. I.e. adjacent arrays must be separated by a
+newline.</li>
+<li>v5: Special case the output for <strong>a single lookup AND JSON output</strong> (i.e. <code>-j</code>
+or <code>-o json*</code>) to only output the value instead of the more general array or
+table that is necessary for multiple lookups.</li>
 <li>v4: Made "auto-arrayification" require an explicit '-g' or '--group' option
 to prefer that implicit processing never magically fix otherwise invalid
 JSON. The feature is now called grouping.</li>

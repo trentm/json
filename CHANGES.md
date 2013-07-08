@@ -1,7 +1,37 @@
 # json (aka jsontool) Changelog
 
 
-## json 5.2.0 (not yet released)
+## json 6.0.0 (not yet released)
+
+- [Backwards incompatibility, issue #55] Drop support for grouping of adjacent
+  arrays (via `-g`, `--group`) **separated by no space**:
+  
+        # Before
+        echo '["one"]["two"]' | json -g
+        [
+          "one",
+          "two"
+        ]
+        
+        # After
+        $ echo '["one"]["two"]' | jsondev -g
+        json: error: input is not JSON: Syntax error at line 1, column 8:
+                ["one"]["two"]
+                .......^
+        ["one"]["two"]
+
+  We still allow grouping of arrays separated by a newline:
+
+        # Before and after
+        $ echo '["one"]
+        ["two"]' | json -g
+        [
+          "one",
+          "two"
+        ]
+
+  This was dropped because the current regex technique used for grouping can
+  fail with a JSON string that contains ']['. Not worth it.
 
 - New `-I/--in-place` option for in-place editing of given files with:
 

@@ -17,20 +17,46 @@ subset of the JSON. HTTP header blocks are skipped by default.
 
 ### Grouping
 
-(Added in json v4.) Use '-g' or '--group' to group objects (into an array of
-objects) or concatenate arrays (into a single array) separated by no space or
-by a newline. This can be helpful for, e.g.:
+(Added in json v4.) Use '-g' or '--group' to group adjacent objects into a
+single JSON array or to concatenate adjacent arrays into a single array. E.g.:
+
+    $ echo '{"a":1}
+    {"b": 2}' | json -g
+    [
+      {
+        "a": 1
+      },
+      {
+        "b": 2
+      }
+    ]
+
+    $ echo '["one"]
+    ["two"]' | json -g
+    [
+      "one",
+      "two"
+    ]
+
+"Adjacent" objects means objects separated by a newline, or by no space at all.
+Adjacent *arrays* means separate by a newline. These conditions are chosen as
+a balance between (a) not being ambiguous to parse with a simple regex and
+(b) enough to be useful for common cases.
+
+Grouping can be helpful for "one JSON object per line" formats (like
+[Bunyan](https://github.com/trentm/node-bunyan)) or for things such as:
 
     $ cat *.json | json -g ...
-
-and similar.
 
 As of json v5.1, `json -ga` will **stream**, e.g.:
 
     $ yes '{"foo":"bar"}' | json -ga
 
 In json v3 and earlier, this used to be called "auto-arrayification" and
-was implicit. See the [COMPATIBILITY][] section below.
+was implicit. In json v4 and v5 grouping of adjacent arrays separate by
+no space was allowed. That was dropped in v6 (see
+[issue #55](https://github.com/trentm/json/issues/55)).
+See the [COMPATIBILITY][] section below.
 
 
 ### Merging
@@ -660,9 +686,15 @@ because that can too easily result in data loss, e.g. with something like:
 
 ## COMPATIBILITY
 
-This is json version 4. The major version is incremented when there is a
-backward incompatible change.
+The json tool major version is incremented when there is a backward incompatible
+change. An overview of those changes is here.
 
+- v6: Grouping (via `-g` or `--group`) of adjacent *arrays* no longer groups
+  arrays separated by no space. I.e. adjacent arrays must be separated by a
+  newline.
+- v5: Special case the output for **a single lookup AND JSON output** (i.e. `-j`
+  or `-o json*`) to only output the value instead of the more general array or
+  table that is necessary for multiple lookups.
 - v4: Made "auto-arrayification" require an explicit '-g' or '--group' option
   to prefer that implicit processing never magically fix otherwise invalid
   JSON. The feature is now called grouping.
