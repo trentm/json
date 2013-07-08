@@ -1,7 +1,7 @@
 # json (aka jsontool) Changelog
 
 
-## json 6.0.0 (not yet released)
+## json 6.0.0
 
 - [Backwards incompatibility, issue #55] Drop support for grouping of adjacent
   arrays (via `-g`, `--group`) **separated by no space**:
