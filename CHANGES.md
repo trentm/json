@@ -1,6 +1,11 @@
 # json (aka jsontool) Changelog
 
 
+## json 6.0.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 6.0.0
 
 - [Backwards incompatibility, issue #55] Drop support for grouping of adjacent
