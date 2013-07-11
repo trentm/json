@@ -3,7 +3,9 @@
 
 ## json 6.0.1 (not yet released)
 
-(nothing yet)
+- Move json.1 to "man/man1" and set "directories.man" in package.json to
+  have "man json" work after "npm install -g jsontool" with the coming
+  npm 1.3.3 work.
 
 
 ## json 6.0.0
