@@ -15,6 +15,7 @@ Use it to:
 - extract particular values (see `LOOKUPS` in usage)
 - get details on JSON syntax errors (handy for config files)
 - filter input JSON (see `-e` and `-c` options)
+- ... much more
 
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to jsontool.
@@ -73,7 +74,8 @@ MIT (see the fine LICENSE.txt file).
     <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
     json -f FILE [OPTIONS] [LOOKUPS...]
 
-See `json --help` output for full details.
+See `json --help` output for full details or read the man page online
+at <http://trentm.com/json>.
 
 
 
@@ -89,6 +91,7 @@ focus.
 
 # Alternatives you might prefer
 
+- jq: <http://stedolan.github.io/jq/>
 - json:select: <http://jsonselect.org/>
 - jsonpipe: <https://github.com/dvxhouse/jsonpipe>
 - json-command: <https://github.com/zpoley/json-command>
