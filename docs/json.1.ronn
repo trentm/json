@@ -1,4 +1,4 @@
-# json(1) -- (aka "jsontool") JSON love for your command line.
+# json(1) -- JSON love for your command line
 
 
 ## SYNOPSIS
@@ -10,12 +10,26 @@ something-generating-JSON-on-stdout | `json` \[OPTIONS\] \[LOOKUPS\]
 
 ## DESCRIPTION
 
-Pipe in your JSON for pretty-printing, JSON validation, filtering,
-and modification. Supply one or more `LOOKUPS` to extract a
-subset of the JSON. HTTP header blocks are skipped by default.
+`json` is a fast command-line tool for working with JSON content from the
+command line. Among its features: streaming stdin/stdout or working with JSON
+files, pretty-printing with control over output formats, JSON validation,
+filtering, modification, in-place JSON file modification, field extraction,
+tabular output, skipping HTTP header blocks for use with REST API responses,
+JSON stream ('\n'-separated JSON objects) processing.
+
+Read on for details and examples. The FEATURE sections describe `json`
+features roughly in the order of processing.
 
 
-### Grouping
+## FEATURE: HTTP Header Stripping
+
+`json` roots are as a tool to assist working with REST APIs. Often results
+being parsed include HTTP headers, as from `curl -i`, with a JSON payload.
+By default `json` passes through HTTP header blocks. Use `-H` to strip a
+leading HTTP header block.
+
+
+## FEATURE: Grouping
 
 (Added in json v4.) Use '-g' or '--group' to group adjacent objects into a
 single JSON array or to concatenate adjacent arrays into a single array. E.g.:
@@ -43,23 +57,36 @@ Adjacent *arrays* means separate by a newline. These conditions are chosen as
 a balance between (a) not being ambiguous to parse with a simple regex and
 (b) enough to be useful for common cases.
 
-Grouping can be helpful for "one JSON object per line" formats (like
-[Bunyan](https://github.com/trentm/node-bunyan)) or for things such as:
+*Compatibility note:* In json v3 and earlier, this used to be called
+"auto-arrayification" and was implicit. In json v4 and v5 grouping of adjacent
+arrays separated by no space was allowed. That was dropped in v6 (see
+[issue #55](https://github.com/trentm/json/issues/55)). See the
+[COMPATIBILITY][] section below.
+
+
+## FEATURE: Streaming
+
+Grouping can be helpful for "one JSON object per line" formats or for things such as:
+
 
     $ cat *.json | json -g ...
 
-As of json v5.1, `json -ga` will **stream**, e.g.:
+However, when the size of the input is large practically one must do stream
+processing. As of json v5.1, `json -ga` will **stream**. An extreme example is:
 
     $ yes '{"foo":"bar"}' | json -ga
 
-In json v3 and earlier, this used to be called "auto-arrayification" and
-was implicit. In json v4 and v5 grouping of adjacent arrays separate by
-no space was allowed. That was dropped in v6 (see
-[issue #55](https://github.com/trentm/json/issues/55)).
-See the [COMPATIBILITY][] section below.
+But a more practical example would be a large file of newline-separated
+JSON objects, such as a [Bunyan](https://github.com/trentm/node-bunyan)
+log file:
+
+    $ cat foo.log | json -ga req.method req.url res.headers.x-response-time
+    GET /ping 1
+    POST /images 43
+    ...
 
 
-### Merging
+## FEATURE: Merging
 
 (Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
 objects in the input. Keys in the last object win.
@@ -80,38 +107,136 @@ This could be useful for merging multiple config files, e.g.:
     ...
 
 
-### Execution
+## FEATURE: Validation
 
-Use the `-e CODE` option to execute (JavaScript) code on the input JSON.
+Since v1.2.0 `json` will give position information and context for JSON
+syntax errors (`SyntaxError`). This can be handy for validating data and
+config files:
 
-    $ echo '{"name":"trent","age":38}' | json -e 'this.age++'
+    $ cat config.json | json
+    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+                , { "name": "smartos64-1.4.7"
+            ....^
+    {
+        "use-proxy": false
+    ...
+    $ echo $?
+    1
+
+Processing and output of the input JSON can be suppressed with the
+`-n, --validate` option:
+
+    $ cat config.json | json --validate
+    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
+                , { "name": "smartos64-1.4.7"
+            ....^
+
+Together with the `-q` you can get silent, exit-status-only, JSON validation:
+
+    $ cat config.json | json -nq
+    $ echo $?
+    1
+
+
+## FEATURE: Execution
+
+(Added in json v7.) Use the `-E CODE` option to execute (JavaScript) code on the
+input JSON.
+
+    $ echo '{"name":"trent","age":38}' | json -E 'this.age++'
     {
       "name": "trent",
       "age": 39
     }
 
-If input is an array, this will automatically process each
-item separately.
+If input is an array, this will automatically process each item separately:
+
+    $ echo '[{"age":38},{"age":4}]' | json -E this.age++
+    [
+      {
+        "age": 39
+      },
+      {
+        "age": 5
+      }
+    ]
+
+That can be overriden with `-A`:
+
+    $ echo '[{"age":38},{"age":4}]' | json -A -E 'this[0].age = "unknown"'
+    [
+      {
+        "age": "unknown"
+      },
+      {
+        "age": 4
+      }
+    ]
+
+The given CODE is executed in a function bound to the input object (i.e.
+`this` is the input object).
+
+*Security note:* `CODE` is *not* executed in a sandbox, so `json`'s globals are
+available and unguarded. You can shoot yourself in the foot. *Do not pass
+untrusted user-supplied strings here.*
+
+*Compatibility note:* There is also a `-e CODE` option (lowercase "e") from
+earlier versions of json to do much the same thing (with slightly different
+semantics for the CODE). It is still supported for backward compatibility.
+However it is deprecated because it can cause processing to be *10x* or more
+slower for large inputs. See the [COMPATIBILITY][] section below.
 
 
-### Conditional filtering
+## FEATURE: Conditional filtering
 
-Use the `-c CODE` option to run JavaScript code ending with a statement
+Use the `-C CODE` option to run JavaScript code ending with a statement
 returning a boolean to filter the input JSON.
 
-    $ echo '[{"age":38},{"age":4}]' | json -c 'this.age > 21'
+    $ echo '[{"age":38},{"age":4}]' | json -C 'this.age > 21'
     [{"age":38}]
 
-If input is an array, this will automatically process each
-item separately.
+As with `-E` above, if input is an array, this will automatically process each
+item separately. This can be overriden with `-A`.
+
+The given CODE is executed in a function bound to the input object (i.e.
+`this` is the input object). A JavaScript function must use `return` to return
+a value, so as a convenience if "return" is not in the given CODE it is presumed
+to be a single statement and it is wrapped:
+
+    function () {
+        return ( CODE );
+    }
+
+To use multiple statements in `-C CODE` you must explicitly use `return`, e.g.:
+
+    $ echo '{"a": 2, "b": 6}' | json -C 'sum = this.a + this.b; return sum > 5'
+    {
+      "a": 2,
+      "b": 6
+    }
+
+*Security note:* `CODE` is *not* executed in a sandbox, so `json`'s globals are
+available and unguarded. You can shoot yourself in the foot. *Do not pass
+untrusted user-supplied strings here.*
+
+*Compatibility note:* There is also a `-c CODE` option (lowercase "c") from
+earlier versions of json to do much the same thing (with slightly different
+semantics for the CODE. It is still supported for backward compatibility.
+However it is deprecated because it can cause processing to be *10x* or more
+slower for large inputs. See the [COMPATIBILITY][] section below.
 
 
-### Lookups
+## FEATURE: Lookups
 
 Use lookup arguments to extract particular values:
 
     $ echo '{"name":"trent","age":38}' | json name
     trent
+
+    $ echo '{"name": {"first": "Trent", "last": "Mick"}, "age": 38}' \
+        | json name.first age
+    Trent
+    38
 
 Use `-a` for *array processing* of lookups and *tabular output*:
 
@@ -127,7 +252,8 @@ Integral values work for array index lookups:
     $ echo '["a", "b", "c"]' | json 1
     b
 
-Negative array indices are also supported:
+Negative array indices are also supported for convenience (a la Python array
+indexing):
 
     $ echo '["a", "b", "c"]' | json -- -1
     c
@@ -149,10 +275,9 @@ just like you would in JavaScript:
     'my-value'
 
 
-### Pretty-printing
+## FEATURE: Pretty-printing
 
-Output is "jsony" by default: 2-space indented JSON with one exception, a
-single string value is printed without quotes.
+Output is "jsony" by default: 2-space indented JSON ...
 
     $ echo '{"name": "trent", "age": 38}' | json
     {
@@ -160,15 +285,49 @@ single string value is printed without quotes.
       "age": 38
     }
 
-Use `-o json` for explicit JSON, `-o json-N` for N-space indent:
+... with one exception, a bare string value is printed without quotes (because
+who wants to deal with quotes in your pipeline?).
+
+    $ echo '{"name": "trent", "age": 38}' | json name
+    trent
+
+If pure JSON output is wanted, use `-o json` or the `-j` shortcut:
+
+    $ echo '{"name": "trent", "age": 38}' | json -o json name
+    "trent"
+
+Indentations other than 2 can be selected via `-o json-N`
 
     $ echo '{"name": "trent", "age": 38}' | json -o json-0
     {"name":"trent","age":38}
+    $ echo '{"name": "trent", "age": 38}' | json -o json-4
+    {
+        "name": "trent",
+        "age": 38
+    }
 
-Use `-H` to exclude a leading HTTP header block as from `curl -i`.
+The "FORMAT-N" suffix can also be useful on "jsony" when selecting multiple
+values and wanting tabular output where some cells are objects:
+
+    $ cat users.json
+    [
+       {"name": {"first": "Trent", "last": "Mick"}, "age": 38},
+       {"name": {"first": "Ewan", "last": "Mick"}, "age": 4}
+    ]
+
+    $ json -f users.json -a name age -o jsony-0
+    {"first":"Trent","last":"Mick"} 38
+    {"first":"Ewan","last":"Mick"} 4
+
+You can get colored (non-JSON) output using node.js's
+[`util.inspect`](http://nodejs.org/docs/latest/api/all.html#util.inspect):
+
+    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o inspect
+    [ { name: 'Trent' },
+      { name: 'Ewan' } ]
 
 
-### Listing keys
+## FEATURE: Listing keys
 
 Sometimes you want the list of keys for an object. Use `-k` or `--keys` for
 that:
@@ -182,6 +341,43 @@ that:
     name
     age
 
+
+## FEATURE: In-place editing
+
+You can edit a file in place with `-I` and `-f FILE`:
+
+    $ cat config.json
+    {"hostname":"127.0.0.1"}
+
+    $ json -I -f config.json                        # format the file
+    json: updated "config.json" in-place
+    $ cat config.json
+    {
+      "hostname": "127.0.0.1"
+    }
+
+    $ json -I -f config.json -E 'this.port=8080'    # add port field
+    json: updated "config.json" in-place
+    $ cat config.json
+    {
+      "hostname": "127.0.0.1",
+      "port": 8080
+    }
+
+Some limitations. Only one file at a time:
+
+    $ json -I -f foo.json -f bar.json
+    json: error: must specify exactly one file with '-f FILE' to use -I/--in-place
+
+Lookups are not allowed:
+
+    $ json -I -f foo.json key.subkey
+    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
+
+because that can too easily result in data loss, e.g. with something like:
+
+    $ json -I -f *.json    # if there is more than match to the glob
+    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
 
 
 ## OPTIONS
@@ -241,23 +437,32 @@ output:
     Delimiter character for tabular output (default is ' ').
 
   * `-A`:
-    Process input as a single object, i.e. stop `-e` and `-c` automatically
-    processing each item of an input array.
+    Process input as a single object, i.e. stop `-E` and `-C` automatically
+    processing each item of an input array. Likewise for the deprecated
+    `-c` and `-e` options.
 
+You can execute code on (`-E`) and filter (`-C`) the input (this is done before
+LOOKUPS are processed, if any).
 
-You can execute code on (`-e`) and filter (`-c`) the input (this is done before
-LOOKUPS are processed, if any). If datum is an object, then a shortcut is
-`<key>`. To remove a key, use `this.<key> = undefined`. For array items, use
-`this[<index>] = 42`.
-
-  * `-e CODE`:
+  * `-E CODE`:
     Execute the given JavaScript code on the input. If input is an array, then
     each item of the array is processed separately (use `-A` to override).
 
-  * `-c CODE`:
+  * `-C CODE`:
     Filter the input with JavaScript `CODE`. If `CODE` returns false-y, then
     the item is filtered out. If input is an array, then each item of the array
     is processed separately (use `-A` to override).
+
+Older similar `-e` and `-c` options exist for execution and conditional
+filtering -- now deprecated because they can be 10x or more slower.
+
+  * `-e CODE`:
+    Execute the given JavaScript code on the input. Deprecated in v7. Use
+    `-E CODE` instead.
+
+  * `-c CODE`:
+    Filter the input with JavaScript `CODE`. If `CODE` returns false-y, then
+    the item is filtered out. Deprecated in v7. Use `-C CODE` instead.
 
 
 Finally, if `LOOKUP` arguments are given, these are extracted from the
@@ -385,7 +590,6 @@ allows a special case for an integer lookup:
     socket.io
 
 
-
 ### Array processing with -a
 
 `json` includes the `-a` (aka `--array`) option for **processing each element of
@@ -453,242 +657,18 @@ The **`-d` option can be used to specify a delimiter**:
     2012-07-22T13:43:40Z,3752,Auto-detect hardfloat eabi and armv7 varia...
 
 
-### Grouping
-
-You can use the **'-g' or '--group' option to group adjacent objects** into
-an array of those objects; or to concatenate adjacent arrays into a single
-array. To attempt to avoid false positives inside JSON strings, *adjacent*
-elements must have either no whitespace separation or at least a newline
-separation. Examples:
-
-    $ echo '{"a":1}{"b":2}' | json -g       # group into array of objects
-    [
-      {
-        "a": 1
-      },
-      {
-        "b": 2
-      }
-    ]
-    $ echo '[1,2][3,4]' | json -g           # concantenate into one array
-    [
-      1,
-      2,
-      3,
-      4
-    ]
-
-This can be useful when processing a number of JSON files, e.g.:
-
-    $ cat my_data/*.json | json -g ...
-
-Or when composing multiple JSON API response, e.g. this somewhat contrived
-search for node.js bugs mentioning "tty" or "windows":
-
-    $ echo tty windows | xargs -n1 -I{} curl -s \
-        https://api.github.com/legacy/issues/search/joyent/node/open/{} \
-        | json -g -a issues | json -g -a number title
-    623 Non-userfacing native modules should be prefixed with _
-    861 child_process fails after stdin close
-    1157 `child_process` module should read / write password prompts
-    1180 Ctrl+Shift+BS can't be input.
-    ...
-
-
-### Output formatting
-
-You can use the '-o MODE' option (or '--output MODE') to control the output
-flavour. By default the output is "jsony" (JSON, except that a simple string
-is printed *without the quotes*):
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json
-    [
-      {
-        "name": "Trent"
-      },
-      {
-        "name": "Ewan"
-      }
-    ]
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json '0.name'
-    Trent
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json '0.name' -o jsony
-    Trent
-
-Or for strict JSON output:
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o json
-    [
-      {
-        "name": "Trent"
-      },
-      {
-        "name": "Ewan"
-      }
-    ]
-
-By default this uses a 2-space indent. That can be changed with a "-N" suffix:
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o json-4
-    [
-        {
-            "name": "Trent"
-        },
-        {
-            "name": "Ewan"
-        }
-    ]
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o json-0
-    [{"name":"Trent"},{"name":"Ewan"}]
-
-You can get colored (non-JSON) output using node.js's
-[`util.inspect`](http://nodejs.org/docs/latest/api/all.html#util.inspect):
-
-    $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o inspect
-    [ { name: 'Trent' },
-      { name: 'Ewan' } ]
-
-
-### Validation
-
-Since v1.2.0 `json` will give position information and context for JSON
-syntax errors (`SyntaxError`). This can be handy for validating data and
-config files:
-
-    $ cat config.json | json
-    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
-                , { "name": "smartos64-1.4.7"
-            ....^
-    {
-        "use-proxy": false
-    ...
-    $ echo $?
-    1
-
-Processing and output of the input JSON can be suppressed with the
-`-n, --validate` option:
-
-    $ cat config.json | json --validate
-    json: error: input is not JSON: Unexpected ',' at line 17, column 5:
-                , { "name": "smartos64-1.4.7"
-            ....^
-
-Together with the `-q` you can get silent, exit-status-only, JSON validation:
-
-    $ cat config.json | json -nq
-    $ echo $?
-    1
-
-
-### Executing code snippets on input
-
-You can use the `-e CODE` option to execute small code snippets to massage
-the input data. Some examples (generally use `this.<key>` to refer to a key):
-
-    $ echo '{"foo": "bar"}' | json -e 'this.foo="baz"'
-    {"foo":"baz"}
-
-Or omit the `this.` as a shortcut:
-
-    $ echo '{"foo": "bar"}' | json -e 'foo="baz"'
-    {"foo":"baz"}
-    $ echo '{"age": 38}' | json -e 'age++'
-    {"age":39}
-
-Set a key to `undefined` to remove it:
-
-    $ echo '{"one": 1, "two": 2}' | json -e 'this.one=undefined'
-    {"two":2}
-
-If the input is an array, then `-e` will automatically process each element
-separately (use `-A` to override this):
-
-    $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
-        | json -e 'age++'
-    [
-      {
-        "name": "trent",
-        "age": 39
-      },
-      {
-        "name": "ewan",
-        "age": 5
-      }
-    ]
-
-
-### Filtering with '-c'
-
-You can use the `-c CODE` option to filter the input (this is JavaScript code):
-
-    $ echo '{"name":"trent", "age":38}' | json -c 'this.age > 21'
-    {
-      "name": "trent",
-      "age": 38
-    }
-    $ echo '{"name":"trent", "age":38}' | json -c 'this.age==16'
-    $
-
-If the input is an array, then `-c` will automatically process each element
-separately (use `-A` to override this):
-
-    $ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' \
-        | json -c 'this.age>21'
-    [
-      {
-        "name": "trent",
-        "age": 38
-      }
-    ]
-
-
-### In-place editing
-
-You can edit a file in place with `-I` and `-f FILE`:
-
-    $ cat config.json
-    {"hostname":"127.0.0.1"}
-
-    $ json -I -f config.json                   # format the file
-    json: updated "config.json" in-place
-    $ cat config.json
-    {
-      "hostname": "127.0.0.1"
-    }
-
-    $ json -I -f config.json -e 'this.port=8080'  # add bar field
-    json: updated "config.json" in-place
-    $ cat config.json
-    {
-      "hostname": "127.0.0.1",
-      "port": 8080
-    }
-
-Some limitations. Only one file at a time:
-
-    $ json -I -f foo.json -f bar.json
-    json: error: must specify exactly one file with '-f FILE' to use -I/--in-place
-
-Lookups are not allowed:
-
-    $ json -I -f foo.json key.subkey
-    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
-
-because that can too easily result in data loss, e.g. with something like:
-
-    $ json -I -f *.json    # if there is more than match to the glob
-    json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
-
-
-
 ## COMPATIBILITY
 
 The json tool major version is incremented when there is a backward incompatible
 change. An overview of those changes is here.
 
+- v7: `-E CODE` and `-C CODE` were added in favour of `-e CODE` and `-c CODE`
+  because the former provide a 10x or more performance improvement for
+  larger inputs. The latter are still included for backward compatibility.
+  `-E/-C` use a JavaScript function to execute CODE, which `-e/-c` use node.js's
+  `vm.runInNewContext` which is crazy slow. Use of a JavaScript function
+  places slightly different semantics and requirements on the given `CODE`, so
+  new options were required for compat.
 - v6: Grouping (via `-g` or `--group`) of adjacent *arrays* no longer groups
   arrays separated by no space. I.e. adjacent arrays must be separated by a
   newline.
@@ -705,15 +685,26 @@ See the [changelog](https://github.com/trentm/json/blob/master/CHANGES.md)
 for full compatibility and change details.
 
 
-## PROJECT & BUGS
+## INSTALL, PROJECT, BUGS
 
-`json` is written in JavaScript and requires node.js (`node`).
-The project lives at <https://github.com/trentm/json> and is published to
-npm as "jsontool" ("json" was already taken, boo).
+`json` is written in JavaScript and requires node.js (`node`). You can either
+install via `npm`:
 
-* README, Install notes: <https://github.com/trentm/json#readme>
-* Report bugs to <https://github.com/trentm/json/issues>.
-* See the full changelog at: <https://github.com/trentm/json/blob/master/CHANGES.md>
+    npm install -g jsontool
+
+or manually get the script and put it on your PATH somewhere (`json` is a single
+file with no external deps other than node itself):
+
+    cd ~/bin
+    curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
+    chmod 755 json
+
+(Note: NOT `npm install json`. Unfortunately and confusingly, that will
+install a different and incompatible `json` CLI tool.)
+
+This project lives at <https://github.com/trentm/json>. Please report bugs
+to <https://github.com/trentm/json/issues>. See the full changelog at:
+<https://github.com/trentm/json/blob/master/CHANGES.md>.
 
 
 ## LICENSE
@@ -723,4 +714,5 @@ MIT License (see <https://github.com/trentm/json/blob/master/LICENSE.txt>)
 
 ## COPYRIGHT
 
-json is Copyright (c) 2012 Trent Mick
+json is Copyright (c) 2013 Trent Mick and Copyright (c) 2013 Joyent Inc.
+All rights reserved.

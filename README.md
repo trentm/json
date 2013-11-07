@@ -41,7 +41,7 @@ See <http://trentm.com/json> for full docs and many examples.
 You should now have "json" on your PATH:
 
     $ json --version
-    json 6.0.0
+    json 7.0.0
 
 
 **WARNING for Ubuntu/Debian users:** There is a current bug in Debian stable

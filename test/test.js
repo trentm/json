@@ -30,39 +30,39 @@ var data = {
 
   parseLookup: function(test) {
     var parseLookup = require("../lib/jsontool.js").parseLookup;
-    test.deepEqual(parseLookup("42"), ["42"]);
+    test.deepEqual(parseLookup("42"), [42]);
     test.deepEqual(parseLookup("a"), ["a"]);
     test.deepEqual(parseLookup("a.b"), ["a", "b"]);
     test.deepEqual(parseLookup("a.b.c"), ["a", "b", "c"]);
 
-    test.deepEqual(parseLookup("[42]"), ["[42]"]);
-    test.deepEqual(parseLookup("['a']"), ["['a']"]);
-    test.deepEqual(parseLookup('["a"]'), ['["a"]']);
+    test.deepEqual(parseLookup("[42]"), [42]);
+    test.deepEqual(parseLookup("['a']"), ["a"]);
+    test.deepEqual(parseLookup('["a"]'), ["a"]);
 
-    test.deepEqual(parseLookup("b[42]"), ["b", "[42]"]);
-    test.deepEqual(parseLookup("b['a']"), ["b", "['a']"]);
-    test.deepEqual(parseLookup('b["a"]'), ["b", '["a"]']);
+    test.deepEqual(parseLookup("b[42]"), ["b", 42]);
+    test.deepEqual(parseLookup("b['a']"), ["b", "a"]);
+    test.deepEqual(parseLookup('b["a"]'), ["b", "a"]);
 
-    test.deepEqual(parseLookup("[42].b"), ["[42]", "b"]);
-    test.deepEqual(parseLookup("['a'].b"), ["['a']", "b"]);
-    test.deepEqual(parseLookup('["a"].b'), ['["a"]', "b"]);
+    test.deepEqual(parseLookup("[42].b"), [42, "b"]);
+    test.deepEqual(parseLookup("['a'].b"), ["a", "b"]);
+    test.deepEqual(parseLookup('["a"].b'), ["a", "b"]);
 
-    test.deepEqual(parseLookup("['a-b']"), ["['a-b']"]);
-    test.deepEqual(parseLookup('["a-b"]'), ['["a-b"]']);
-    test.deepEqual(parseLookup("['a.b']"), ["['a.b']"]);
-    test.deepEqual(parseLookup('["a.b"]'), ['["a.b"]']);
-    test.deepEqual(parseLookup("['a[b']"), ["['a[b']"]);
-    test.deepEqual(parseLookup('["a[b"]'), ['["a[b"]']);
-    test.deepEqual(parseLookup("['a]b']"), ["['a]b']"]);
-    test.deepEqual(parseLookup('["a]b"]'), ['["a]b"]']);
+    test.deepEqual(parseLookup("['a-b']"), ["a-b"]);
+    test.deepEqual(parseLookup('["a-b"]'), ["a-b"]);
+    test.deepEqual(parseLookup("['a.b']"), ["a.b"]);
+    test.deepEqual(parseLookup('["a.b"]'), ["a.b"]);
+    test.deepEqual(parseLookup("['a[b']"), ["a[b"]);
+    test.deepEqual(parseLookup('["a[b"]'), ["a[b"]);
+    test.deepEqual(parseLookup("['a]b']"), ["a]b"]);
+    test.deepEqual(parseLookup('["a]b"]'), ["a]b"]);
 
-    test.deepEqual(parseLookup("['a\\'[b']"), ["['a\\'[b']"]);
-    test.deepEqual(parseLookup("['a\\'[b'].c"), ["['a\\'[b']", "c"]);
+    test.deepEqual(parseLookup("['a\\'[b']"), ["a'[b"]);
+    test.deepEqual(parseLookup("['a\\'[b'].c"), ["a'[b", "c"]);
 
     test.deepEqual(parseLookup("a/b", "/"), ["a", "b"]);
     test.deepEqual(parseLookup("a.b/c", "/"), ["a.b", "c"]);
-    test.deepEqual(parseLookup("a.b/c[42]", "/"), ["a.b", "c", "[42]"]);
-    test.deepEqual(parseLookup('["a/b"]', "/"), ['["a/b"]']);
+    test.deepEqual(parseLookup("a.b/c[42]", "/"), ["a.b", "c", 42]);
+    test.deepEqual(parseLookup('["a/b"]', "/"), ["a/b"]);
 
     test.done();
   }

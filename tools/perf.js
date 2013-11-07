@@ -24,13 +24,15 @@ versions.push('dev');
 versions.reverse();
 
 var nodes = [
+    //'node11',
+    'node10',
     'node8',
     'node6',
-    'node4'
 ];
 
 var cmds = [
     // [VERSION-RANGE, CMD-TEMPLATE]
+    // Too slow running this: ['>=4', 'cat TOP/tools/perf/newline-100k.log | JSON -ga foo'],
     ['>=3', 'cat TOP/tools/perf/1k.json | JSON UUID'],
     ['>=3', 'echo \'{"foo":"bar"}\' | JSON -e "foo=\'baz\'" foo'],
     ['>=3', 'echo \'{"foo":"bar"}\' | JSON -c "true" foo'],

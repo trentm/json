@@ -1,7 +1,129 @@
-# json (aka jsontool) Changelog
+# json Changelog
 
 
-## json 6.0.1 (not yet released)
+## json 7.0.0 (not yet released)
+
+-   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
+    CODE`. The new options can be **10x or more faster**. An example processing
+    a large log of newline-separated JSON object as a stream:
+
+        $ ls -al big.log
+        -rw-r--r--  1 trentm  staff   156M Oct 25 23:31 big.log
+
+        $ time json -f big.log -gac 'this.audit' req.method req.url >/dev/null
+
+        real	0m21.380s
+        user	0m21.051s
+        sys	0m0.526s
+
+        $ time json -f big.log -gaC 'this.audit' req.method req.url >/dev/null
+
+        real	0m3.336s
+        user	0m3.124s
+        sys	0m0.295s
+
+    For comparison with `jq` (a C-based fast JSON processor tool):
+
+        $ time cat big.log | jq '.req.method, .req.url' >/dev/null
+
+        real	0m3.307s
+        user	0m3.249s
+        sys	0m0.136s
+
+    The speed difference in `json` is in how the given `CODE` is executed: the new
+    implementation uses a JS function, while the `-c/-e` options use node.js's
+    `vm.runInNewContext`. This change means some semantic changes to the given
+    `CODE` so *new* options were required. The old `-c/-e` remain for backward
+    compatibility. Some examples to show the semantic differences:
+
+    1. `this` is required to access the object fields:
+
+            $ echo '{"foo": "bar"}' | json -e 'foo="baz"'
+            {
+              "foo": "baz"
+            }
+            $ echo '{"foo": "bar"}' | json -e 'this.foo="baz"'
+            {
+              "foo": "baz"
+            }
+
+            $ echo '{"foo": "bar"}' | json -E 'foo="baz"'   # doesn't work
+            {
+              "foo": "bar"
+            }
+            $ echo '{"foo": "bar"}' | json -E 'this.foo="baz"'
+            {
+              "foo": "baz"
+            }
+
+    2. Explicit `return` is required with `-C` when using multiple statements:
+
+            $ echo '{"a": 2, "b": 6}' | json -C 'sum = this.a + this.b; sum > 5'
+
+            undefined:2
+            return (sum = this.a + this.b; sum > 5)
+                                         ^
+            SyntaxError: Unexpected token ;
+
+            $ echo '{"a": 2, "b": 6}' | json -C 'sum = this.a + this.b; return sum > 5'
+            {
+              "a": 2,
+              "b": 6
+            }
+
+    3. Some operations on the input object are more as you'd expect:
+
+            $ echo '["a", "b"]' | json -AE 'this.push("c")'
+            [
+              "a",
+              "b",
+              "c"
+            ]
+
+            $ echo '{"a":1,"b":2}' | json -E 'delete this.a'
+            {
+              "b": 2
+            }
+
+    4. `CODE` is no longer run in a sandbox, so you can shoot yourself in the
+       foot. Security warning: *Don't run untrusted code with '-E' or '-C'.*
+
+            $ echo '{}' | json -C 'process.stdout.end()'
+            [Error: process.stdout cannot be closed.]
+
+            $ echo '{}' | json -c 'process.stdout.end()'
+
+            vm.js:41
+                    return ns[f].apply(ns, arguments);
+                                 ^
+            ReferenceError: process is not defined
+
+    Overall: (1) is a annoying, (2) is likely rare but at least is explicit,
+    (3) is a minor win, (4) is something to just be aware of. The major win is a
+    ~10x speed improvement!
+
+    See <https://github.com/nfitch/node-test/blob/master/test/vmalterns.js> for
+    analysis on the perf of various options for running user-given code. Thanks
+    to Nate for pushing me on this!
+
+- Major perf win on simple lookups, and with no behaviour change(!).
+  Similarly this was achieved by avoiding `vm.runInNewContext`:
+
+        $ time json6 -f big.log -ga time >/dev/null   # v6
+
+        real	0m28.892s
+        user	0m26.839s
+        sys	0m2.295s
+
+        $ time json -f big.log -ga time >/dev/null    # v7
+
+        real	0m2.427s
+        user	0m2.289s
+        sys	0m0.212s
+
+    The changes for this have changed `jsontool.parseLookup` and
+    `jsontool.handleLookup` incompatibly. However, using "jsontool.js" is
+    experimental and extremely rare. Please contact me if this impacts you.
 
 - Move json.1 to "man/man1" and set "directories.man" in package.json to
   have "man json" work after "npm install -g jsontool" with the coming
@@ -12,16 +134,16 @@
 
 - [Backwards incompatibility, issue #55] Drop support for grouping of adjacent
   arrays (via `-g`, `--group`) **separated by no space**:
-  
+
         # Before
         echo '["one"]["two"]' | json -g
         [
           "one",
           "two"
         ]
-        
+
         # After
-        $ echo '["one"]["two"]' | jsondev -g
+        $ echo '["one"]["two"]' | json -g
         json: error: input is not JSON: Syntax error at line 1, column 8:
                 ["one"]["two"]
                 .......^

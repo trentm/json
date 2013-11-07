@@ -1,0 +1,32 @@
+JSON="../../lib/jsontool.js"
+JSON0="../../lib/jsontool.js -o json-0"
+
+echo '{"foo": "bar"}' | $JSON0 -E 'this.foo="baz"'
+#    {"foo":"baz"}
+echo '{"age": 38}' | $JSON0 -E 'this.age++'
+#    {"age":39}
+
+echo '{"one": 1, "two": 2}' | $JSON0 -E 'this.one=undefined'
+#    {"two":2}
+echo '{"one": 1, "two": 2}' | $JSON0 -E 'delete this.one'
+#    {"two":2}
+
+echo '["a", "b"]' | $JSON0 -A -E 'this[0]="A"'
+#    ["A","b"]
+echo '[1,1]' | $JSON0 -A -E 'this[0]++'
+#    [2,1]
+
+echo ''
+echo '{"one": 1, "two": 2}' | $JSON0 -E 'this.one++' -E 'this.two++'
+#    {"one":2,"two":3}
+echo '{"one": 1, "two": 2}' | $JSON -E 'this.one++' one
+#    2
+
+echo ''
+echo '[{"first":"Trent","last":"Mick"},{"first":"Andrew","last":"Dlugan"}]' \
+    | $JSON0 -a -E 'this.name=[this.first,this.last].join(" ");this.first=undefined;this.last=undefined'
+#    [{"name":"Trent Mick"},{"name":"Andrew Dlugan"}]
+
+echo ''
+echo '{"foo": "bar"}' | $JSON -E 'foo foo' 2>&1 | grep SyntaxError
+#    SyntaxError: Unexpected identifier
