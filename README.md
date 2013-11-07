@@ -1,33 +1,46 @@
-A "json" command for working with JSON on the command line. It is a
-single-file node.js script with no external deps (other than
-[node](https://github.com/joyent/node) itself). Here is a taste:
+`json` is a fast CLI tool for working with JSON. It is a single-file node.js
+script with no external deps (other than
+[node.js](https://github.com/joyent/node) itself). A quick taste:
 
     $ echo '{"foo":"bar"}' | json
     {
       "foo": "bar"
     }
+
     $ echo '{"foo":"bar"}' | json foo
     bar
 
-Use it to:
+    $ echo '{"age":10}' | json -E 'this.age++'
+    {
+      "age": 11
+    }
 
-- pretty-print JSON to help read it
-- extract particular values (see `LOOKUPS` in usage)
+    $ echo '{"latency":32,"req":"POST /widgets"},
+    {"latency":10,"req":"GET /ping"}
+    ' | json -gaC 'this.latency > 10' req
+    POST /widgets
+
+Features:
+
+- pretty-printing JSON
+- natural syntax (like JS code) for extracting particular values
 - get details on JSON syntax errors (handy for config files)
-- filter input JSON (see `-e` and `-c` options)
-- ... much more
+- filter input JSON (see `-E` and `-C` options)
+- fast stream processing
+- JSON validation
+- in-place file editing
+
+See <http://trentm.com/json> for full docs and examples as a man page.
 
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to jsontool.
-
-See <http://trentm.com/json> for full docs and many examples.
 
 
 # Installation
 
 1. Get [node](http://nodejs.org).
 
-2. `npm install -g jsontool`
+2. `npm install -g jsontool`  (**NOT** `npm install json`, that's something else :|)
 
 **OR manually**:
 
@@ -61,22 +74,12 @@ e.g.:
 
     cd test && TEST_ONLY=executable nodeunit test.js
 
-I test against node 0.4, 0.6, 0.7 and (occassionally) node master.
+I test against node 0.4 (less so now), 0.6, 0.8, and 0.10.
 
 
 # License
 
 MIT (see the fine LICENSE.txt file).
-
-
-# Command-Line Usage
-
-    <something generating JSON on stdout> | json [OPTIONS] [LOOKUPS...]
-    json -f FILE [OPTIONS] [LOOKUPS...]
-
-See `json --help` output for full details or read the man page online
-at <http://trentm.com/json>.
-
 
 
 # Module Usage
