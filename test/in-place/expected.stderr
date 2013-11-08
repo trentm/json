@@ -2,7 +2,7 @@
 json: updated "a1.json" in-place
 json: updated "a1.json" in-place
 # bogus
-json: error: input is not JSON: Unexpected 'a' at line 1, column 10:
+json: error: "bogus.json" is not JSON: Unexpected 'a' at line 1, column 10:
         {"name": a1"}
         .........^
 # http header block

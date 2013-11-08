@@ -1,4 +1,3 @@
-- json -nf foo.json:  includes filename in invalid output
 - get some perf numbers (timeit-based. 'Ben' isn't cutting it)
 - `make check` add jsl
 

@@ -173,6 +173,13 @@
           "project": "https://github.com/trentm/json"
         }
 
+- Validation failures with a given filename will now show the filename, e.g.:
+
+        $ jsondev -nf foo.json
+        json: error: "foo.json" is not JSON: Expected ',' instead of '"' at line 3, column 5:
+                    "baz": "car"
+                ....^
+
 - Move json.1 to "man/man1" and set "directories.man" in package.json to
   have "man json" work after "npm install -g jsontool" with the coming
   npm 1.3.3 work.
