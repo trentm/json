@@ -161,12 +161,12 @@
   but to help differentiate from the other `json` tool out there (`npm home
   json`).
 
-        $ jsondev --version
+        $ json --version
         json 7.0.0
         written by Trent Mick
         https://github.com/trentm/json
 
-        $ jsondev --version -j
+        $ json --version -j
         {
           "version": "7.0.0",
           "author": "Trent Mick",
