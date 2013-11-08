@@ -3,37 +3,6 @@
 
 ## json 7.0.0 (not yet released)
 
--   Support for node 0.11.x -- basically stop using `util.puts`.
-
-    Note that apparently `vm.runInNewContext` has changed
-    in node 0.11.x such that the following no longer works:
-
-        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
-        [
-          "A",
-          "b"
-        ]
-
-    The result with node 0.11.x is actually:
-
-        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
-        [
-          "a",
-          "b"
-        ]
-
-    Using the new `-E` works:
-
-        $ echo '["a", "b"]' | json -A -E 'this[0]="A"'
-        [
-          "A",
-          "b"
-        ]
-
-    All the more reason to use the new `-E CODE`.
-
-- Change to 4-space indents. 'make check' clean. No functional change.
-
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
     CODE`. The new options can be **10x or more faster**. An example processing
     a large log of newline-separated JSON object as a stream:
@@ -137,8 +106,8 @@
     analysis on the perf of various options for running user-given code. Thanks
     to Nate for pushing me on this!
 
-- Major perf win on simple lookups, and with no behaviour change(!).
-  Similarly this was achieved by avoiding `vm.runInNewContext`:
+-   Major perf win on simple lookups, and with no behaviour change(!).
+    Similarly this was achieved by avoiding `vm.runInNewContext`:
 
         $ time json6 -f big.log -ga time >/dev/null   # v6
 
@@ -155,6 +124,54 @@
     The changes for this have changed `jsontool.parseLookup` and
     `jsontool.handleLookup` incompatibly. However, using "jsontool.js" is
     experimental and extremely rare. Please contact me if this impacts you.
+
+-   Support for node 0.11.x -- basically stop using `util.puts`.
+
+    Note that apparently `vm.runInNewContext` has changed in node 0.11.x such
+    that the following no longer works:
+
+        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
+        [
+          "A",
+          "b"
+        ]
+
+    The result with node 0.11.x is actually:
+
+        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
+        [
+          "a",
+          "b"
+        ]
+
+    Using the new `-E` works:
+
+        $ echo '["a", "b"]' | json -A -E 'this[0]="A"'
+        [
+          "A",
+          "b"
+        ]
+
+    All the more reason to use the new `-E CODE`.
+
+- Change to 4-space indents. 'make check' clean. No functional change.
+
+- Include project url (and my name) in `json --version`. Also show *JSON*
+  formatted version info with `-j`. The point here isn't self-agrandization
+  but to help differentiate from the other `json` tool out there (`npm home
+  json`).
+
+        $ jsondev --version
+        json 7.0.0
+        written by Trent Mick
+        https://github.com/trentm/json
+
+        $ jsondev --version -j
+        {
+          "version": "7.0.0",
+          "author": "Trent Mick",
+          "project": "https://github.com/trentm/json"
+        }
 
 - Move json.1 to "man/man1" and set "directories.man" in package.json to
   have "man json" work after "npm install -g jsontool" with the coming
