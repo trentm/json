@@ -1,6 +1,11 @@
 # json Changelog
 
 
+## json 7.0.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 7.0.0
 
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
