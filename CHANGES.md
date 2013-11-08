@@ -1,7 +1,7 @@
 # json Changelog
 
 
-## json 7.0.0 (not yet released)
+## json 7.0.0
 
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
     CODE`. The new options can be **10x or more faster**. An example processing
