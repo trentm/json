@@ -24,7 +24,7 @@ deps/JSON-js/json_parse.js:
 .PHONY: versioncheck
 versioncheck:
 	[[ `cat package.json | json version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
-	[[ `cat package.json | bin/json version` == `grep '^var VERSION' lib/jsontool.js | awk -F'"' '{print $$2}'` ]]
+	[[ `cat package.json | bin/json version` == `grep '^var VERSION' lib/jsontool.js | awk -F"'" '{print $$2}'` ]]
 
 .PHONY: docs
 docs:
