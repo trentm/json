@@ -3,7 +3,7 @@
 
 ## json 7.0.0 (not yet released)
 
-- Change to 4-space indents. No functional change.
+- Change to 4-space indents. 'make check' clean. No functional change.
 
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
     CODE`. The new options can be **10x or more faster**. An example processing

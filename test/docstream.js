@@ -30,12 +30,13 @@ if (isNaN(times))
 var period = Number(process.argv[3]);
 if (isNaN(period))
   period = 1000;
-var randomize = (process.argv[4] !== undefined); // i.e. don't emit whole JSON objects.
+// i.e. don't emit whole JSON objects.
+var randomize = (process.argv[4] !== undefined);
 
 var leftover = '';
 var interval = setInterval(function () {
   times--;
-  var s = leftover + JSON.stringify({foo: "bar"}) + '\n';
+  var s = leftover + JSON.stringify({foo: 'bar'}) + '\n';
   var len = s.length; // emit the whole thing
   if (times <= 0) {
     clearInterval(interval);

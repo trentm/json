@@ -1,10 +1,9 @@
-- 4-space indent
 - json --version  # include identifying info (project url?)
   json -j --version # JSON version info
 - node 0.11-ify
 - json -nf foo.json:  includes filename in invalid output
 - get some perf numbers (timeit-based. 'Ben' isn't cutting it)
-- `make check`, jsstyle, add jsl
+- `make check` add jsl
 
 
 # someday/maybe
