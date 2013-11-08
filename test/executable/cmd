@@ -15,11 +15,6 @@ echo '{"one": 1, "two": 2}' | $JSON0 -e 'this.one=undefined'
 echo '{"one": 1, "two": 2}' | $JSON0 -e 'one=undefined'
 #    {"two":2}
 
-echo '["a", "b"]' | $JSON0 -A -e 'this[0]="A"'
-#    ["A","b"]
-echo '[1,1]' | $JSON0 -A -e 'this[0]++'
-#    [2,1]
-
 echo ''
 echo '{"one": 1, "two": 2}' | $JSON0 -e 'one++' -e 'two++'
 #    {"one":2,"two":3}

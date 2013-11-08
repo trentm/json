@@ -7,7 +7,7 @@ test:
 
 # Test will all node versions (presumes install locations I use on my machine).
 .PHONY: testall
-testall: test10 test08 test06 test04
+testall: test10 test08 test11 test06 test04
 
 
 .PHONY: test08

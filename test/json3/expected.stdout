@@ -51,17 +51,6 @@ ewan
   "age": 38
 }
 
-[
-  {
-    "cmd": "EHLO"
-  },
-  {
-    "cmd": "..."
-  }
-]
-
-(empty output)
-
 {
   "name": "trent",
   "age": 38

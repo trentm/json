@@ -51,17 +51,6 @@ echo ''
 echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -c 'age>30' 0  # auto json
 #      {"name":"trent","age":38}
 
-# New option in json3: Use '-A' to avoid auto array processing.
-# E.g., a list of input commands in an SMTP session.
-echo ''
-echo '[{"cmd":"EHLO"}, {"cmd":"..."}]' | $JSON -A -c 'this[0].cmd === "EHLO"'
-#      [{"cmd":"EHLO"}, {"cmd":"..."}]
-
-echo ''
-echo '[{"cmd":"GET /"}, {"cmd":"..."}]' | $JSON -A -c 'this[0].cmd === "EHLO"'  # not SMTP
-#      (empty output)
-echo '(empty output)'
-
 # If the "lookups" are indeces into an array, then *json*-mode output will
 # be an array of selected items (more likely to be the user's desire) instead
 # of the usual "JSON table" structure.

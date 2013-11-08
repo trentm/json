@@ -3,6 +3,35 @@
 
 ## json 7.0.0 (not yet released)
 
+-   Support for node 0.11.x -- basically stop using `util.puts`.
+
+    Note that apparently `vm.runInNewContext` has changed
+    in node 0.11.x such that the following no longer works:
+
+        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
+        [
+          "A",
+          "b"
+        ]
+
+    The result with node 0.11.x is actually:
+
+        $ echo '["a", "b"]' | json -A -e 'this[0]="A"'
+        [
+          "a",
+          "b"
+        ]
+
+    Using the new `-E` works:
+
+        $ echo '["a", "b"]' | json -A -E 'this[0]="A"'
+        [
+          "A",
+          "b"
+        ]
+
+    All the more reason to use the new `-E CODE`.
+
 - Change to 4-space indents. 'make check' clean. No functional change.
 
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
