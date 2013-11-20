@@ -1,6 +1,11 @@
 # json Changelog
 
 
+## json 7.0.2 (not yet released)
+
+(nothing yet)
+
+
 ## json 7.0.1
 
 - [pull #60, issue #59] Fix not having a `json` on the PATH from 
