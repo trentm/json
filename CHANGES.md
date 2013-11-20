@@ -3,7 +3,8 @@
 
 ## json 7.0.1 (not yet released)
 
-(nothing yet)
+- [pull #60, issue #59] Fix not having a `json` on the PATH from 
+  'npm install -g jsontool'.
 
 
 ## json 7.0.0
