@@ -9,9 +9,9 @@
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "main": "./lib/jsontool.js",
   "directories": {
-    "bin": "./bin",
     "man": "./man/man1"
   },
+  "bin": { "json": "./lib/jsontool.js" },
   "scripts": {
     "test": "make test"
   },
