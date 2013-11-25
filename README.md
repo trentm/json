@@ -101,3 +101,4 @@ focus.
 - JSONPath: <http://goessner.net/articles/JsonPath/>, <http://code.google.com/p/jsonpath/wiki/Javascript>
 - jsawk: <https://github.com/micha/jsawk>
 - jshon: <http://kmkeen.com/jshon/>
+- json2: <https://github.com/vi/json2>
