@@ -1,7 +1,7 @@
 # json Changelog
 
 
-## json 7.0.2 (not yet released)
+## json 7.0.2
 
 - [issue #68] Fix `--keys, -k` handling in streaming mode, i.e. `json -gak`.
 
