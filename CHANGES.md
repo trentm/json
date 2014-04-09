@@ -3,12 +3,12 @@
 
 ## json 7.0.2 (not yet released)
 
-(nothing yet)
+- [issue #68] Fix `--keys, -k` handling in streaming mode, i.e. `json -gak`.
 
 
 ## json 7.0.1
 
-- [pull #60, issue #59] Fix not having a `json` on the PATH from 
+- [pull #60, issue #59] Fix not having a `json` on the PATH from
   'npm install -g jsontool'.
 
 
