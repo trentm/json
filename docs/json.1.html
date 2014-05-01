@@ -364,14 +364,14 @@ b
 indentifier</a>
 you can always use JavaScript array-style lookups like this:</p>
 
-<pre><code>$ echo '{"http://example.com": "my-value"} | json '["http://example.com"]'
+<pre><code>$ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
 my-value
 </code></pre>
 
 <p>just like you would in JavaScript:</p>
 
 <pre><code>$ node
-&gt; var d = '{"http://example.com": "my-value"}
+&gt; var d = {"http://example.com": "my-value"}
 &gt; d["http://example.com"]
 'my-value'
 </code></pre>
