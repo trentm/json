@@ -33,14 +33,14 @@ Features:
 See <http://trentm.com/json> for full docs and examples as a man page.
 
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
-for updates to jsontool.
+for updates to json.
 
 
 # Installation
 
 1. Get [node](http://nodejs.org).
 
-2. `npm install -g jsontool`  (**NOT** `npm install json`, that's something else :|)
+2. `npm install -g json`
 
 **OR manually**:
 
@@ -84,12 +84,21 @@ MIT (see the fine LICENSE.txt file).
 
 # Module Usage
 
-Since v1.3.1 you can use "jsontool" as a node.js module:
+Since v1.3.1 you can use "json" as a node.js module:
 
-    var jsontool = require('jsontool');
+    var json = require('json');
 
 However, so far the module API isn't that useful and the CLI is the primary
 focus.
+
+
+# npm Package Name
+
+Once upon a time, `json` was a different thing, and this module was
+called `jsontool`.
+
+If you see documentation referring to `jsontool`, it is most likely
+referring to this module.
 
 
 # Alternatives you might prefer
