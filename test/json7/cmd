@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../lib/json.js
 
 # Possible subtlety from json6: is the lookup parsed as an int
 echo '{"1e6": "one"}' | $JSON 1e6

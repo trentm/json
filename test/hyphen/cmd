@@ -1,5 +1,5 @@
 # See <https://github.com/trentm/json/issues#issue/1>
 echo "# unadorned"
-cat input | ../../lib/jsontool.js platform-release
+cat input | ../../lib/json.js platform-release
 echo "# bracket notation"
-cat input | ../../lib/jsontool.js '["platform-release"]'
+cat input | ../../lib/json.js '["platform-release"]'

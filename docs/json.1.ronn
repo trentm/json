@@ -690,13 +690,13 @@ for full compatibility and change details.
 `json` is written in JavaScript and requires node.js (`node`). You can either
 install via `npm`:
 
-    npm install -g jsontool
+    npm install -g json
 
 or manually get the script and put it on your PATH somewhere (`json` is a single
 file with no external deps other than node itself):
 
     cd ~/bin
-    curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
+    curl -L https://github.com/trentm/json/raw/master/lib/json.js > json
     chmod 755 json
 
 (Note: NOT `npm install json`. Unfortunately and confusingly, that will

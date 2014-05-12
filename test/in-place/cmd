@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../lib/json.js
 
 # setup
 rm -f *.json

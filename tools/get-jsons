@@ -28,8 +28,8 @@ for major_ver in $major_vers; do
     echo "# get latest $major_ver.x: $latest_ver"
     (cd ./repo && git checkout $latest_ver 2>/dev/null)
     mkdir $latest_ver
-    if [[ -f ./repo/lib/jsontool.js ]]; then
-        cp ./repo/lib/jsontool.js $latest_ver/json
+    if [[ -f ./repo/lib/json.js ]]; then
+        cp ./repo/lib/json.js $latest_ver/json
     elif [[ -f ./repo/json ]]; then
         cp ./repo/json $latest_ver/json
     fi

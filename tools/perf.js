@@ -53,7 +53,7 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
             }
 
             var json = (version === 'dev'
-                ? path.resolve(TOP, 'lib', 'jsontool.js')
+                ? path.resolve(TOP, 'lib', 'json.js')
                 : path.resolve(JSONS, version, 'json'));
             if (!fs.existsSync(json)) {
                 return nextVer();

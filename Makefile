@@ -20,11 +20,11 @@ deps/JSON-js/json_parse.js:
 	git submodule update --init
 
 
-# Ensure jsontool.js and package.json have the same version.
+# Ensure json.js and package.json have the same version.
 .PHONY: versioncheck
 versioncheck:
-	[[ `cat package.json | lib/jsontool.js version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
-	[[ `cat package.json | lib/jsontool.js version` == `grep '^var VERSION' lib/jsontool.js | awk -F"'" '{print $$2}'` ]]
+	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
+	[[ `cat package.json | lib/json.js version` == `grep '^var VERSION' lib/json.js | awk -F"'" '{print $$2}'` ]]
 
 .PHONY: docs
 docs:
@@ -54,9 +54,9 @@ testall: node_modules/.bin/nodeunit
 
 .PHONY: cutarelease
 cutarelease: versioncheck
-	./tools/cutarelease.py -f package.json -f lib/jsontool.js
+	./tools/cutarelease.py -f package.json -f lib/json.js
 
-# Update the embedded minified "function json_parse" in lib/jsontool.js.
+# Update the embedded minified "function json_parse" in lib/json.js.
 .PHONY: update_json_parse
 update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
 	@./tools/update_json_parse.js

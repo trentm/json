@@ -7,11 +7,11 @@
     "url": "git://github.com/trentm/json.git"
   },
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
-  "main": "./lib/jsontool.js",
+  "main": "./lib/json.js",
   "directories": {
     "man": "./man/man1"
   },
-  "bin": { "json": "./lib/jsontool.js" },
+  "bin": { "json": "./lib/json.js" },
   "scripts": {
     "test": "make test"
   },

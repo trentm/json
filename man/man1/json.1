@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "October 2013" "" "json tool manual"
+.TH "JSON" "1" "May 2014" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- JSON love for your command line
@@ -423,7 +423,7 @@ $ echo \'{"name": "trent", "age": 38}\' | json
 .IP "" 0
 .
 .P
-\&\.\.\. with one exception, a bare string value is printed without quotes\.
+\&\.\.\. with one exception, a bare string value is printed without quotes (because who wants to deal with quotes in your pipeline?)\.
 .
 .IP "" 4
 .
@@ -997,7 +997,7 @@ See the changelog \fIhttps://github\.com/trentm/json/blob/master/CHANGES\.md\fR 
 .
 .nf
 
-npm install \-g jsontool
+npm install \-g json
 .
 .fi
 .
@@ -1011,7 +1011,7 @@ or manually get the script and put it on your PATH somewhere (\fBjson\fR is a si
 .nf
 
 cd ~/bin
-curl \-L https://github\.com/trentm/json/raw/master/lib/jsontool\.js > json
+curl \-L https://github\.com/trentm/json/raw/master/lib/json\.js > json
 chmod 755 json
 .
 .fi

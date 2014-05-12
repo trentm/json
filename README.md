@@ -52,7 +52,7 @@ for updates to json.
    with no external dependencies). For example:
 
         cd ~/bin
-        curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js > json
+        curl -L https://github.com/trentm/json/raw/master/lib/json.js > json
         chmod 755 json
 
 You should now have "json" on your PATH:
@@ -90,7 +90,7 @@ MIT (see the fine LICENSE.txt file).
 
 Since v1.3.1 you can use "json" as a node.js module:
 
-    var json = require('jsontool');
+    var json = require('json');
 
 However, so far the module API isn't that useful and the CLI is the primary
 focus.

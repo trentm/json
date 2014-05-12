@@ -1,4 +1,4 @@
-JSON=../../lib/jsontool.js
+JSON=../../lib/json.js
 
 echo '{"name":"trent", "age":38}' | $JSON -k
 echo '{"name":"trent", "age":38}' | $JSON -k -a

@@ -387,7 +387,8 @@ my-value
 }
 </code></pre>
 
-<p>... with one exception, a bare string value is printed without quotes.</p>
+<p>... with one exception, a bare string value is printed without quotes (because
+who wants to deal with quotes in your pipeline?).</p>
 
 <pre><code>$ echo '{"name": "trent", "age": 38}' | json name
 trent
@@ -808,14 +809,14 @@ for full compatibility and change details.</p>
 <p><code>json</code> is written in JavaScript and requires node.js (<code>node</code>). You can either
 install via <code>npm</code>:</p>
 
-<pre><code>npm install -g jsontool
+<pre><code>npm install -g json
 </code></pre>
 
 <p>or manually get the script and put it on your PATH somewhere (<code>json</code> is a single
 file with no external deps other than node itself):</p>
 
 <pre><code>cd ~/bin
-curl -L https://github.com/trentm/json/raw/master/lib/jsontool.js &gt; json
+curl -L https://github.com/trentm/json/raw/master/lib/json.js &gt; json
 chmod 755 json
 </code></pre>
 
@@ -838,7 +839,7 @@ All rights reserved.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>October 2013</li>
+    <li class='tc'>May 2014</li>
     <li class='tr'>json(1)</li>
   </ol>
 
