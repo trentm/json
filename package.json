@@ -1,6 +1,6 @@
 {
   "name": "json",
-  "description": "a 'json' command for massaging JSON on the command line",
+  "description": "a 'json' command for massaging and processing JSON on the command line",
   "version": "7.0.3",
   "repository": {
     "type": "git",

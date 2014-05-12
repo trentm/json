@@ -3,7 +3,10 @@
 
 ## json 7.0.3 (not yet released)
 
-(nothing yet)
+- [pull #70] Move from 'jsontool' to 'json' in the npm registry!  Thanks
+  to <https://github.com/zpoley> for graciously giving up the name, and to
+  @izs for driving.  `npm install json` FTW. Here after `jsontool` will
+  stagnate at version 7.0.2.
 
 
 ## json 7.0.2

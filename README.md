@@ -42,6 +42,10 @@ for updates to json.
 
 2. `npm install -g json`
 
+   *Note: This used to be called 'jsontool' in the npm registry, but as of
+   version 7.0.3 it has taken over the 'json' name. See [npm Package
+   Name](#npm-package-name) below.*
+
 **OR manually**:
 
 2. Get the 'json' script and put it on your PATH somewhere (it is a single file
@@ -86,7 +90,7 @@ MIT (see the fine LICENSE.txt file).
 
 Since v1.3.1 you can use "json" as a node.js module:
 
-    var json = require('json');
+    var json = require('jsontool');
 
 However, so far the module API isn't that useful and the CLI is the primary
 focus.
@@ -94,8 +98,10 @@ focus.
 
 # npm Package Name
 
-Once upon a time, `json` was a different thing, and this module was
-called `jsontool`.
+Once upon a time, `json` was a different thing (see [zpoley's json-command
+here](https://github.com/zpoley/json-command)), and this module was
+called `jsontool` in npm. As of version 7.0.3 of this module, `npm install json`
+means this tool.
 
 If you see documentation referring to `jsontool`, it is most likely
 referring to this module.
