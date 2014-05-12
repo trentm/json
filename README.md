@@ -43,7 +43,7 @@ for updates to json.
 2. `npm install -g json`
 
    *Note: This used to be called 'jsontool' in the npm registry, but as of
-   version 7.0.3 it has taken over the 'json' name. See [npm Package
+   version 8.0.0 it has taken over the 'json' name. See [npm Package
    Name](#npm-package-name) below.*
 
 **OR manually**:
@@ -100,7 +100,7 @@ focus.
 
 Once upon a time, `json` was a different thing (see [zpoley's json-command
 here](https://github.com/zpoley/json-command)), and this module was
-called `jsontool` in npm. As of version 7.0.3 of this module, `npm install json`
+called `jsontool` in npm. As of version 8.0.0 of this module, `npm install json`
 means this tool.
 
 If you see documentation referring to `jsontool`, it is most likely

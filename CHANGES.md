@@ -1,7 +1,7 @@
 # json Changelog
 
 
-## json 7.0.3 (not yet released)
+## json 8.0.0 (not yet released)
 
 - [pull #70] Move from 'jsontool' to 'json' in the npm registry!  Thanks
   to <https://github.com/zpoley> for graciously giving up the name, and to
