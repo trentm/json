@@ -5,9 +5,10 @@ NODEUNIT=../node_modules/nodeunit/bin/nodeunit
 test:
 	NODE_PATH=node_modules $(NODEUNIT) test.js
 
-# Test will all node versions (presumes install locations I use on my machine).
+# Test will all supported node versions (presumes install locations I use on my
+# machine).
 .PHONY: testall
-testall: test10 test08 test11 test06 test04
+testall: test10 test08 test11 test06
 
 
 .PHONY: test08

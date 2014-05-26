@@ -1,5 +1,5 @@
-JSON="../../lib/json.js"
-JSON0="../../lib/json.js -o json-0"
+JSON="env JSON_EXEC=vm ../../lib/json.js"
+JSON0="env JSON_EXEC=vm ../../lib/json.js -o json-0"
 
 # Basic -c usage:
 # 1. Filter based on the check.
@@ -15,9 +15,6 @@ echo '(empty output)'
 echo ''
 echo '[{"age":38}, {"age": 42}, {"age":21}]' | $JSON0 -c 'this.age > 30'
 #       [{"age":38},{"age": 42}]
-# '-C' deprecated synonym works too.
-echo '[{"age":38}, {"age": 42}, {"age":21}]' | $JSON0 -C 'this.age > 40'
-#       [{"age": 42}]
 
 # 3. -a still does its thing (flatten)
 echo ''

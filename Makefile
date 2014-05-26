@@ -23,6 +23,7 @@ deps/JSON-js/json_parse.js:
 # Ensure json.js and package.json have the same version.
 .PHONY: versioncheck
 versioncheck:
+	@echo version is: $(shell cat package.json | lib/json.js version)
 	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
 	[[ `cat package.json | lib/json.js version` == `grep '^var VERSION' lib/json.js | awk -F"'" '{print $$2}'` ]]
 

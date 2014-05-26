@@ -134,7 +134,7 @@ $ cat /opt/app/etc/defaults\.json \e
 .IP "" 0
 .
 .SH "FEATURE: Validation"
-Since v1\.2\.0 \fBjson\fR will give position information and context for JSON syntax errors (\fBSyntaxError\fR)\. This can be handy for validating data and config files:
+\fBjson\fR will give position information and context for JSON syntax errors (\fBSyntaxError\fR)\. This can be handy for validating data and config files:
 .
 .IP "" 4
 .
@@ -186,13 +186,13 @@ $ echo $?
 .IP "" 0
 .
 .SH "FEATURE: Execution"
-(Added in json v7\.) Use the \fB\-E CODE\fR option to execute (JavaScript) code on the input JSON\.
+Use the \fB\-e CODE\fR option to execute (JavaScript) code on the input JSON\.
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'{"name":"trent","age":38}\' | json \-E \'this\.age++\'
+$ echo \'{"name":"trent","age":38}\' | json \-e \'this\.age++\'
 {
   "name": "trent",
   "age": 39
@@ -209,7 +209,7 @@ If input is an array, this will automatically process each item separately:
 .
 .nf
 
-$ echo \'[{"age":38},{"age":4}]\' | json \-E this\.age++
+$ echo \'[{"age":38},{"age":4}]\' | json \-e this\.age++
 [
   {
     "age": 39
@@ -230,7 +230,7 @@ That can be overriden with \fB\-A\fR:
 .
 .nf
 
-$ echo \'[{"age":38},{"age":4}]\' | json \-A \-E \'this[0]\.age = "unknown"\'
+$ echo \'[{"age":38},{"age":4}]\' | json \-A \-e \'this[0]\.age = "unknown"\'
 [
   {
     "age": "unknown"
@@ -251,16 +251,16 @@ The given CODE is executed in a function bound to the input object (i\.e\. \fBth
 \fISecurity note:\fR \fBCODE\fR is \fInot\fR executed in a sandbox, so \fBjson\fR\'s globals are available and unguarded\. You can shoot yourself in the foot\. \fIDo not pass untrusted user\-supplied strings here\.\fR
 .
 .P
-\fICompatibility note:\fR There is also a \fB\-e CODE\fR option (lowercase "e") from earlier versions of json to do much the same thing (with slightly different semantics for the CODE)\. It is still supported for backward compatibility\. However it is deprecated because it can cause processing to be \fI10x\fR or more slower for large inputs\. See the \fICOMPATIBILITY\fR section below\.
+\fICompatibility note:\fR In versions before v9 \fB\-e CODE\fR used an alternate implementation (with slightly different semantics for the CODE)\. It is still supported for backward compatibility by using the \fBJSON_EXEC=vm\fR environment variable\. However it is deprecated because it can cause processing to be \fI10x\fR or more slower for large inputs\. See the \fICOMPATIBILITY\fR section below\.
 .
 .SH "FEATURE: Conditional filtering"
-Use the \fB\-C CODE\fR option to run JavaScript code ending with a statement returning a boolean to filter the input JSON\.
+Use the \fB\-e CODE\fR option to run JavaScript code ending with a statement returning a boolean to filter the input JSON\.
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'[{"age":38},{"age":4}]\' | json \-C \'this\.age > 21\'
+$ echo \'[{"age":38},{"age":4}]\' | json \-e \'this\.age > 21\'
 [{"age":38}]
 .
 .fi
@@ -268,7 +268,7 @@ $ echo \'[{"age":38},{"age":4}]\' | json \-C \'this\.age > 21\'
 .IP "" 0
 .
 .P
-As with \fB\-E\fR above, if input is an array, this will automatically process each item separately\. This can be overriden with \fB\-A\fR\.
+As with \fB\-e\fR above, if input is an array, this will automatically process each item separately\. This can be overriden with \fB\-A\fR\.
 .
 .P
 The given CODE is executed in a function bound to the input object (i\.e\. \fBthis\fR is the input object)\. A JavaScript function must use \fBreturn\fR to return a value, so as a convenience if "return" is not in the given CODE it is presumed to be a single statement and it is wrapped:
@@ -286,13 +286,13 @@ function () {
 .IP "" 0
 .
 .P
-To use multiple statements in \fB\-C CODE\fR you must explicitly use \fBreturn\fR, e\.g\.:
+To use multiple statements in \fB\-c CODE\fR you must explicitly use \fBreturn\fR, e\.g\.:
 .
 .IP "" 4
 .
 .nf
 
-$ echo \'{"a": 2, "b": 6}\' | json \-C \'sum = this\.a + this\.b; return sum > 5\'
+$ echo \'{"a": 2, "b": 6}\' | json \-c \'sum = this\.a + this\.b; return sum > 5\'
 {
   "a": 2,
   "b": 6
@@ -306,7 +306,7 @@ $ echo \'{"a": 2, "b": 6}\' | json \-C \'sum = this\.a + this\.b; return sum > 5
 \fISecurity note:\fR \fBCODE\fR is \fInot\fR executed in a sandbox, so \fBjson\fR\'s globals are available and unguarded\. You can shoot yourself in the foot\. \fIDo not pass untrusted user\-supplied strings here\.\fR
 .
 .P
-\fICompatibility note:\fR There is also a \fB\-c CODE\fR option (lowercase "c") from earlier versions of json to do much the same thing (with slightly different semantics for the CODE\. It is still supported for backward compatibility\. However it is deprecated because it can cause processing to be \fI10x\fR or more slower for large inputs\. See the \fICOMPATIBILITY\fR section below\.
+\fICompatibility note:\fR In versions before v9 \fB\-c CODE\fR used an alternate implementation (with slightly different semantics for the CODE)\. It is still supported for backward compatibility by using the \fBJSON_EXEC=vm\fR environment variable\. However it is deprecated because it can cause processing to be \fI10x\fR or more slower for large inputs\. See the \fICOMPATIBILITY\fR section below\.
 .
 .SH "FEATURE: Lookups"
 Use lookup arguments to extract particular values:
@@ -542,7 +542,7 @@ $ cat config\.json
   "hostname": "127\.0\.0\.1"
 }
 
-$ json \-I \-f config\.json \-E \'this\.port=8080\'    # add port field
+$ json \-I \-f config\.json \-e \'this\.port=8080\'    # add port field
 json: updated "config\.json" in\-place
 $ cat config\.json
 {
@@ -589,7 +589,7 @@ because that can too easily result in data loss, e\.g\. with something like:
 .
 .nf
 
-$ json \-I \-f *\.json    # if there is more than match to the glob
+$ json \-I \-f *\.json    # if there is more than one match to the glob
 json: error: lookups cannot be specified with in\-place editing (\-I/\-\-in\-place), too easy to lose content
 .
 .fi
@@ -655,29 +655,18 @@ Delimiter character for tabular output (default is \' \')\.
 .
 .TP
 \fB\-A\fR
-Process input as a single object, i\.e\. stop \fB\-E\fR and \fB\-C\fR automatically processing each item of an input array\. Likewise for the deprecated \fB\-c\fR and \fB\-e\fR options\.
+Process input as a single object, i\.e\. stop \fB\-e\fR and \fB\-c\fR automatically processing each item of an input array\.
 .
 .P
-You can execute code on (\fB\-E\fR) and filter (\fB\-C\fR) the input (this is done before LOOKUPS are processed, if any)\.
-.
-.TP
-\fB\-E CODE\fR
-Execute the given JavaScript code on the input\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
-.
-.TP
-\fB\-C CODE\fR
-Filter the input with JavaScript \fBCODE\fR\. If \fBCODE\fR returns false\-y, then the item is filtered out\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\.
-.
-.P
-Older similar \fB\-e\fR and \fB\-c\fR options exist for execution and conditional filtering \-\- now deprecated because they can be 10x or more slower\.
+You can execute code on (\fB\-e\fR) and filter (\fB\-c\fR) the input (this is done before LOOKUPS are processed, if any)\.
 .
 .TP
 \fB\-e CODE\fR
-Execute the given JavaScript code on the input\. Deprecated in v7\. Use \fB\-E CODE\fR instead\.
+Execute the given JavaScript code on the input\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\. Use \fBthis\.\fR to access fields on the object being processed\. (\fB\-E CODE\fR is a now deprecated synonym\.)
 .
 .TP
 \fB\-c CODE\fR
-Filter the input with JavaScript \fBCODE\fR\. If \fBCODE\fR returns false\-y, then the item is filtered out\. Deprecated in v7\. Use \fB\-C CODE\fR instead\.
+Filter the input with JavaScript \fBCODE\fR\. If \fBCODE\fR returns false\-y, then the item is filtered out\. If input is an array, then each item of the array is processed separately (use \fB\-A\fR to override)\. Use \fBthis\.\fR to access fields on the object being processed\. An explicit \fBreturn\fR is required if \fBCODE\fR includes multiple statements\. (\fB\-C CODE\fR is a now deprecated synonym\.)
 .
 .P
 Finally, if \fBLOOKUP\fR arguments are given, these are extracted from the JSON\. By default \fB\.\fR is used as a separator for nested object lookup\. This can be overridden:
@@ -714,6 +703,12 @@ Shortcut for \fB\-o inspect\fR\.
 .TP
 \fB\-j\fR
 Shortcut for \fB\-o json\fR\.
+.
+.SH "ENVIRONMENT"
+.
+.TP
+\fBJSON_EXEC=vm\fR
+Set this to turn on the old (pre\-v9) behaviour of \fB\-e CODE\fR and \fB\-c CODE\fR\.
 .
 .SH "EXAMPLES"
 A typical JSON REST API response:
@@ -971,6 +966,12 @@ $ curl \-s https://api\.github\.com/repos/joyent/node/issues?state=open \e
 The json tool major version is incremented when there is a backward incompatible change\. An overview of those changes is here\.
 .
 .IP "\(bu" 4
+v9: \fB\-e CODE\fR and \fB\-c CODE\fR switch away from using \fBvm\.runInNewContext\fR for processing\. In other words they now do what \fB\-E\fR and \fB\-C\fR do, and the uppercase options are not deprecated synonyms\. Use the \fBJSON_EXEC=vm\fR environment variable to bring back the old behaviour\.
+.
+.IP "\(bu" 4
+v8: No incompatible change\. The npm registry name changed from \'jsontool\' to \'json\'\.
+.
+.IP "\(bu" 4
 v7: \fB\-E CODE\fR and \fB\-C CODE\fR were added in favour of \fB\-e CODE\fR and \fB\-c CODE\fR because the former provide a 10x or more performance improvement for larger inputs\. The latter are still included for backward compatibility\. \fB\-E/\-C\fR use a JavaScript function to execute CODE, which \fB\-e/\-c\fR use node\.js\'s \fBvm\.runInNewContext\fR which is crazy slow\. Use of a JavaScript function places slightly different semantics and requirements on the given \fBCODE\fR, so new options were required for compat\.
 .
 .IP "\(bu" 4
@@ -1019,7 +1020,7 @@ chmod 755 json
 .IP "" 0
 .
 .P
-(Note: NOT \fBnpm install json\fR\. Unfortunately and confusingly, that will install a different and incompatible \fBjson\fR CLI tool\.)
+(Note: Before version 8, this tool was called "jsontool" in the npm registry\. That name is now defunct\.)
 .
 .P
 This project lives at \fIhttps://github\.com/trentm/json\fR\. Please report bugs to \fIhttps://github\.com/trentm/json/issues\fR\. See the full changelog at: \fIhttps://github\.com/trentm/json/blob/master/CHANGES\.md\fR\.
@@ -1028,4 +1029,4 @@ This project lives at \fIhttps://github\.com/trentm/json\fR\. Please report bugs
 MIT License (see \fIhttps://github\.com/trentm/json/blob/master/LICENSE\.txt\fR)
 .
 .SH "COPYRIGHT"
-json is Copyright (c) 2013 Trent Mick and Copyright (c) 2013 Joyent Inc\. All rights reserved\.
+json is Copyright (c) 2014 Trent Mick and Copyright (c) 2014 Joyent Inc\. All rights reserved\.

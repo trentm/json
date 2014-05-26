@@ -1,9 +1,7 @@
 {"foo":"baz"}
-{"foo":"baz"}
-{"age":39}
 {"age":39}
 {"two":2}
-{"two":2}
+{"one":1}
 
 {"one":2,"two":3}
 2

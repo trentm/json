@@ -58,7 +58,7 @@ for updates to json.
 You should now have "json" on your PATH:
 
     $ json --version
-    json 7.0.0
+    json 9.0.0
 
 
 **WARNING for Ubuntu/Debian users:** There is a current bug in Debian stable

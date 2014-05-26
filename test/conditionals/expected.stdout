@@ -2,6 +2,7 @@
 (empty output)
 
 [{"age":38},{"age":42}]
+[{"age":42}]
 
 {
   "age": 38

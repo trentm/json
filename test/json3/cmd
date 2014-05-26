@@ -44,11 +44,11 @@ echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON 0  # jsony
 # Change from json 2: Showing auto array processing (and change to 'json'
 # output mode).
 echo ''
-echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -e 'age++'   # auto json
+echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -e 'this.age++'   # auto json
 #      [{"name":"trent", "age":39}, {"name":"ewan", "age":5}]
 
 echo ''
-echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -c 'age>30' 0  # auto json
+echo '[{"name":"trent", "age":38}, {"name":"ewan", "age":4}]' | $JSON -c 'this.age>30' 0  # auto json
 #      {"name":"trent","age":38}
 
 # If the "lookups" are indeces into an array, then *json*-mode output will

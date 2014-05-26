@@ -1,9 +1,47 @@
 # json Changelog
 
+## json 9.0.0 (not yet released)
 
-## json 8.0.1 (not yet released)
+- **Backward incompatible change to `-c CODE` and `-e CODE`** changing their
+  implementation to use a JS function for processing rather than
+  `vm.runInNewContext`. This is the technique for which the `-C CODE` and `-E
+  CODE` options were added in version 7.0.0. Basically: This technique is
+  obviously better because it is 10x faster, so it is being made the only
+  supported way. `-C` and `-E`, then, become synonyms and may be removed
+  in a later release.
 
-(nothing yet)
+  Unfortunately this does mean a few semantic differences in the `CODE`, the
+  most noticeable of which is that **`this` is required to access the object
+  fields:**
+
+        # Bad. Works with json < v9...
+        $ echo '{"green": "eggs"}' | json-v8 -e 'green="ham"'
+        {
+          "green": "ham"
+        }
+
+        # ... does *not* work with json v9.
+        $ echo '{"green": "eggs"}' | json -e 'green="ham"'
+        {
+          "green": "eggs"
+        }
+
+        # Good. Works with all versions of json.
+        $ echo '{"green": "eggs"}' | json -e 'this.green="ham"'
+        {
+          "green": "ham"
+        }
+
+  The old behaviour of `-c` and `-e` can be restored with the `JSON_EXEC=vm`
+  environment variable:
+
+        $ echo '{"green": "eggs"}' | JSON_EXEC=vm json -e 'green="ham"'
+        {
+          "green": "ham"
+        }
+
+  See the notes on [json 7.0.0](#json-700) below for full details on the
+  performance improvements and semantic changes.
 
 
 ## json 8.0.0
@@ -57,8 +95,7 @@
     The speed difference in `json` is in how the given `CODE` is executed: the new
     implementation uses a JS function, while the `-c/-e` options use node.js's
     `vm.runInNewContext`. This change means some semantic changes to the given
-    `CODE` so *new* options were required. The old `-c/-e` remain for backward
-    compatibility. Some examples to show the semantic differences:
+    `CODE`. Some examples to show the semantic differences:
 
     1. `this` is required to access the object fields:
 
@@ -199,7 +236,7 @@
 
 - Validation failures with a given filename will now show the filename, e.g.:
 
-        $ jsondev -nf foo.json
+        $ json -nf foo.json
         json: error: "foo.json" is not JSON: Expected ',' instead of '"' at line 3, column 5:
                     "baz": "car"
                 ....^

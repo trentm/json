@@ -35,6 +35,6 @@ cat a1.json
 
 echo '# -c' >&2
 echo '# -c'
-$JSON -I -f users.json -c 'age < 30'
+$JSON -I -f users.json -c 'this.age < 30'
 cat users.json
 
