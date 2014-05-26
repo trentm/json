@@ -88,8 +88,8 @@ log file:
 
 ## FEATURE: Merging
 
-(Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
-objects in the input. Keys in the last object win.
+(Added in json v4.) Use '--merge' or '--deep-merge' to **merge adjacent JSON
+objects** in the input. Keys in the last object win.
 
     $ echo '{"one":"un","two":"deux"}
     {"one":"uno","three":"tres"}' | json --merge
@@ -105,6 +105,51 @@ This could be useful for merging multiple config files, e.g.:
         /etc/app/config.json \
         ~/.app/config.json | json --merge
     ...
+
+
+## FEATURE: Itemizing
+
+(Added in json v9.) Looking up fields in an array of object is easy with `json`:
+
+    $ echo '[{"name":"trent","age":38},
+             {"name":"ewan","age":4}]' | json -a name age
+    trent 38
+    ewan 4
+
+but less so when a set of objects is indexed by key in an object:
+
+    $ echo '{"trent":{"age":38},
+             "ewan": {"age":4}}' | ...    # How to list ages?
+
+The `-M, --items` option allows one to **itemize the key/value pairs of
+an object** for convenient iteration with `-a`:
+
+    $ echo '{"trent":{"age":38},
+             "ewan": {"age":4}}' | json -M
+    [
+      {
+        "key": "trent",
+        "value": {
+          "age": 38
+        }
+      },
+      {
+        "key": "ewan",
+        "value": {
+          "age": 4
+        }
+      }
+    ]
+
+    $ echo '{"trent":{"age":38},
+             "ewan": {"age":4}}' | json -Ma key value.age
+    trent 38
+    ewan 4
+
+    # List people that can vote.
+    $ echo '{"trent":{"age":38},
+             "ewan": {"age":4}}' | json -M -c 'this.value.age > 18' -a key
+    trent
 
 
 ## FEATURE: Validation
@@ -424,6 +469,10 @@ Other pre-JSON input handling:
     Merge adjacent objects into a single object with merged keys. Values
     in later objects win. Use `--deep-merge` to recursively merge keys in
     objects.
+
+  * `-M`, `--items`:
+    Itemize an object into an array of `{"key": <key>, "value": <value>}`
+    objects for easier processing.
 
 You can process elements of an input array separately and generate tabular
 output:

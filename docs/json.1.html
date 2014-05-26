@@ -66,6 +66,7 @@
     <a href="#FEATURE-Grouping">FEATURE: Grouping</a>
     <a href="#FEATURE-Streaming">FEATURE: Streaming</a>
     <a href="#FEATURE-Merging">FEATURE: Merging</a>
+    <a href="#FEATURE-Itemizing">FEATURE: Itemizing</a>
     <a href="#FEATURE-Validation">FEATURE: Validation</a>
     <a href="#FEATURE-Execution">FEATURE: Execution</a>
     <a href="#FEATURE-Conditional-filtering">FEATURE: Conditional filtering</a>
@@ -179,8 +180,8 @@ POST /images 43
 
 <h2 id="FEATURE-Merging">FEATURE: Merging</h2>
 
-<p>(Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
-objects in the input. Keys in the last object win.</p>
+<p>(Added in json v4.) Use '--merge' or '--deep-merge' to <strong>merge adjacent JSON
+objects</strong> in the input. Keys in the last object win.</p>
 
 <pre><code>$ echo '{"one":"un","two":"deux"}
 {"one":"uno","three":"tres"}' | json --merge
@@ -197,6 +198,53 @@ objects in the input. Keys in the last object win.</p>
     /etc/app/config.json \
     ~/.app/config.json | json --merge
 ...
+</code></pre>
+
+<h2 id="FEATURE-Itemizing">FEATURE: Itemizing</h2>
+
+<p>(Added in json v9.) Looking up fields in an array of object is easy with <code>json</code>:</p>
+
+<pre><code>$ echo '[{"name":"trent","age":38},
+         {"name":"ewan","age":4}]' | json -a name age
+trent 38
+ewan 4
+</code></pre>
+
+<p>but less so when a set of objects is indexed by key in an object:</p>
+
+<pre><code>$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | ...    # How to list ages?
+</code></pre>
+
+<p>The <code>-M, --items</code> option allows one to <strong>itemize the key/value pairs of
+an object</strong> for convenient iteration with <code>-a</code>:</p>
+
+<pre><code>$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -M
+[
+  {
+    "key": "trent",
+    "value": {
+      "age": 38
+    }
+  },
+  {
+    "key": "ewan",
+    "value": {
+      "age": 4
+    }
+  }
+]
+
+$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -Ma key value.age
+trent 38
+ewan 4
+
+# List people that can vote.
+$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -M -c 'this.value.age &gt; 18' -a key
+trent
 </code></pre>
 
 <h2 id="FEATURE-Validation">FEATURE: Validation</h2>
@@ -534,6 +582,8 @@ arrays into a single array.</p></dd>
 <dt><code>--merge</code>, <code>--deep-merge</code></dt><dd><p>Merge adjacent objects into a single object with merged keys. Values
 in later objects win. Use <code>--deep-merge</code> to recursively merge keys in
 objects.</p></dd>
+<dt><code>-M</code>, <code>--items</code></dt><dd><p>Itemize an object into an array of <code>{"key": &lt;key>, "value": &lt;value>}</code>
+objects for easier processing.</p></dd>
 </dl>
 
 

@@ -2,6 +2,38 @@
 
 ## json 9.0.0 (not yet released)
 
+- [pull #64] Add `-M, --items` option for "itemizing" key/value pairs in an
+  object for easy iteration. For example:
+
+        $ echo '{"trent":{"age":38},
+                 "ewan": {"age":4}}' | json -M
+        [
+          {
+            "key": "trent",
+            "value": {
+              "age": 38
+            }
+          },
+          {
+            "key": "ewan",
+            "value": {
+              "age": 4
+            }
+          }
+        ]
+
+        $ echo '{"trent":{"age":38},
+                 "ewan": {"age":4}}' | json -Ma key value.age
+        trent 38
+        ewan 4
+
+        # List people that can vote.
+        $ echo '{"trent":{"age":38},
+                 "ewan": {"age":4}}' | json -M -c 'this.value.age > 18' -a key
+        trent
+
+  Thanks to [AndrewO](https://github.com/AndrewO) for providing this!
+
 - **Backward incompatible change to `-c CODE` and `-e CODE`** changing their
   implementation to use a JS function for processing rather than
   `vm.runInNewContext`. This is the technique for which the `-C CODE` and `-E

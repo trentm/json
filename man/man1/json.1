@@ -99,7 +99,7 @@ POST /images 43
 .IP "" 0
 .
 .SH "FEATURE: Merging"
-(Added in json v4\.) Use \'\-\-merge\' or \'\-\-deep\-merge\' to merge adjacent JSON objects in the input\. Keys in the last object win\.
+(Added in json v4\.) Use \'\-\-merge\' or \'\-\-deep\-merge\' to \fBmerge adjacent JSON objects\fR in the input\. Keys in the last object win\.
 .
 .IP "" 4
 .
@@ -128,6 +128,74 @@ $ cat /opt/app/etc/defaults\.json \e
     /etc/app/config\.json \e
     ~/\.app/config\.json | json \-\-merge
 \.\.\.
+.
+.fi
+.
+.IP "" 0
+.
+.SH "FEATURE: Itemizing"
+(Added in json v9\.) Looking up fields in an array of object is easy with \fBjson\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'[{"name":"trent","age":38},
+         {"name":"ewan","age":4}]\' | json \-a name age
+trent 38
+ewan 4
+.
+.fi
+.
+.IP "" 0
+.
+.P
+but less so when a set of objects is indexed by key in an object:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"trent":{"age":38},
+         "ewan": {"age":4}}\' | \.\.\.    # How to list ages?
+.
+.fi
+.
+.IP "" 0
+.
+.P
+The \fB\-M, \-\-items\fR option allows one to \fBitemize the key/value pairs of an object\fR for convenient iteration with \fB\-a\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"trent":{"age":38},
+         "ewan": {"age":4}}\' | json \-M
+[
+  {
+    "key": "trent",
+    "value": {
+      "age": 38
+    }
+  },
+  {
+    "key": "ewan",
+    "value": {
+      "age": 4
+    }
+  }
+]
+
+$ echo \'{"trent":{"age":38},
+         "ewan": {"age":4}}\' | json \-Ma key value\.age
+trent 38
+ewan 4
+
+# List people that can vote\.
+$ echo \'{"trent":{"age":38},
+         "ewan": {"age":4}}\' | json \-M \-c \'this\.value\.age > 18\' \-a key
+trent
 .
 .fi
 .
@@ -641,6 +709,10 @@ Group adjacent objects into an array of objects, or concatenate adjacent arrays 
 .TP
 \fB\-\-merge\fR, \fB\-\-deep\-merge\fR
 Merge adjacent objects into a single object with merged keys\. Values in later objects win\. Use \fB\-\-deep\-merge\fR to recursively merge keys in objects\.
+.
+.TP
+\fB\-M\fR, \fB\-\-items\fR
+Itemize an object into an array of \fB{"key": <key>, "value": <value>}\fR objects for easier processing\.
 .
 .P
 You can process elements of an input array separately and generate tabular output:
