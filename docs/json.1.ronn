@@ -262,13 +262,13 @@ If your lookup isn't a number or [a JS
 indentifier](https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables)
 you can always use JavaScript array-style lookups like this:
 
-    $ echo '{"http://example.com": "my-value"} | json '["http://example.com"]'
+    $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
     my-value
 
 just like you would in JavaScript:
 
     $ node
-    > var d = '{"http://example.com": "my-value"}
+    > var d = {"http://example.com": "my-value"}
     > d["http://example.com"]
     'my-value'
 
