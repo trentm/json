@@ -1,5 +1,10 @@
 # json Changelog
 
+## json 9.0.1 (not yet released)
+
+(nothing yet)
+
+
 ## json 9.0.0
 
 - [issue #52] Fix termination on EPIPE in some cases.

@@ -1,7 +1,7 @@
 {
   "name": "json",
   "description": "a 'json' command for massaging and processing JSON on the command line",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/trentm/json.git"
