@@ -66,6 +66,7 @@
     <a href="#FEATURE-Grouping">FEATURE: Grouping</a>
     <a href="#FEATURE-Streaming">FEATURE: Streaming</a>
     <a href="#FEATURE-Merging">FEATURE: Merging</a>
+    <a href="#FEATURE-Itemizing">FEATURE: Itemizing</a>
     <a href="#FEATURE-Validation">FEATURE: Validation</a>
     <a href="#FEATURE-Execution">FEATURE: Execution</a>
     <a href="#FEATURE-Conditional-filtering">FEATURE: Conditional filtering</a>
@@ -74,6 +75,7 @@
     <a href="#FEATURE-Listing-keys">FEATURE: Listing keys</a>
     <a href="#FEATURE-In-place-editing">FEATURE: In-place editing</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#ENVIRONMENT">ENVIRONMENT</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COMPATIBILITY">COMPATIBILITY</a>
     <a href="#INSTALL-PROJECT-BUGS">INSTALL, PROJECT, BUGS</a>
@@ -154,7 +156,8 @@ arrays separated by no space was allowed. That was dropped in v6 (see
 
 <h2 id="FEATURE-Streaming">FEATURE: Streaming</h2>
 
-<p>Grouping can be helpful for "one JSON object per line" formats or for things such as:</p>
+<p>Grouping can be helpful for "one JSON object per line" formats or for things
+such as:</p>
 
 <pre><code>$ cat *.json | json -g ...
 </code></pre>
@@ -177,8 +180,8 @@ POST /images 43
 
 <h2 id="FEATURE-Merging">FEATURE: Merging</h2>
 
-<p>(Added in json v4.) Use '--merge' or '--deep-merge' to merge adjacent JSON
-objects in the input. Keys in the last object win.</p>
+<p>(Added in json v4.) Use '--merge' or '--deep-merge' to <strong>merge adjacent JSON
+objects</strong> in the input. Keys in the last object win.</p>
 
 <pre><code>$ echo '{"one":"un","two":"deux"}
 {"one":"uno","three":"tres"}' | json --merge
@@ -197,11 +200,57 @@ objects in the input. Keys in the last object win.</p>
 ...
 </code></pre>
 
+<h2 id="FEATURE-Itemizing">FEATURE: Itemizing</h2>
+
+<p>(Added in json v9.) Looking up fields in an array of object is easy with <code>json</code>:</p>
+
+<pre><code>$ echo '[{"name":"trent","age":38},
+         {"name":"ewan","age":4}]' | json -a name age
+trent 38
+ewan 4
+</code></pre>
+
+<p>but less so when a set of objects is indexed by key in an object:</p>
+
+<pre><code>$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | ...    # How to list ages?
+</code></pre>
+
+<p>The <code>-M, --items</code> option allows one to <strong>itemize the key/value pairs of
+an object</strong> for convenient iteration with <code>-a</code>:</p>
+
+<pre><code>$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -M
+[
+  {
+    "key": "trent",
+    "value": {
+      "age": 38
+    }
+  },
+  {
+    "key": "ewan",
+    "value": {
+      "age": 4
+    }
+  }
+]
+
+$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -Ma key value.age
+trent 38
+ewan 4
+
+# List people that can vote.
+$ echo '{"trent":{"age":38},
+         "ewan": {"age":4}}' | json -M -c 'this.value.age &gt; 18' -a key
+trent
+</code></pre>
+
 <h2 id="FEATURE-Validation">FEATURE: Validation</h2>
 
-<p>Since v1.2.0 <code>json</code> will give position information and context for JSON
-syntax errors (<code>SyntaxError</code>). This can be handy for validating data and
-config files:</p>
+<p><code>json</code> will give position information and context for JSON syntax errors
+(<code>SyntaxError</code>). This can be handy for validating data and config files:</p>
 
 <pre><code>$ cat config.json | json
 json: error: input is not JSON: Unexpected ',' at line 17, column 5:
@@ -232,10 +281,9 @@ $ echo $?
 
 <h2 id="FEATURE-Execution">FEATURE: Execution</h2>
 
-<p>(Added in json v7.) Use the <code>-E CODE</code> option to execute (JavaScript) code on the
-input JSON.</p>
+<p>Use the <code>-e CODE</code> option to execute (JavaScript) code on the input JSON.</p>
 
-<pre><code>$ echo '{"name":"trent","age":38}' | json -E 'this.age++'
+<pre><code>$ echo '{"name":"trent","age":38}' | json -e 'this.age++'
 {
   "name": "trent",
   "age": 39
@@ -244,7 +292,7 @@ input JSON.</p>
 
 <p>If input is an array, this will automatically process each item separately:</p>
 
-<pre><code>$ echo '[{"age":38},{"age":4}]' | json -E this.age++
+<pre><code>$ echo '[{"age":38},{"age":4}]' | json -e this.age++
 [
   {
     "age": 39
@@ -257,7 +305,7 @@ input JSON.</p>
 
 <p>That can be overriden with <code>-A</code>:</p>
 
-<pre><code>$ echo '[{"age":38},{"age":4}]' | json -A -E 'this[0].age = "unknown"'
+<pre><code>$ echo '[{"age":38},{"age":4}]' | json -A -e 'this[0].age = "unknown"'
 [
   {
     "age": "unknown"
@@ -275,22 +323,22 @@ input JSON.</p>
 available and unguarded. You can shoot yourself in the foot. <em>Do not pass
 untrusted user-supplied strings here.</em></p>
 
-<p><em>Compatibility note:</em> There is also a <code>-e CODE</code> option (lowercase "e") from
-earlier versions of json to do much the same thing (with slightly different
-semantics for the CODE). It is still supported for backward compatibility.
-However it is deprecated because it can cause processing to be <em>10x</em> or more
-slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+<p><em>Compatibility note:</em> In versions before v9 <code>-e CODE</code> used an alternate
+implementation (with slightly different semantics for the CODE). It is still
+supported for backward compatibility by using the <code>JSON_EXEC=vm</code> environment
+variable. However it is deprecated because it can cause processing to be <em>10x</em>
+or more slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
 
 <h2 id="FEATURE-Conditional-filtering">FEATURE: Conditional filtering</h2>
 
-<p>Use the <code>-C CODE</code> option to run JavaScript code ending with a statement
+<p>Use the <code>-e CODE</code> option to run JavaScript code ending with a statement
 returning a boolean to filter the input JSON.</p>
 
-<pre><code>$ echo '[{"age":38},{"age":4}]' | json -C 'this.age &gt; 21'
+<pre><code>$ echo '[{"age":38},{"age":4}]' | json -e 'this.age &gt; 21'
 [{"age":38}]
 </code></pre>
 
-<p>As with <code>-E</code> above, if input is an array, this will automatically process each
+<p>As with <code>-e</code> above, if input is an array, this will automatically process each
 item separately. This can be overriden with <code>-A</code>.</p>
 
 <p>The given CODE is executed in a function bound to the input object (i.e.
@@ -303,9 +351,9 @@ to be a single statement and it is wrapped:</p>
 }
 </code></pre>
 
-<p>To use multiple statements in <code>-C CODE</code> you must explicitly use <code>return</code>, e.g.:</p>
+<p>To use multiple statements in <code>-c CODE</code> you must explicitly use <code>return</code>, e.g.:</p>
 
-<pre><code>$ echo '{"a": 2, "b": 6}' | json -C 'sum = this.a + this.b; return sum &gt; 5'
+<pre><code>$ echo '{"a": 2, "b": 6}' | json -c 'sum = this.a + this.b; return sum &gt; 5'
 {
   "a": 2,
   "b": 6
@@ -316,11 +364,11 @@ to be a single statement and it is wrapped:</p>
 available and unguarded. You can shoot yourself in the foot. <em>Do not pass
 untrusted user-supplied strings here.</em></p>
 
-<p><em>Compatibility note:</em> There is also a <code>-c CODE</code> option (lowercase "c") from
-earlier versions of json to do much the same thing (with slightly different
-semantics for the CODE. It is still supported for backward compatibility.
-However it is deprecated because it can cause processing to be <em>10x</em> or more
-slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
+<p><em>Compatibility note:</em> In versions before v9 <code>-c CODE</code> used an alternate
+implementation (with slightly different semantics for the CODE). It is still
+supported for backward compatibility by using the <code>JSON_EXEC=vm</code> environment
+variable. However it is deprecated because it can cause processing to be <em>10x</em>
+or more slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATIBILITY" data-bare-link="true">COMPATIBILITY</a> section below.</p>
 
 <h2 id="FEATURE-Lookups">FEATURE: Lookups</h2>
 
@@ -364,14 +412,14 @@ b
 indentifier</a>
 you can always use JavaScript array-style lookups like this:</p>
 
-<pre><code>$ echo '{"http://example.com": "my-value"} | json '["http://example.com"]'
+<pre><code>$ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
 my-value
 </code></pre>
 
 <p>just like you would in JavaScript:</p>
 
 <pre><code>$ node
-&gt; var d = '{"http://example.com": "my-value"}
+&gt; var d = {"http://example.com": "my-value"}
 &gt; d["http://example.com"]
 'my-value'
 </code></pre>
@@ -425,6 +473,14 @@ $ json -f users.json -a name age -o jsony-0
 {"first":"Ewan","last":"Mick"} 4
 </code></pre>
 
+<p>Further the <code>-0</code>, <code>-2</code>, and <code>-4</code> shortcuts can be used to set the indentation
+without changing the mode. This can be use to make the above shorter:</p>
+
+<pre><code>$ json -f users.json -a name age -0
+{"first":"Trent","last":"Mick"} 38
+{"first":"Ewan","last":"Mick"} 4
+</code></pre>
+
 <p>You can get colored (non-JSON) output using node.js's
 <a href="http://nodejs.org/docs/latest/api/all.html#util.inspect"><code>util.inspect</code></a>:</p>
 
@@ -462,7 +518,7 @@ $ cat config.json
   "hostname": "127.0.0.1"
 }
 
-$ json -I -f config.json -E 'this.port=8080'    # add port field
+$ json -I -f config.json -e 'this.port=8080'    # add port field
 json: updated "config.json" in-place
 $ cat config.json
 {
@@ -485,7 +541,7 @@ json: error: lookups cannot be specified with in-place editing (-I/--in-place), 
 
 <p>because that can too easily result in data loss, e.g. with something like:</p>
 
-<pre><code>$ json -I -f *.json    # if there is more than match to the glob
+<pre><code>$ json -I -f *.json    # if there is more than one match to the glob
 json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
 </code></pre>
 
@@ -534,6 +590,8 @@ arrays into a single array.</p></dd>
 <dt><code>--merge</code>, <code>--deep-merge</code></dt><dd><p>Merge adjacent objects into a single object with merged keys. Values
 in later objects win. Use <code>--deep-merge</code> to recursively merge keys in
 objects.</p></dd>
+<dt><code>-M</code>, <code>--items</code></dt><dd><p>Itemize an object into an array of <code>{"key": &lt;key>, "value": &lt;value>}</code>
+objects for easier processing.</p></dd>
 </dl>
 
 
@@ -543,32 +601,24 @@ output:</p>
 <dl>
 <dt><code>-a</code>, <code>--array</code></dt><dd><p>Process input as an array of separate inputs and output in tabular form.</p></dd>
 <dt><code>-d DELIM</code></dt><dd><p>Delimiter character for tabular output (default is ' ').</p></dd>
-<dt class="flush"><code>-A</code></dt><dd><p>Process input as a single object, i.e. stop <code>-E</code> and <code>-C</code> automatically
-processing each item of an input array. Likewise for the deprecated
-<code>-c</code> and <code>-e</code> options.</p></dd>
+<dt class="flush"><code>-A</code></dt><dd><p>Process input as a single object, i.e. stop <code>-e</code> and <code>-c</code> automatically
+processing each item of an input array.</p></dd>
 </dl>
 
 
-<p>You can execute code on (<code>-E</code>) and filter (<code>-C</code>) the input (this is done before
+<p>You can execute code on (<code>-e</code>) and filter (<code>-c</code>) the input (this is done before
 LOOKUPS are processed, if any).</p>
 
 <dl>
-<dt class="flush"><code>-E CODE</code></dt><dd><p>Execute the given JavaScript code on the input. If input is an array, then
-each item of the array is processed separately (use <code>-A</code> to override).</p></dd>
-<dt class="flush"><code>-C CODE</code></dt><dd><p>Filter the input with JavaScript <code>CODE</code>. If <code>CODE</code> returns false-y, then
-the item is filtered out. If input is an array, then each item of the array
-is processed separately (use <code>-A</code> to override).</p></dd>
-</dl>
-
-
-<p>Older similar <code>-e</code> and <code>-c</code> options exist for execution and conditional
-filtering -- now deprecated because they can be 10x or more slower.</p>
-
-<dl>
-<dt class="flush"><code>-e CODE</code></dt><dd><p>Execute the given JavaScript code on the input. Deprecated in v7. Use
-<code>-E CODE</code> instead.</p></dd>
+<dt class="flush"><code>-e CODE</code></dt><dd><p>Execute the given JavaScript code on the input. If input is an array, then
+each item of the array is processed separately (use <code>-A</code> to override). Use
+<code>this.</code> to access fields on the object being processed. (<code>-E CODE</code> is a now
+deprecated synonym.)</p></dd>
 <dt class="flush"><code>-c CODE</code></dt><dd><p>Filter the input with JavaScript <code>CODE</code>. If <code>CODE</code> returns false-y, then
-the item is filtered out. Deprecated in v7. Use <code>-C CODE</code> instead.</p></dd>
+the item is filtered out. If input is an array, then each item of the array
+is processed separately (use <code>-A</code> to override). Use <code>this.</code> to access fields
+on the object being processed. An explicit <code>return</code> is required if <code>CODE</code>
+includes multiple statements. (<code>-C CODE</code> is a now deprecated synonym.)</p></dd>
 </dl>
 
 
@@ -609,6 +659,14 @@ string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
 (node.js <code>util.inspect</code> output).</p></dd>
 <dt class="flush"><code>-i</code></dt><dd><p>Shortcut for <code>-o inspect</code>.</p></dd>
 <dt class="flush"><code>-j</code></dt><dd><p>Shortcut for <code>-o json</code>.</p></dd>
+<dt><code>-0</code>, <code>-2</code>, <code>-4</code></dt><dd><p>Set the JSON indentation without changing the mode.</p></dd>
+</dl>
+
+
+<h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+
+<dl>
+<dt><code>JSON_EXEC=vm</code></dt><dd>Set this to turn on the old (pre-v9) behaviour of <code>-e CODE</code> and <code>-c CODE</code>.</dd>
 </dl>
 
 
@@ -780,6 +838,12 @@ example, we could get the list of top-five most commented open node issues:</p>
 change. An overview of those changes is here.</p>
 
 <ul>
+<li>v9: <code>-e CODE</code> and <code>-c CODE</code> switch away from using <code>vm.runInNewContext</code> for
+processing. In other words they now do what <code>-E</code> and <code>-C</code> do, and the
+uppercase options are not deprecated synonyms. Use the <code>JSON_EXEC=vm</code>
+environment variable to bring back the old behaviour.</li>
+<li>v8: No incompatible change. The npm registry name changed from 'jsontool' to
+'json'.</li>
 <li>v7: <code>-E CODE</code> and <code>-C CODE</code> were added in favour of <code>-e CODE</code> and <code>-c CODE</code>
 because the former provide a 10x or more performance improvement for
 larger inputs. The latter are still included for backward compatibility.
@@ -820,8 +884,8 @@ curl -L https://github.com/trentm/json/raw/master/lib/json.js &gt; json
 chmod 755 json
 </code></pre>
 
-<p>(Note: NOT <code>npm install json</code>. Unfortunately and confusingly, that will
-install a different and incompatible <code>json</code> CLI tool.)</p>
+<p>(Note: Before version 8, this tool was called "jsontool" in the npm
+registry. That name is now defunct.)</p>
 
 <p>This project lives at <a href="https://github.com/trentm/json" data-bare-link="true">https://github.com/trentm/json</a>. Please report bugs
 to <a href="https://github.com/trentm/json/issues" data-bare-link="true">https://github.com/trentm/json/issues</a>. See the full changelog at:
@@ -833,7 +897,7 @@ to <a href="https://github.com/trentm/json/issues" data-bare-link="true">https:/
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>json is Copyright (c) 2013 Trent Mick and Copyright (c) 2013 Joyent Inc.
+<p>json is Copyright (c) 2014 Trent Mick and Copyright (c) 2014 Joyent Inc.
 All rights reserved.</p>
 
 
