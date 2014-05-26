@@ -382,7 +382,7 @@ If your lookup isn\'t a number or a JS indentifier \fIhttps://developer\.mozilla
 .
 .nf
 
-$ echo \'{"http://example\.com": "my\-value"} | json \'["http://example\.com"]\'
+$ echo \'{"http://example\.com": "my\-value"}\' | json \'["http://example\.com"]\'
 my\-value
 .
 .fi
@@ -397,7 +397,7 @@ just like you would in JavaScript:
 .nf
 
 $ node
-> var d = \'{"http://example\.com": "my\-value"}
+> var d = {"http://example\.com": "my\-value"}
 > d["http://example\.com"]
 \'my\-value\'
 .
