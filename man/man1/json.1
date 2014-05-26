@@ -559,6 +559,21 @@ $ json \-f users\.json \-a name age \-o jsony\-0
 .IP "" 0
 .
 .P
+Further the \fB\-0\fR, \fB\-2\fR, and \fB\-4\fR shortcuts can be used to set the indentation without changing the mode\. This can be use to make the above shorter:
+.
+.IP "" 4
+.
+.nf
+
+$ json \-f users\.json \-a name age \-0
+{"first":"Trent","last":"Mick"} 38
+{"first":"Ewan","last":"Mick"} 4
+.
+.fi
+.
+.IP "" 0
+.
+.P
 You can get colored (non\-JSON) output using node\.js\'s \fButil\.inspect\fR \fIhttp://nodejs\.org/docs/latest/api/all\.html#util\.inspect\fR:
 .
 .IP "" 4
@@ -775,6 +790,10 @@ Shortcut for \fB\-o inspect\fR\.
 .TP
 \fB\-j\fR
 Shortcut for \fB\-o json\fR\.
+.
+.TP
+\fB\-0\fR, \fB\-2\fR, \fB\-4\fR
+Set the JSON indentation without changing the mode\.
 .
 .SH "ENVIRONMENT"
 .

@@ -2,6 +2,9 @@
 
 ## json 9.0.0 (not yet released)
 
+- Add `-0`, `-2`, `-4` options to more conveniently set the JSON indentation
+  without changing the mode.
+
 - [pull #64] Add `-M, --items` option for "itemizing" key/value pairs in an
   object for easy iteration. For example:
 

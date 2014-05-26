@@ -362,6 +362,13 @@ values and wanting tabular output where some cells are objects:
     {"first":"Trent","last":"Mick"} 38
     {"first":"Ewan","last":"Mick"} 4
 
+Further the `-0`, `-2`, and `-4` shortcuts can be used to set the indentation
+without changing the mode. This can be use to make the above shorter:
+
+    $ json -f users.json -a name age -0
+    {"first":"Trent","last":"Mick"} 38
+    {"first":"Ewan","last":"Mick"} 4
+
 You can get colored (non-JSON) output using node.js's
 [`util.inspect`](http://nodejs.org/docs/latest/api/all.html#util.inspect):
 
@@ -542,6 +549,9 @@ Other output formats are supported:
 
   * `-j`:
     Shortcut for `-o json`.
+
+  * `-0`, `-2`, `-4`:
+    Set the JSON indentation without changing the mode.
 
 
 ## ENVIRONMENT

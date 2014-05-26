@@ -473,6 +473,14 @@ $ json -f users.json -a name age -o jsony-0
 {"first":"Ewan","last":"Mick"} 4
 </code></pre>
 
+<p>Further the <code>-0</code>, <code>-2</code>, and <code>-4</code> shortcuts can be used to set the indentation
+without changing the mode. This can be use to make the above shorter:</p>
+
+<pre><code>$ json -f users.json -a name age -0
+{"first":"Trent","last":"Mick"} 38
+{"first":"Ewan","last":"Mick"} 4
+</code></pre>
+
 <p>You can get colored (non-JSON) output using node.js's
 <a href="http://nodejs.org/docs/latest/api/all.html#util.inspect"><code>util.inspect</code></a>:</p>
 
@@ -651,6 +659,7 @@ string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
 (node.js <code>util.inspect</code> output).</p></dd>
 <dt class="flush"><code>-i</code></dt><dd><p>Shortcut for <code>-o inspect</code>.</p></dd>
 <dt class="flush"><code>-j</code></dt><dd><p>Shortcut for <code>-o json</code>.</p></dd>
+<dt><code>-0</code>, <code>-2</code>, <code>-4</code></dt><dd><p>Set the JSON indentation without changing the mode.</p></dd>
 </dl>
 
 
