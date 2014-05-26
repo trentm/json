@@ -2,6 +2,8 @@
 
 ## json 9.0.0 (not yet released)
 
+- [issue #52] Fix termination on EPIPE in some cases.
+
 - Add `-0`, `-2`, `-4` options to more conveniently set the JSON indentation
   without changing the mode.
 
