@@ -1,5 +1,10 @@
 # json Changelog
 
+## json 9.0.2 (not yet released)
+
+(nothing yet)
+
+
 ## json 9.0.1
 
 - [issue #71] Support `-o json-tab` and `-o jsony-tab` for TAB (i.e. `\t`)
