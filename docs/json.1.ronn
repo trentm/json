@@ -541,8 +541,9 @@ Other output formats are supported:
   * `-o MODE`, `--output MODE`:
     Specify an output mode. One of `jsony` (the default; JSON, if a single
     string then quotes are elided), `json` (JSON output, 2-space indent),
-    `json-N` (JSON output, N-space indent, e.g. 'json-4'), or `inspect`
-    (node.js `util.inspect` output).
+    or `inspect` (node.js `util.inspect` output). `json` and `jsony` modes can
+    specify an indentation via `json-N` or `jsony-N` for N-space indentation
+    (e.g. `json-4`), or via `json-tab` or `jsony-tab` for TAB indentation.
 
   * `-i`:
     Shortcut for `-o inspect`.

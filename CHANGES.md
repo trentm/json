@@ -2,7 +2,8 @@
 
 ## json 9.0.1 (not yet released)
 
-(nothing yet)
+- [issue #71] Support `-o json-tab` and `-o jsony-tab` for TAB (i.e. `\t`)
+  indentation of emitted JSON.
 
 
 ## json 9.0.0

@@ -655,8 +655,9 @@ Other output formats are supported:</p>
 <dl>
 <dt><code>-o MODE</code>, <code>--output MODE</code></dt><dd><p>Specify an output mode. One of <code>jsony</code> (the default; JSON, if a single
 string then quotes are elided), <code>json</code> (JSON output, 2-space indent),
-<code>json-N</code> (JSON output, N-space indent, e.g. 'json-4'), or <code>inspect</code>
-(node.js <code>util.inspect</code> output).</p></dd>
+or <code>inspect</code> (node.js <code>util.inspect</code> output). <code>json</code> and <code>jsony</code> modes can
+specify an indentation via <code>json-N</code> or <code>jsony-N</code> for N-space indentation
+(e.g. <code>json-4</code>), or via <code>json-tab</code> or <code>jsony-tab</code> for TAB indentation.</p></dd>
 <dt class="flush"><code>-i</code></dt><dd><p>Shortcut for <code>-o inspect</code>.</p></dd>
 <dt class="flush"><code>-j</code></dt><dd><p>Shortcut for <code>-o json</code>.</p></dd>
 <dt><code>-0</code>, <code>-2</code>, <code>-4</code></dt><dd><p>Set the JSON indentation without changing the mode.</p></dd>
