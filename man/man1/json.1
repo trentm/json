@@ -322,7 +322,7 @@ The given CODE is executed in a function bound to the input object (i\.e\. \fBth
 \fICompatibility note:\fR In versions before v9 \fB\-e CODE\fR used an alternate implementation (with slightly different semantics for the CODE)\. It is still supported for backward compatibility by using the \fBJSON_EXEC=vm\fR environment variable\. However it is deprecated because it can cause processing to be \fI10x\fR or more slower for large inputs\. See the \fICOMPATIBILITY\fR section below\.
 .
 .SH "FEATURE: Conditional filtering"
-Use the \fB\-e CODE\fR option to run JavaScript code ending with a statement returning a boolean to filter the input JSON\.
+Use the \fB\-c CODE\fR option to run JavaScript code ending with a statement returning a boolean to filter the input JSON\.
 .
 .IP "" 4
 .

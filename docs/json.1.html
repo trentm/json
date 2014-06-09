@@ -331,7 +331,7 @@ or more slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATI
 
 <h2 id="FEATURE-Conditional-filtering">FEATURE: Conditional filtering</h2>
 
-<p>Use the <code>-e CODE</code> option to run JavaScript code ending with a statement
+<p>Use the <code>-c CODE</code> option to run JavaScript code ending with a statement
 returning a boolean to filter the input JSON.</p>
 
 <pre><code>$ echo '[{"age":38},{"age":4}]' | json -e 'this.age &gt; 21'
