@@ -331,10 +331,10 @@ or more slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATI
 
 <h2 id="FEATURE-Conditional-filtering">FEATURE: Conditional filtering</h2>
 
-<p>Use the <code>-e CODE</code> option to run JavaScript code ending with a statement
+<p>Use the <code>-c CODE</code> option to run JavaScript code ending with a statement
 returning a boolean to filter the input JSON.</p>
 
-<pre><code>$ echo '[{"age":38},{"age":4}]' | json -e 'this.age &gt; 21'
+<pre><code>$ echo '[{"age":38},{"age":4}]' | json -c 'this.age &gt; 21'
 [{"age":38}]
 </code></pre>
 
@@ -904,7 +904,7 @@ All rights reserved.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>May 2014</li>
+    <li class='tc'>June 2014</li>
     <li class='tr'>json(1)</li>
   </ol>
 

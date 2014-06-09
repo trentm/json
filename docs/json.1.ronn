@@ -232,10 +232,10 @@ or more slower for large inputs. See the [COMPATIBILITY][] section below.
 
 ## FEATURE: Conditional filtering
 
-Use the `-e CODE` option to run JavaScript code ending with a statement
+Use the `-c CODE` option to run JavaScript code ending with a statement
 returning a boolean to filter the input JSON.
 
-    $ echo '[{"age":38},{"age":4}]' | json -e 'this.age > 21'
+    $ echo '[{"age":38},{"age":4}]' | json -c 'this.age > 21'
     [{"age":38}]
 
 As with `-e` above, if input is an array, this will automatically process each
