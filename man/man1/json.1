@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "June 2014" "" "json tool manual"
+.TH "JSON" "1" "July 2014" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- JSON love for your command line
@@ -385,6 +385,17 @@ Use lookup arguments to extract particular values:
 
 $ echo \'{"name":"trent","age":38}\' | json name
 trent
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Use \'\.\' in a single lookup to do property access (e\.g\. \fBname\.first\fR) and use multiple args to lookup multiple fields\.
+.
+.IP "" 4
+.
+.nf
 
 $ echo \'{"name": {"first": "Trent", "last": "Mick"}, "age": 38}\' \e
     | json name\.first age
@@ -396,7 +407,7 @@ Trent
 .IP "" 0
 .
 .P
-Use \fB\-a\fR for \fIarray processing\fR of lookups and \fItabular output\fR:
+Use \fB\-a\fR for \fIArray processing\fR of lookups and \fItAbular output\fR:
 .
 .IP "" 4
 .
@@ -444,7 +455,7 @@ b
 .IP "" 0
 .
 .P
-If your lookup isn\'t a number or a JS indentifier \fIhttps://developer\.mozilla\.org/en\-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables\fR you can always use JavaScript array\-style lookups like this:
+If your lookup isn\'t a number or a JS indentifier \fIhttps://developer\.mozilla\.org/en\-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables\fR you can always use \fBJavaScript array\-style lookups\fR like this:
 .
 .IP "" 4
 .
@@ -468,6 +479,23 @@ $ node
 > var d = {"http://example\.com": "my\-value"}
 > d["http://example\.com"]
 \'my\-value\'
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Or it might be easier to set \fBan alternate lookup delimiter\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ echo \'{"http://example\.com": "my\-value"}\' | json \-D, http://example\.com
+my\-value
+
+$ echo \'{"etc": {"resolv\.conf": 1, "passwd": 2}}\' | json \-D/ etc/resolv\.conf
+1
 .
 .fi
 .

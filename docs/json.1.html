@@ -376,14 +376,18 @@ or more slower for large inputs. See the <a href="#COMPATIBILITY" title="COMPATI
 
 <pre><code>$ echo '{"name":"trent","age":38}' | json name
 trent
+</code></pre>
 
-$ echo '{"name": {"first": "Trent", "last": "Mick"}, "age": 38}' \
+<p>Use '.' in a single lookup to do property access (e.g. <code>name.first</code>) and use
+multiple args to lookup multiple fields.</p>
+
+<pre><code>$ echo '{"name": {"first": "Trent", "last": "Mick"}, "age": 38}' \
     | json name.first age
 Trent
 38
 </code></pre>
 
-<p>Use <code>-a</code> for <em>array processing</em> of lookups and <em>tabular output</em>:</p>
+<p>Use <code>-a</code> for <em>Array processing</em> of lookups and <em>tAbular output</em>:</p>
 
 <pre><code>$ echo '{"name":"trent","age":38}' | json name
 trent
@@ -410,7 +414,7 @@ b
 
 <p>If your lookup isn't a number or <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables">a JS
 indentifier</a>
-you can always use JavaScript array-style lookups like this:</p>
+you can always use <strong>JavaScript array-style lookups</strong> like this:</p>
 
 <pre><code>$ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
 my-value
@@ -422,6 +426,15 @@ my-value
 &gt; var d = {"http://example.com": "my-value"}
 &gt; d["http://example.com"]
 'my-value'
+</code></pre>
+
+<p>Or it might be easier to set <strong>an alternate lookup delimiter</strong>:</p>
+
+<pre><code>$ echo '{"http://example.com": "my-value"}' | json -D, http://example.com
+my-value
+
+$ echo '{"etc": {"resolv.conf": 1, "passwd": 2}}' | json -D/ etc/resolv.conf
+1
 </code></pre>
 
 <h2 id="FEATURE-Pretty-printing">FEATURE: Pretty-printing</h2>
@@ -904,7 +917,7 @@ All rights reserved.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>June 2014</li>
+    <li class='tc'>July 2014</li>
     <li class='tr'>json(1)</li>
   </ol>
 

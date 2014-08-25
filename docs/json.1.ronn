@@ -276,12 +276,15 @@ Use lookup arguments to extract particular values:
     $ echo '{"name":"trent","age":38}' | json name
     trent
 
+Use '.' in a single lookup to do property access (e.g. `name.first`) and use
+multiple args to lookup multiple fields.
+
     $ echo '{"name": {"first": "Trent", "last": "Mick"}, "age": 38}' \
         | json name.first age
     Trent
     38
 
-Use `-a` for *array processing* of lookups and *tabular output*:
+Use `-a` for *Array processing* of lookups and *tAbular output*:
 
     $ echo '{"name":"trent","age":38}' | json name
     trent
@@ -305,7 +308,7 @@ indexing):
 
 If your lookup isn't a number or [a JS
 indentifier](https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables)
-you can always use JavaScript array-style lookups like this:
+you can always use **JavaScript array-style lookups** like this:
 
     $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
     my-value
@@ -316,6 +319,14 @@ just like you would in JavaScript:
     > var d = {"http://example.com": "my-value"}
     > d["http://example.com"]
     'my-value'
+
+Or it might be easier to set **an alternate lookup delimiter**:
+
+    $ echo '{"http://example.com": "my-value"}' | json -D, http://example.com
+    my-value
+
+    $ echo '{"etc": {"resolv.conf": 1, "passwd": 2}}' | json -D/ etc/resolv.conf
+    1
 
 
 ## FEATURE: Pretty-printing

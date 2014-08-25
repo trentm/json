@@ -10,14 +10,18 @@ script with no external deps (other than
     $ echo '{"foo":"bar"}' | json foo
     bar
 
-    $ echo '{"age":10}' | json -E 'this.age++'
+    $ echo '{"fred":{"age":42}}' | json fred.age    # '.' for property access
+    42
+
+    $ echo '{"age":10}' | json -e 'this.age++'
     {
       "age": 11
     }
 
-    $ echo '{"latency":32,"req":"POST /widgets"},
+    # `json -ga` (g == group, a == array) for streaming mode
+    $ echo '{"latency":32,"req":"POST /widgets"}
     {"latency":10,"req":"GET /ping"}
-    ' | json -gaC 'this.latency > 10' req
+    ' | json -gac 'this.latency > 10' req
     POST /widgets
 
 Features:
@@ -25,7 +29,7 @@ Features:
 - pretty-printing JSON
 - natural syntax (like JS code) for extracting particular values
 - get details on JSON syntax errors (handy for config files)
-- filter input JSON (see `-E` and `-C` options)
+- filter input JSON (see `-e` and `-c` options)
 - fast stream processing
 - JSON validation
 - in-place file editing
