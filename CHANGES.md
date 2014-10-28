@@ -2,7 +2,7 @@
 
 ## json 9.0.2 (not yet released)
 
-(nothing yet)
+- [pull #72] Correct examples in docs for conditional filtering.
 
 
 ## json 9.0.1
