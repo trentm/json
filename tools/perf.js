@@ -27,7 +27,7 @@ var nodes = [
     //'node11',
     'node10',
     'node8',
-    'node6',
+    'node6'
 ];
 
 var cmds = [
@@ -37,7 +37,7 @@ var cmds = [
     ['>=3', 'echo \'{"foo":"bar"}\' | JSON -e "foo=\'baz\'" foo'],
     ['>=3', 'echo \'{"foo":"bar"}\' | JSON -c "true" foo'],
     ['*', 'echo \'{"foo":"bar"}\' | JSON foo'],
-    ['*', 'echo \'{"foo":"bar"}\' | JSON'],
+    ['*', 'echo \'{"foo":"bar"}\' | JSON']
 ];
 
 async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
@@ -51,7 +51,7 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
             if (version !== 'dev' && !semver.satisfies(version, cmdVerRange)) {
                 return nextVer();
             }
-
+            
             var json = (version === 'dev'
                 ? path.resolve(TOP, 'lib', 'json.js')
                 : path.resolve(JSONS, version, 'json'));
@@ -69,7 +69,7 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
                         console.log('error with cmd `%s`: %s', cmd, err);
                         fail = true;
                     }
-                    done()
+                    done();
                 });
             }
             ben.async(runCmd, function (ms) {

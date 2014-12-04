@@ -15,7 +15,7 @@ var execFile = require('child_process').execFile;
 
 var startSep = "// START json_parse\n";
 var endSep = "// END json_parse\n";
-var jsonJs = path.resolve(__dirname, "..", "lib", "json.js")
+var jsonJs = path.resolve(__dirname, "..", "lib", "json.js");
 var content = fs.readFileSync(jsonJs, 'utf8');
 
 var startIdx = content.indexOf(startSep);
@@ -37,10 +37,10 @@ execFile(process.execPath, [uglifyjs, "-nc", jsonParseJs],
     ];
     var newContent = bits.join('');
     if (newContent === content) {
-      log('"'+jsonJs+'" not changed.')
+      log('"'+jsonJs+'" not changed.');
     } else {
       fs.writeFileSync(jsonJs, newContent, 'utf8');
-      log('"'+jsonJs+'" updated.')
+      log('"'+jsonJs+'" updated.');
     }
   }
 );

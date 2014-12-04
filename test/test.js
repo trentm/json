@@ -110,9 +110,9 @@ for (var i = 0; i < names.length; ++i) {
             return function (test) {
                 var numTests = 0;
 
-                var expectedExitCode = null;
+                var p, expectedExitCode = null;
                 try {
-                    var p = path.join(dir, 'expected.exitCode');
+                    p = path.join(dir, 'expected.exitCode');
                     if (fs.statSync(p)) {
                         expectedExitCode = Number(fs.readFileSync(p));
                         numTests += 1;
@@ -121,7 +121,7 @@ for (var i = 0; i < names.length; ++i) {
 
                 var expectedStdout = null;
                 try {
-                    var p = path.join(dir, 'expected.stdout');
+                    p = path.join(dir, 'expected.stdout');
                     if (fs.statSync(p)) {
                         expectedStdout = fs.readFileSync(p, 'utf8');
                         numTests += 1;
@@ -130,7 +130,7 @@ for (var i = 0; i < names.length; ++i) {
 
                 var expectedStderr = null;
                 try {
-                    var p = path.join(dir, 'expected.stderr');
+                    p = path.join(dir, 'expected.stderr');
                     if (fs.statSync(p)) {
                         expectedStderr = fs.readFileSync(p, 'utf8');
                         numTests += 1;
@@ -171,9 +171,9 @@ for (var i = 0; i < names.length; ++i) {
                     }
                     test.done();
                 });
-            }
+            };
         })(dir);
     }
 }
 
-exports['test'] = testCase(data);
+exports.test = testCase(data);
