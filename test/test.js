@@ -23,7 +23,7 @@ var warn = console.warn;
 
 //---- test cases
 
-var data = {
+var jsTests = {
     //setUp: function (callback) {
     //  ...
     //},
@@ -69,111 +69,133 @@ var data = {
         test.done();
     }
 };
+var shellTests=buildShellTests();
+// export testcase from both sets of tests
+exports.test = testCase(mixin(shellTests, jsTests));
 
-// Process includes and excludes from 'TEST_ONLY'.
-var only = [],
-    excludes = [];
-if (process.env.TEST_ONLY) {
-    warn('Note: Limiting "test.js" tests by $TEST_ONLY: "' +
-        process.env.TEST_ONLY + '"');
-    var tokens = process.env.TEST_ONLY.trim().split(/\s+/);
-    for (var i = 0; i < tokens.length; i++) {
-        if (tokens[i][0] === '-') {
-            excludes.push(tokens[i].slice(1));
-        } else {
-            only.push(tokens[i]);
+//---- support
+
+function buildShellTests(){
+
+    // builds {} where each property is test from */cmd
+
+    // Process includes and excludes from 'TEST_ONLY'.
+    var only = [],
+        excludes = [],
+        i;
+    if (process.env.TEST_ONLY) {
+        warn('Note: Limiting "test.js" tests by $TEST_ONLY: "' +
+            process.env.TEST_ONLY + '"');
+        var tokens = process.env.TEST_ONLY.trim().split(/\s+/);
+        for (i = 0; i < tokens.length; i++) {
+            if (tokens[i][0] === '-') {
+                excludes.push(tokens[i].slice(1));
+            } else {
+                only.push(tokens[i]);
+            }
         }
     }
-}
 
-// Add a test case for each dir with a 'test.sh' script.
-var names = fs.readdirSync(__dirname);
-for (var i = 0; i < names.length; ++i) {
-    var name = names[i];
-    if (only.length && only.indexOf(name) == -1) {
-        continue;
-    }
-    if (excludes.length && excludes.indexOf(name) != -1) {
-        continue;
-    }
-    var dir = path.join(__dirname, name);
-    if (fs.statSync(dir).isDirectory()) {
-        try {
-            fs.statSync(path.join(dir, 'cmd'));
-        } catch (e) {
+    // Add a test case for each dir with a 'test.sh' script.
+    var data={};
+    var names = fs.readdirSync(__dirname);
+    for (i = 0; i < names.length; ++i) {
+        var name = names[i];
+        if (only.length && only.indexOf(name) == -1) {
             continue;
         }
-        if (data[name] !== undefined) {
-            throw ('error: test "' + name + '" already exists');
+        if (excludes.length && excludes.indexOf(name) != -1) {
+            continue;
         }
-        data[name] = (function (dir) {
-            return function (test) {
-                var numTests = 0;
+        var dir = path.join(__dirname, name);
+        if (fs.statSync(dir).isDirectory()) {
+            try {
+                fs.statSync(path.join(dir, 'cmd'));
+            } catch (e) {
+                continue;
+            }
+            if (data[name] !== undefined) {
+                throw ('error: test "' + name + '" already exists');
+            }
+            data[name] = buildTest(dir);
+        }
+    }
+    return data;
 
-                var p, expectedExitCode = null;
-                try {
-                    p = path.join(dir, 'expected.exitCode');
-                    if (fs.statSync(p)) {
-                        expectedExitCode = Number(fs.readFileSync(p));
-                        numTests += 1;
-                    }
-                } catch (e) {}
+    function buildTest(dir) {
+        return function (test) {
+            var numTests = 0;
 
-                var expectedStdout = null;
-                try {
-                    p = path.join(dir, 'expected.stdout');
-                    if (fs.statSync(p)) {
-                        expectedStdout = fs.readFileSync(p, 'utf8');
-                        numTests += 1;
-                    }
-                } catch (e) {}
+            var p, expectedExitCode = null;
+            try {
+                p = path.join(dir, 'expected.exitCode');
+                if (fs.statSync(p)) {
+                    expectedExitCode = Number(fs.readFileSync(p));
+                    numTests += 1;
+                }
+            } catch (e) {}
 
-                var expectedStderr = null;
-                try {
-                    p = path.join(dir, 'expected.stderr');
-                    if (fs.statSync(p)) {
-                        expectedStderr = fs.readFileSync(p, 'utf8');
-                        numTests += 1;
-                    }
-                } catch (e) {}
+            var expectedStdout = null;
+            try {
+                p = path.join(dir, 'expected.stdout');
+                if (fs.statSync(p)) {
+                    expectedStdout = fs.readFileSync(p, 'utf8');
+                    numTests += 1;
+                }
+            } catch (e) {}
 
-                test.expect(numTests);
-                exec('bash cmd', {
-                    'cwd': dir
-                }, function (error, stdout, stderr) {
-                    var errmsg = ('\n-- return value:\n' +
-                        (error && error.code) + '\n-- expected stdout:\n' +
-                        expectedStdout + '\n-- stdout:\n' + stdout +
-                        '\n-- stdout diff:\n' +
-                        ansidiff.chars(expectedStdout, stdout));
-                    if (expectedStderr !== null) {
-                        errmsg += '\n-- expected stderr:\n' + expectedStderr;
-                    }
-                    if (stderr !== null) {
-                        errmsg += '\n-- stderr:\n' + stderr;
-                    }
-                    if (expectedStderr !== null) {
-                        errmsg += '\n-- stderr diff:\n' +
-                            ansidiff.chars(expectedStderr, stderr);
-                    }
+            var expectedStderr = null;
+            try {
+                p = path.join(dir, 'expected.stderr');
+                if (fs.statSync(p)) {
+                    expectedStderr = fs.readFileSync(p, 'utf8');
+                    numTests += 1;
+                }
+            } catch (e) {}
 
-                    if (expectedExitCode !== null) {
-                        test.equal(expectedExitCode, error && error.code || 0,
-                            '\n\nunexpected exit code' + errmsg);
-                    }
-                    if (expectedStdout !== null) {
-                        test.equal(stdout, expectedStdout,
-                            '\n\nunexpected stdout' + errmsg);
-                    }
-                    if (expectedStderr !== null) {
-                        test.equal(stderr, expectedStderr,
-                            '\n\nunexpected stderr' + errmsg);
-                    }
-                    test.done();
-                });
-            };
-        })(dir);
+            test.expect(numTests);
+            exec('bash cmd', {
+                'cwd': dir
+            }, function (error, stdout, stderr) {
+                var errmsg = ('\n-- return value:\n' +
+                    (error && error.code) + '\n-- expected stdout:\n' +
+                    expectedStdout + '\n-- stdout:\n' + stdout +
+                    '\n-- stdout diff:\n' +
+                    ansidiff.chars(expectedStdout, stdout));
+                if (expectedStderr !== null) {
+                    errmsg += '\n-- expected stderr:\n' + expectedStderr;
+                }
+                if (stderr !== null) {
+                    errmsg += '\n-- stderr:\n' + stderr;
+                }
+                if (expectedStderr !== null) {
+                    errmsg += '\n-- stderr diff:\n' +
+                        ansidiff.chars(expectedStderr, stderr);
+                }
+
+                if (expectedExitCode !== null) {
+                    test.equal(expectedExitCode, error && error.code || 0,
+                        '\n\nunexpected exit code' + errmsg);
+                }
+                if (expectedStdout !== null) {
+                    test.equal(stdout, expectedStdout,
+                        '\n\nunexpected stdout' + errmsg);
+                }
+                if (expectedStderr !== null) {
+                    test.equal(stderr, expectedStderr,
+                        '\n\nunexpected stderr' + errmsg);
+                }
+                test.done();
+            });
+        };
     }
 }
+function mixin(a,b) {
+    for(var k in b) {
+        a[k] = b[k];
+    }
+    return a;
+}
 
-exports.test = testCase(data);
+
+
