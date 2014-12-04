@@ -69,7 +69,7 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
                         console.log('error with cmd `%s`: %s', cmd, err);
                         fail = true;
                     }
-                    done()
+                    done();
                 });
             }
             ben.async(runCmd, function (ms) {
