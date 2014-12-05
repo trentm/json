@@ -106,74 +106,75 @@ for (var i = 0; i < names.length; ++i) {
         if (data[name] !== undefined) {
             throw ('error: test "' + name + '" already exists');
         }
-        data[name] = (function (dir) {
-            return function (test) {
-                var numTests = 0;
-
-                var p, expectedExitCode = null;
-                try {
-                    p = path.join(dir, 'expected.exitCode');
-                    if (fs.statSync(p)) {
-                        expectedExitCode = Number(fs.readFileSync(p));
-                        numTests += 1;
-                    }
-                } catch (e) {}
-
-                var expectedStdout = null;
-                try {
-                    p = path.join(dir, 'expected.stdout');
-                    if (fs.statSync(p)) {
-                        expectedStdout = fs.readFileSync(p, 'utf8');
-                        numTests += 1;
-                    }
-                } catch (e) {}
-
-                var expectedStderr = null;
-                try {
-                    p = path.join(dir, 'expected.stderr');
-                    if (fs.statSync(p)) {
-                        expectedStderr = fs.readFileSync(p, 'utf8');
-                        numTests += 1;
-                    }
-                } catch (e) {}
-
-                test.expect(numTests);
-                exec('bash cmd', {
-                    'cwd': dir
-                }, function (error, stdout, stderr) {
-                    var errmsg = ('\n-- return value:\n' +
-                        (error && error.code) + '\n-- expected stdout:\n' +
-                        expectedStdout + '\n-- stdout:\n' + stdout +
-                        '\n-- stdout diff:\n' +
-                        ansidiff.chars(expectedStdout, stdout));
-                    if (expectedStderr !== null) {
-                        errmsg += '\n-- expected stderr:\n' + expectedStderr;
-                    }
-                    if (stderr !== null) {
-                        errmsg += '\n-- stderr:\n' + stderr;
-                    }
-                    if (expectedStderr !== null) {
-                        errmsg += '\n-- stderr diff:\n' +
-                            ansidiff.chars(expectedStderr, stderr);
-                    }
-
-                    if (expectedExitCode !== null) {
-                        test.equal(expectedExitCode, error && error.code || 0,
-                            '\n\nunexpected exit code' + errmsg);
-                    }
-                    if (expectedStdout !== null) {
-                        test.equal(stdout, expectedStdout,
-                            '\n\nunexpected stdout' + errmsg);
-                    }
-                    if (expectedStderr !== null) {
-                        test.equal(stderr, expectedStderr,
-                            '\n\nunexpected stderr' + errmsg);
-                    }
-                    test.done();
-                });
-            };
-        })(dir);
+        data[name] = buildShellTest(dir);
     }
+}
+function buildShellTest(dir) {
+    return function (test) {
+        var numTests = 0;
+
+        var p, expectedExitCode = null;
+        try {
+            p = path.join(dir, 'expected.exitCode');
+            if (fs.statSync(p)) {
+                expectedExitCode = Number(fs.readFileSync(p));
+                numTests += 1;
+            }
+        } catch (e) {}
+
+        var expectedStdout = null;
+        try {
+            p = path.join(dir, 'expected.stdout');
+            if (fs.statSync(p)) {
+                expectedStdout = fs.readFileSync(p, 'utf8');
+                numTests += 1;
+            }
+        } catch (e) {}
+
+        var expectedStderr = null;
+        try {
+            p = path.join(dir, 'expected.stderr');
+            if (fs.statSync(p)) {
+                expectedStderr = fs.readFileSync(p, 'utf8');
+                numTests += 1;
+            }
+        } catch (e) {}
+
+        test.expect(numTests);
+        exec('bash cmd', {
+            'cwd': dir
+        }, function (error, stdout, stderr) {
+            var errmsg = ('\n-- return value:\n' +
+                (error && error.code) + '\n-- expected stdout:\n' +
+                expectedStdout + '\n-- stdout:\n' + stdout +
+                '\n-- stdout diff:\n' +
+                ansidiff.chars(expectedStdout, stdout));
+            if (expectedStderr !== null) {
+                errmsg += '\n-- expected stderr:\n' + expectedStderr;
+            }
+            if (stderr !== null) {
+                errmsg += '\n-- stderr:\n' + stderr;
+            }
+            if (expectedStderr !== null) {
+                errmsg += '\n-- stderr diff:\n' +
+                    ansidiff.chars(expectedStderr, stderr);
+            }
+
+            if (expectedExitCode !== null) {
+                test.equal(expectedExitCode, error && error.code || 0,
+                    '\n\nunexpected exit code' + errmsg);
+            }
+            if (expectedStdout !== null) {
+                test.equal(stdout, expectedStdout,
+                    '\n\nunexpected stdout' + errmsg);
+            }
+            if (expectedStderr !== null) {
+                test.equal(stderr, expectedStderr,
+                    '\n\nunexpected stderr' + errmsg);
+            }
+            test.done();
+        });
+    };
 }
 
 exports.test = testCase(data);
