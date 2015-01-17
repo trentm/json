@@ -1,5 +1,10 @@
 # json Changelog
 
+## json 9.0.4 (not yet released)
+
+(nothing yet)
+
+
 ## json 9.0.3
 
 - [issue #82] Fix a race in `-I/--in-place` temp file creation.
