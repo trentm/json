@@ -2,7 +2,8 @@
 
 ## json 9.0.3 (not yet released)
 
-(nothing yet)
+- [issue #82] Fix a race in `-I/--in-place` temp file creation.
+  By https://github.com/inator
 
 
 ## json 9.0.2
