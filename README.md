@@ -70,8 +70,7 @@ such that "apt-get install nodejs" installed a `nodejs` binary instead of a
 `node` binary. You'll either need to create a symlink for `node`, change the
 `json` command's shebang line to "#!/usr/bin/env nodejs" or use
 [chrislea's PPA](https://launchpad.net/~chris-lea/+archive/node.js/) as
-discussed on [issue #56](https://github.com/trentm/json/issues/56).
-
+discussed on [issue #56](https://github.com/trentm/json/issues/56). You can also do "apt-get install nodejs-legacy" to install symlink for `node` with apt.
 
 # Test suite
 
