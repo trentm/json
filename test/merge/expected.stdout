@@ -72,3 +72,31 @@
   },
   "kevin": true
 }
+
+# array concatenation
+{
+  "array": [
+    "item1",
+    "item2"
+  ]
+}
+{
+  "array": [
+    "item1",
+    "item2"
+  ]
+}
+{
+  "array": [
+    {
+      "name": "item"
+    }
+  ],
+  "object": {
+    "array-inside": [
+      "good",
+      "better"
+    ],
+    "label": "this is an object"
+  }
+}

@@ -35,3 +35,17 @@ echo '{"trent":{"name":"Trent Mick","age":38},"kevin":{"name":"Kevin Chan"}}
 
 echo '{"trent":{"name":"Trent Mick","age":38},"kevin":{"name":"Kevin Chan"}}
 {"trent":{"email":"trent@example.com"},"kevin":true}' | $JSON --deep-merge
+
+echo ''
+echo '# array concatenation'
+echo '{"array": ["item1"]}
+{"array": ["item2"]}' | $JSON --merge
+
+echo '{"array": ["item1"]}
+{"array": []}
+{"array": "item2"}' | $JSON --merge
+
+echo '{"array": "banana"}
+{"array": []}
+{"array": {"name": "item"}, "object": {"array-inside": ["good"]}}
+{"object": {"label": "this is an object", "array-inside": ["better"]}}' | $JSON --deep-merge
