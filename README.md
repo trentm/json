@@ -114,7 +114,6 @@ referring to this module.
 
 - jq: <http://stedolan.github.io/jq/>
 - json:select: <http://jsonselect.org/>
-- jsonpipe: <https://github.com/dvxhouse/jsonpipe>
 - json-command: <https://github.com/zpoley/json-command>
 - JSONPath: <http://goessner.net/articles/JsonPath/>, <http://code.google.com/p/jsonpath/wiki/Javascript>
 - jsawk: <https://github.com/micha/jsawk>
