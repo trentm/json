@@ -2,7 +2,7 @@
 
 ## json 9.0.4 (not yet released)
 
-(nothing yet)
+- [issue #108] Fix a crash on `json foo.bar` if "foo" is null.
 
 
 ## json 9.0.3
