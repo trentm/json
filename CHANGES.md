@@ -1,5 +1,10 @@
 # json Changelog
 
+## json 9.0.5 (not yet released)
+
+(nothing yet)
+
+
 ## json 9.0.4
 
 - [issue #108] Fix a crash on `json foo.bar` if "foo" is null.
