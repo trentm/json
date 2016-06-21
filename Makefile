@@ -69,6 +69,17 @@ update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
 check-jsstyle: $(JSSTYLE_FILES)
 	./tools/jsstyle -o indent=2,doxygen,unparenthesized-return=0,blank-after-start-comment=0,leading-right-paren-ok $(JSSTYLE_FILES)
 
+
+# TODO: please review
+.PHONY: check-jshint 
+check-jshint: $(JSSTYLE_FILES)
+	# run on everything (see .jshintignore)	
+	./node_modules/jshint/bin/jshint . 
+	# or on the same files as jsstyle
+	# ./node_modules/jshint/bin/jshint $(JSSTYLE_FILES) 	
+	# or with checkstyle reported 
+	# ./node_modules/jshint/bin/jshint --reporter=checkstyle .	 
+
 .PHONY: check
 check: check-jsstyle
 	@echo "Check ok."
