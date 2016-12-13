@@ -51,7 +51,7 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
             if (version !== 'dev' && !semver.satisfies(version, cmdVerRange)) {
                 return nextVer();
             }
-
+            
             var json = (version === 'dev'
                 ? path.resolve(TOP, 'lib', 'json.js')
                 : path.resolve(JSONS, version, 'json'));
