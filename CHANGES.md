@@ -5,7 +5,12 @@
 (nothing yet)
 
 
-## json 9.0.5
+## 9.0.6
+
+- [issue #107] Fix man page installation with `npm install -g json`.
+
+
+## 9.0.5
 
 - [issue #112] Improve streaming (json -ga) performance for very long lines. For
   example, using a 35 MB JSON object on one line gave a 50x speed improvement.
@@ -14,29 +19,29 @@
   former case is expected to be much more common, and the latter may take a
   slight performance hit from this change.
 
-## json 9.0.4
+## 9.0.4
 
 - [issue #108] Fix a crash on `json foo.bar` if "foo" is null.
 
 
-## json 9.0.3
+## 9.0.3
 
 - [issue #82] Fix a race in `-I/--in-place` temp file creation.
   By https://github.com/inator
 
 
-## json 9.0.2
+## 9.0.2
 
 - [pull #72] Correct examples in docs for conditional filtering.
 
 
-## json 9.0.1
+## 9.0.1
 
 - [issue #71] Support `-o json-tab` and `-o jsony-tab` for TAB (i.e. `\t`)
   indentation of emitted JSON.
 
 
-## json 9.0.0
+## 9.0.0
 
 - [issue #52] Fix termination on EPIPE in some cases.
 
@@ -117,7 +122,7 @@
   performance improvements and semantic changes.
 
 
-## json 8.0.0
+## 8.0.0
 
 - [pull #70] Move from 'jsontool' to 'json' in the npm registry!  Thanks
   to <https://github.com/zpoley> for graciously giving up the name, and to
@@ -125,18 +130,18 @@
   stagnate at version 7.0.2.
 
 
-## json 7.0.2
+## 7.0.2
 
 - [issue #68] Fix `--keys, -k` handling in streaming mode, i.e. `json -gak`.
 
 
-## json 7.0.1
+## 7.0.1
 
 - [pull #60, issue #59] Fix not having a `json` on the PATH from
   'npm install -g jsontool'.
 
 
-## json 7.0.0
+## 7.0.0
 
 -   [issue #49] New `-C CODE` and `-E CODE` options to replace `-c CODE` and `-e
     CODE`. The new options can be **10x or more faster**. An example processing
@@ -319,7 +324,7 @@
   npm 1.3.3 work.
 
 
-## json 6.0.0
+## 6.0.0
 
 - [Backwards incompatibility, issue #55] Drop support for grouping of adjacent
   arrays (via `-g`, `--group`) **separated by no space**:
@@ -375,7 +380,7 @@
   taken in this tool.
 
 
-## json 5.1.3
+## 5.1.3
 
 - Fix an issue with option parsing that resulted in this failing:
 
@@ -383,13 +388,13 @@
 
 
 
-## json 5.1.2
+## 5.1.2
 
 - [pull #43] Add '-n' as a short alias for '--validate'. (By Bill Pijewski,
   github.com/pijewski).
 
 
-## json 5.1.1
+## 5.1.1
 
 - [issue #42] Fix an edge case where a blank line would be emitted for
   `... | json -ga -c COND` where the `COND` resulted in no matches.
@@ -397,7 +402,7 @@
   non-identifier keys.
 
 
-## json 5.1.0
+## 5.1.0
 
 - [pull #39, issue #34] `json -ga` streams. (Largely by Fred Kuo, github.com/fkuo)
   This means you can use `json` with an input stream of JSON objects. E.g.:
@@ -415,7 +420,7 @@
   a stream of arrays. Such are the typical use cases I've encountered.
 
 
-## json 5.0.0
+## 5.0.0
 
 - [**backward incompatible**, issue #35] Special case the output for **a single
   lookup AND JSON output** (i.e. `-j` or `-o json*`) to only output the value
@@ -464,13 +469,13 @@
 
 
 
-## json 4.0.1
+## 4.0.1
 
 - [issue #36] Turn off coloring for inspect output (`json -i`, `json -o
   inspect`) if stdout is not a TTY.
 
 
-## json 4.0.0
+## 4.0.0
 
 - Add `--validate` option to just validate (no processing and output)
 
@@ -531,7 +536,7 @@
   Minor change. Tabs are evil.
 
 
-## json 3.3.0
+## 3.3.0
 
 - Add `-k|--keys` option to output the input objects keys:
 
@@ -549,7 +554,7 @@
   enough now to not bother.
 
 
-## json 3.2.0
+## 3.2.0
 
 - Support negative array indeces (a la Python list indeces), e.g.:
 
@@ -557,7 +562,7 @@
         c
 
 
-## json 3.1.2
+## 3.1.2
 
 - Update man page and move bulk examples from README to man page. Use ronn (the
   ruby one) instead of ronnjs: better and more reliable formatting. Add 'make
@@ -566,12 +571,12 @@
 - [issue #31] Fix error message for `json -o`.
 
 
-## json 3.1.1
+## 3.1.1
 
 - [issue #32] Fix '-D' option processing so `json -D/` works (no space).
 
 
-## json 3.1.0
+## 3.1.0
 
 - [pull #29] Add '-D' option to set a delimiter for lookups (default is '.'),
   so that this example works:
@@ -582,7 +587,7 @@
   By Yaniv Aknin.
 
 
-## json 3.0.3
+## 3.0.3
 
 - [issue #30] Fix lookup strings with multiple double-quotes.
 - [issue #28] Don't error on a multi-level lookup where one of the components
@@ -591,17 +596,17 @@
         $ echo '{"foo": "bar"}' | json not_foo.bar
 
 
-## json 3.0.2
+## 3.0.2
 
 - [issue #27] Fix issue handling multi-level lookups (e.g. 'json foo.bar').
 
 
-## json 3.0.1
+## 3.0.1
 
 - Fix a bogus 'json' dep.
 
 
-## json 3.0.0
+## 3.0.0
 
 - Switched to json 3.x dev on master. "2.x" branch created for any
   necessary 2.x releases. See the
@@ -649,14 +654,14 @@
         uno	dos
 
 
-## json 2.2.1
+## 2.2.1
 
 - Hack workaround for issue #24 to not get a spurious "process.stdout cannot be
   closed" from current node 0.6 versions. Note: currently this guard is only
   applied for node v0.6.0..v0.6.8 inclusive.
 
 
-## json 2.2.0
+## 2.2.0
 
 - New "-e CODE" option to execute the given code on the input object; or,
   if '-a/--array' is given, then on each item in the input array. Execution
@@ -668,7 +673,7 @@
         }
 
 
-## json 2.1.0
+## 2.1.0
 
 - Improve error message when input is not JSON to include context and line
   and column position. This is implemented using a JSON parser from
@@ -681,7 +686,7 @@
         [1,,2]
 
 
-## json 2.0.3
+## 2.0.3
 
 - Auto-arrayification: Drop support for arrayifying an array adjacent to
   an object. I.e. only arrayify adjacent objects *or* adjacent arrays.
@@ -726,18 +731,18 @@
 - Fix stdout flushing in some cases.
 
 
-## json 2.0.2
+## 2.0.2
 
 - Add node v0.6 support. Drop v0.2 and v0.3 support.
 
 
-## json 2.0.1
+## 2.0.1
 
 - [issue#23] Fix output in '-a|--array' mode if one or more keys don't
   exist in one or more of the array items.
 
 
-## json 2.0.0
+## 2.0.0
 
 -   '-o | --output MODE' support. Supported modes:
 
@@ -807,13 +812,13 @@
         no false matches inside JS strings.
 
 
-## json 1.4.1
+## 1.4.1
 
 - [issue #9] Gracefully handle EPIPE (i.e. stdout being closed on json before
   it is finished writing).
 
 
-## json 1.4.0
+## 1.4.0
 
 - [issue #19] Allow multiple lookup arguments:
 
@@ -825,25 +830,25 @@
   `jsontool.processDatum` and `jsontool.processDatumExperimental`.
 
 
-## json 1.3.4
+## 1.3.4
 
 - [issue #18] Fix `json --version` for standalone mode again (was broken in json 1.3.3).
 
 
-## json 1.3.3
+## 1.3.3
 
 - WARNING: `json --version` is broken when running outside the source (or npm
   install'd) tree. I.e. this is a bad release for standalone.
 - [issue #17] Ensure stdout is flushed on exit.
 
 
-## json 1.3.2
+## 1.3.2
 
 - [issue #16] Fix to use `<regex object>.exec` instead of using the regex
   object as a function -- no longer allowed in the v8 used in node v0.5.x.
 
 
-## json 1.3.1
+## 1.3.1
 
 - Make "jsontool" require'able as a module. For example, you can now:
 
@@ -869,7 +874,7 @@
         alias json='.../json/lib/jsontool.js'
 
 
-## json 1.3.0
+## 1.3.0
 
 - package.json and publish to npm as "jsontool" ("json" name is taken)
 - Add experimental support for '*' in the lookup. This will extract all
@@ -904,28 +909,28 @@
 - Add '-x|--experimental' option to turn on incomplete/experimental features.
 
 
-## json 1.2.1
+## 1.2.1
 
 - [issue #12] Fix handling of output when result of lookup is `undefined`.
 
 
-## json 1.2.0
+## 1.2.0
 
 - [issue #10] Fix for node v0.5.
 
 
-## json 1.1.9
+## 1.1.9
 
 - [Issue 8] Don't emit a newline for empty output.
 
 
-## json 1.1.8
+## 1.1.8
 
 - [Issue 7] Handle "HTTP/1.1 100 Continue" leading header block.
 - [Issue 4] Add a man page (using ronnjs).
 
 
-## json 1.1.7
+## 1.1.7
 
 - [Issue 5] Fix getting a key with a period. E.g.:
 
@@ -938,12 +943,12 @@
         42
 
 
-## json 1.1.6
+## 1.1.6
 
 - [Issue 6] Error exit value if invalid JSON.
 
 
-## json 1.1.4
+## 1.1.4
 
 - [Issue 2] Fix bracket notation: `echo '{"foo-bar": "baz"}' | json '["foo-bar"]'`
 

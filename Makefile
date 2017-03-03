@@ -113,7 +113,7 @@ check-jsstyle: $(JSSTYLE_FILES)
 .PHONY: check-version
 check-version:
 	@echo version is: $(shell cat package.json | lib/json.js version)
-	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -2 | tail -1 | awk '{print $$3}'` ]]
+	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -2 | tail -1 | awk '{print $$2}'` ]]
 	[[ `cat package.json | lib/json.js version` == `grep '^var VERSION' lib/json.js | awk -F"'" '{print $$2}'` ]]
 
 .PHONY: check
