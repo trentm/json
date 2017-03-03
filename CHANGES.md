@@ -1,6 +1,6 @@
 # json Changelog
 
-## json 9.0.6 (not yet released)
+## not yet released
 
 (nothing yet)
 

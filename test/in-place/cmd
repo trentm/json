@@ -20,9 +20,15 @@ echo '# http header block'
 $JSON -I -f http-header-block.json
 cat http-header-block.json
 
+# Node 0.10 and below look like this:
+#   json: error: Error: ENOENT, no such file or directory 'does-not-exist.json'
+# Node 0.12 and above like this:
+#   json: error: Error: ENOENT: no such file or directory, open 'does-not-exist.json'
+# IOW, node's `message` on a open syscall error changed format. We will
+# normalize to the newer output form.
 echo '# does not exist' >&2
 echo '# does not exist'
-$JSON -I -f does-not-exist.json
+$JSON -I -f does-not-exist.json 2> >(sed -e 's/ENOENT, no such file or directory/ENOENT: no such file or directory, open/' >&2)
 
 echo '# multiple files' >&2
 echo '# multiple files'
@@ -37,4 +43,3 @@ echo '# -c' >&2
 echo '# -c'
 $JSON -I -f users.json -c 'this.age < 30'
 cat users.json
-

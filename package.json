@@ -1,7 +1,7 @@
 {
   "name": "json",
   "description": "a 'json' command for massaging and processing JSON on the command line",
-  "version": "9.0.6",
+  "version": "9.0.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/trentm/json.git"
@@ -15,7 +15,9 @@
   "scripts": {
     "test": "make test"
   },
-  "engines": ["node >=0.6.0"],
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "keywords": ["json", "jsontool", "filter", "command", "shell"],
   "devDependencies": {
     "uglify-js": "1.1.x",

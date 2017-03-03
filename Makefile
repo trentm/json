@@ -4,6 +4,8 @@
 #
 
 JSSTYLE_FILES := $(shell find lib test -name "*.js")
+NODEUNIT=./node_modules/nodeunit/bin/nodeunit
+NODEOPT ?= $(HOME)/opt
 
 
 #
@@ -19,13 +21,6 @@ node_modules/.bin/uglifyjs:
 deps/JSON-js/json_parse.js:
 	git submodule update --init
 
-
-# Ensure json.js and package.json have the same version.
-.PHONY: versioncheck
-versioncheck:
-	@echo version is: $(shell cat package.json | lib/json.js version)
-	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -1 | awk '{print $$3}'` ]]
-	[[ `cat package.json | lib/json.js version` == `grep '^var VERSION' lib/json.js | awk -F"'" '{print $$2}'` ]]
 
 .PHONY: docs
 docs:
@@ -47,15 +42,60 @@ publish:
 		&& git commit -a -m "publish latest docs" \
 		&& git push origin gh-pages || true)
 
-.PHONY: test testall
-test: node_modules/.bin/nodeunit
-	(cd test && make test)
-testall: node_modules/.bin/nodeunit
-	(cd test && make testall)
+.PHONY: test
+test: | node_modules/.bin/nodeunit
+	$(NODEUNIT) test/test.js
+
+# Test will all supported node versions (presumes install locations I use on my
+# machine).
+.PHONY: testall
+testall: test7 test6 test012 test010 test4
+
+.PHONY: test7
+test7:
+	@echo "# Test node 7.x (with node `$(NODEOPT)/node-7/bin/node --version`)"
+	@$(NODEOPT)/node-7/bin/node --version | grep '^v7\.'
+	PATH="$(NODEOPT)/node-7/bin:$(PATH)" make test
+.PHONY: test6
+test6:
+	@echo "# Test node 6.x (with node `$(NODEOPT)/node-6/bin/node --version`)"
+	@$(NODEOPT)/node-6/bin/node --version | grep '^v6\.'
+	PATH="$(NODEOPT)/node-6/bin:$(PATH)" make test
+.PHONY: test4
+test4:
+	@echo "# Test node 4.x (with node `$(NODEOPT)/node-4/bin/node --version`)"
+	@$(NODEOPT)/node-4/bin/node --version | grep '^v4\.'
+	PATH="$(NODEOPT)/node-4/bin:$(PATH)" make test
+.PHONY: test012
+test012:
+	@echo "# Test node 0.12.x (with node `$(NODEOPT)/node-0.12/bin/node --version`)"
+	@$(NODEOPT)/node-0.12/bin/node --version | grep '^v0\.12\.'
+	PATH="$(NODEOPT)/node-0.12/bin:$(PATH)" make test
+.PHONY: test010
+test010:
+	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"
+	@$(NODEOPT)/node-0.10/bin/node --version | grep '^v0\.10\.'
+	PATH="$(NODEOPT)/node-0.10/bin:$(PATH)" make test
 
 .PHONY: cutarelease
-cutarelease: versioncheck
-	./tools/cutarelease.py -f package.json -f lib/json.js
+cutarelease: check-version
+	[[ -z `git status --short` ]]  # If this fails, the working dir is dirty.
+	@which json 2>/dev/null 1>/dev/null && \
+	    ver=$(shell json -f package.json version) && \
+	    name=$(shell json -f package.json name) && \
+	    publishedVer=$(shell npm view -j $(shell json -f package.json name)@$(shell json -f package.json version) version 2>/dev/null) && \
+	    if [[ -n "$$publishedVer" ]]; then \
+		echo "error: $$name@$$ver is already published to npm"; \
+		exit 1; \
+	    fi && \
+	    echo "** Are you sure you want to tag and publish $$name@$$ver to npm?" && \
+	    echo "** Enter to continue, Ctrl+C to abort." && \
+	    read
+	ver=$(shell cat package.json | json version) && \
+	    date=$(shell date -u "+%Y-%m-%d") && \
+	    git tag -a "$$ver" -m "version $$ver ($$date)" && \
+	    git push --tags origin && \
+	    npm publish
 
 # Update the embedded minified "function json_parse" in lib/json.js.
 .PHONY: update_json_parse
@@ -69,8 +109,15 @@ update_json_parse: deps/JSON-js/json_parse.js node_modules/.bin/uglifyjs
 check-jsstyle: $(JSSTYLE_FILES)
 	./tools/jsstyle -o indent=2,doxygen,unparenthesized-return=0,blank-after-start-comment=0,leading-right-paren-ok $(JSSTYLE_FILES)
 
+# Ensure json.js and package.json have the same version.
+.PHONY: check-version
+check-version:
+	@echo version is: $(shell cat package.json | lib/json.js version)
+	[[ `cat package.json | lib/json.js version` == `grep '^## ' CHANGES.md | head -2 | tail -1 | awk '{print $$3}'` ]]
+	[[ `cat package.json | lib/json.js version` == `grep '^var VERSION' lib/json.js | awk -F"'" '{print $$2}'` ]]
+
 .PHONY: check
-check: check-jsstyle
+check: check-jsstyle check-version
 	@echo "Check ok."
 
 .PHONY: prepush
