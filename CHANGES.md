@@ -1,9 +1,18 @@
 # json Changelog
 
-## json 9.0.5 (not yet released)
+## json 9.0.6 (not yet released)
 
 (nothing yet)
 
+
+## json 9.0.5
+
+- [issue #112] Improve streaming (json -ga) performance for very long lines. For
+  example, using a 35 MB JSON object on one line gave a 50x speed improvement.
+  However, this is restricted to streaming of newline-separated JSON as opposed
+  to adjacent JSON objects not separated by newlines ({"a":1}{"a":2}). The
+  former case is expected to be much more common, and the latter may take a
+  slight performance hit from this change.
 
 ## json 9.0.4
 
