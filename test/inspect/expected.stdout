@@ -1,0 +1,8 @@
+{ '$schema': 'http://json-schema.org/draft-03/schema#',
+  type: 'object',
+  properties: 
+   { firstName: { type: 'string' },
+     lastName: { type: 'string' },
+     companyName: { type: 'string' },
+     common1: { type: 'string', required: true },
+     common2: { type: 'string' } } }
