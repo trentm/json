@@ -119,3 +119,4 @@ referring to this module.
 - jsawk: <https://github.com/micha/jsawk>
 - jshon: <http://kmkeen.com/jshon/>
 - json2: <https://github.com/vi/json2>
+- fx: <https://github.com/antonmedv/fx>
