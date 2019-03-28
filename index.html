@@ -557,7 +557,13 @@ json: error: lookups cannot be specified with in-place editing (-I/--in-place), 
 <pre><code>$ json -I -f *.json    # if there is more than one match to the glob
 json: error: lookups cannot be specified with in-place editing (-I/--in-place), too easy to lose content
 </code></pre>
+    
+<p>For multiple files, use exec:</p>
+    
+<pre><code>$ find /path/to/directory -name "*.json" -type f -exec json -I -f {} \;</code></pre>
 
+<p>Check <a href="http://man7.org/linux/man-pages/man1/find.1.html">find man page</a> for more usages.</p>
+    
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
