@@ -2,3 +2,4 @@
 /node_modules
 /test/stream/stream.log
 /test/in-place/*.json
+/package-lock.json

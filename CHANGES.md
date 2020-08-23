@@ -5,6 +5,11 @@
 (nothing yet)
 
 
+## 10.0.0
+
+- **Backward incompatible change to parsing "lookup" strings.**
+  XXX
+
 ## 9.0.6
 
 - [issue #107] Fix man page installation with `npm install -g json`.
