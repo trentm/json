@@ -5,6 +5,51 @@
 (nothing yet)
 
 
+## 10.0.0
+
+- **Backward incompatible** and **security-related** change to parsing "lookup" strings.
+
+  This version restricts the supported syntax for bracketed ["lookup"
+  strings](https://trentm.com/json/#FEATURE-Lookups) to fix a possible
+  vulnerability (CVE-2020-7712). With a carefully crafted lookup string,
+  command injection was possible. See
+  [#144](https://github.com/trentm/json/issues/144) for a repro. If you use
+  `json` (the CLI or as a node.js module) and run arbitrary user-provided
+  strings as a "lookup", then you should upgrade.
+
+  For the `json` CLI, a "lookup" string is the 'foo' in:
+
+        echo ...some json... | json foo
+
+  which allows you to lookup fields on the given JSON, e.g.:
+
+        $ echo '{"foo": {"bar": "baz"}}' | json foo.bar
+        baz
+
+  If one of the lookup fields isn't a valid JS identifier, then the JS array
+  notation is supported:
+
+        $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
+        my-value
+
+  Before this change, `json` would effectively *exec* the string between the
+  brackets as JS code such that things like the following were possible:
+
+        $ echo '{"foo3": "bar"}' | json '["foo" + 3]'
+        bar
+
+  This change limits supported bracket syntax in lookups to a simple quoted
+  string:
+
+        ["..."]
+        ['...']
+        [`...`]      # no variable interpolation
+
+   Otherwise generating an error of the form:
+
+        json: error: invalid bracketed lookup string: "[\"foo\" + 3]" (must be of the form ['...'], ["..."], or [`...`])
+
+
 ## 9.0.6
 
 - [issue #107] Fix man page installation with `npm install -g json`.

@@ -1,0 +1,9 @@
+# Test the json v10 change to limit the allowe bracketed lookup syntax.
+JSON=../../lib/json.js
+
+echo '{"foo42":"bar"}' | $JSON foo42
+
+echo '{"foo42":"bar"}' | $JSON '["foo42"]'
+
+# This one used to work in json <v10. No longer.
+echo '{"foo42":"bar"}' | $JSON '["foo" + 42]'
