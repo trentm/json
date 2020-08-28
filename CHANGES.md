@@ -9,15 +9,15 @@
 
 - **Backward incompatible** and **security-related** change to parsing "lookup" strings.
 
-  This version restricts the supported syntax for bracketed
-  ["lookup" strings](https://trentm.com/json/#FEATURE-Lookups)
-  to fix a possible vulnerability (CVE-2020-7712). With a carefully
-  crafted lookup string, command injection was possible. See
-  [#144](https://github.com/trentm/json/issues/144) for a repro. If you
-  used `json` (CLI or as a node.js module) and run arbitrary user-provided
+  This version restricts the supported syntax for bracketed ["lookup"
+  strings](https://trentm.com/json/#FEATURE-Lookups) to fix a possible
+  vulnerability (CVE-2020-7712). With a carefully crafted lookup string,
+  command injection was possible. See
+  [#144](https://github.com/trentm/json/issues/144) for a repro. If you use
+  `json` (the CLI or as a node.js module) and run arbitrary user-provided
   strings as a "lookup", then you should upgrade.
 
-  For the `json` tool, a "lookup" string is the 'foo' in:
+  For the `json` CLI, a "lookup" string is the 'foo' in:
 
         echo ...some json... | json foo
 
@@ -26,8 +26,8 @@
         $ echo '{"foo": {"bar": "baz"}}' | json foo.bar
         baz
 
-  If one of the lookup fields isn't a valid JS identifier, then the JS
-  array notation is supported:
+  If one of the lookup fields isn't a valid JS identifier, then the JS array
+  notation is supported:
 
         $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
         my-value
@@ -38,8 +38,8 @@
         $ echo '{"foo3": "bar"}' | json '["foo" + 3]'
         bar
 
-  This change limits supported bracket syntax in lookups to a simple
-  quoted string:
+  This change limits supported bracket syntax in lookups to a simple quoted
+  string:
 
         ["..."]
         ['...']
