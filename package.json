@@ -28,11 +28,11 @@
     "shell"
   ],
   "devDependencies": {
-    "uglify-js": "1.1.x",
-    "nodeunit": "0.8.x",
     "ansidiff": "1.0",
-    "ben": "0.0.x",
     "async": "0.1.22",
-    "semver": "1.1.0"
+    "ben": "0.0.x",
+    "nodeunit": "0.8.x",
+    "semver": "^6.3.0",
+    "uglify-js": "1.1.x"
   }
 }

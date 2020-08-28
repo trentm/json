@@ -24,10 +24,9 @@ versions.push('dev');
 versions.reverse();
 
 var nodes = [
-    //'node11',
-    'node10',
-    'node8',
-    'node6'
+    '~/.nvm/versions/node/v14.3.0/bin/node',
+    '~/.nvm/versions/node/v12.16.3/bin/node',
+    '~/.nvm/versions/node/v10.20.1/bin/node'
 ];
 
 var cmds = [
@@ -73,9 +72,8 @@ async.forEachSeries(cmds, function (cmdInfo, nextCmd) {
                 });
             }
             ben.async(runCmd, function (ms) {
-                var space = (version === 'dev' ? '  ' : ''); // HACK
-                console.log('- %s, json %s%s: %dms per iteration%s', node,
-                    space, version, ms, (fail ? ' (fail)' : ''));
+                console.log('- %s, json %s: %dms per iteration%s', node,
+                    version, ms, (fail ? ' (fail)' : ''));
                 nextVer();
             });
         }, nextNode);
