@@ -25,7 +25,7 @@ assert.ok(endIdx !== -1);
 
 var uglifyjs = path.resolve(__dirname, "../node_modules/.bin/uglifyjs");
 var jsonParseJs = path.resolve(__dirname, "../deps/JSON-js/json_parse.js");
-execFile(process.execPath, [uglifyjs, "-nc", jsonParseJs],
+execFile(process.execPath, [uglifyjs, jsonParseJs],
   function (error, minified, stderr) {
     assert.ok(!error, error);
     var bits = [

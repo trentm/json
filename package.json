@@ -29,10 +29,10 @@
   ],
   "devDependencies": {
     "ansidiff": "1.0",
-    "async": "0.1.22",
+    "async": "^3.2.0",
     "ben": "0.0.x",
-    "nodeunit": "0.8.x",
-    "semver": "^6.3.0",
-    "uglify-js": "1.1.x"
+    "nodeunit": "^0.11.3",
+    "semver": "^7.3.2",
+    "uglify-js": "^3.10.2"
   }
 }
