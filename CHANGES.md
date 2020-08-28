@@ -47,7 +47,7 @@
 
    Otherwise generating an error of the form:
 
-        Error: invalid bracketed lookup string: "[\"foo\" + 3]" (must be of the form ['...'], ["..."], or [`...`])
+        json: error: invalid bracketed lookup string: "[\"foo\" + 3]" (must be of the form ['...'], ["..."], or [`...`])
 
 
 ## 9.0.6
