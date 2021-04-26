@@ -1,0 +1,23 @@
+JSON=../../lib/json.js
+
+echo "# simple -d DELIM"
+echo '{"name":"trent", "age":38}' | $JSON -a name age
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d' '
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d,
+
+echo "# -d DELIM with escapes"
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\t'
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\n'
+echo '{"title":"Monsters, Inc.","year":"2001"}' \
+    | json -a title year -d'\u0000' \
+    | xargs -0 && echo "eof"
+
+echo "# -d DELIM edge cases"
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d'"'
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d'""' # had a bug in this at one point
+
+echo "# unsupported JavaScript-only escapes in -d DELIM" >&2
+echo '{"title":"Monsters, Inc.","year":"2001"}' \
+    | $JSON -a title year -d'\0' \
+    | xargs -0 node -e 'console.log(process.argv)'
+echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\x2c'

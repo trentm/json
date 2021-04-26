@@ -30,11 +30,11 @@ Features:
 - natural syntax (like JS code) for extracting particular values
 - get details on JSON syntax errors (handy for config files)
 - filter input JSON (see `-e` and `-c` options)
-- fast stream processing
+- fast stream processing (see `-ga`)
 - JSON validation
 - in-place file editing
 
-See <http://trentm.com/json> for full docs and examples as a man page.
+See <https://trentm.com/json> for full docs and examples as a man page.
 
 Follow <a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
 for updates to json.

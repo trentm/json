@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "JSON" "1" "August 2014" "" "json tool manual"
+.TH "JSON" "1" "April 2021" "" "json tool manual"
 .
 .SH "NAME"
 \fBjson\fR \- JSON love for your command line
@@ -766,7 +766,7 @@ Process input as an array of separate inputs and output in tabular form\.
 .
 .TP
 \fB\-d DELIM\fR
-Delimiter character for tabular output (default is \' \')\.
+Delimiter character for tabular output (default is \' \')\. This supports JSON escapes \fIhttps://tools\.ietf\.org/html/rfc7159#section\-7\fR, e\.g\.: \'\et\' for tab or \'\eu0000\' for the null byte\.
 .
 .TP
 \fB\-A\fR
@@ -1148,4 +1148,4 @@ This project lives at \fIhttps://github\.com/trentm/json\fR\. Please report bugs
 MIT License (see \fIhttps://github\.com/trentm/json/blob/master/LICENSE\.txt\fR)
 .
 .SH "COPYRIGHT"
-json is Copyright (c) 2014 Trent Mick and Copyright (c) 2014 Joyent Inc\. All rights reserved\.
+json is Copyright 2021 Trent Mick and Copyright 2020 Joyent Inc\.

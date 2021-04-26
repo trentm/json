@@ -1,0 +1,14 @@
+# simple -d DELIM
+trent 38
+trent 38
+trent,38
+# -d DELIM with escapes
+trent	38
+trent
+38
+Monsters, Inc. 2001
+
+eof
+# -d DELIM edge cases
+trent"38
+trent""38

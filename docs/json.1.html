@@ -613,7 +613,9 @@ output:</p>
 
 <dl>
 <dt><code>-a</code>, <code>--array</code></dt><dd><p>Process input as an array of separate inputs and output in tabular form.</p></dd>
-<dt><code>-d DELIM</code></dt><dd><p>Delimiter character for tabular output (default is ' ').</p></dd>
+<dt><code>-d DELIM</code></dt><dd><p>Delimiter character for tabular output (default is ' '). This supports
+<a href="https://tools.ietf.org/html/rfc7159#section-7">JSON escapes</a>, e.g.:
+'\t' for tab or '\u0000' for the null byte.</p></dd>
 <dt class="flush"><code>-A</code></dt><dd><p>Process input as a single object, i.e. stop <code>-e</code> and <code>-c</code> automatically
 processing each item of an input array.</p></dd>
 </dl>
@@ -911,13 +913,12 @@ to <a href="https://github.com/trentm/json/issues" data-bare-link="true">https:/
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>json is Copyright (c) 2014 Trent Mick and Copyright (c) 2014 Joyent Inc.
-All rights reserved.</p>
+<p>json is Copyright 2021 Trent Mick and Copyright 2020 Joyent Inc.</p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>August 2014</li>
+    <li class='tc'>April 2021</li>
     <li class='tr'>json(1)</li>
   </ol>
 

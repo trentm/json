@@ -2,7 +2,51 @@
 
 ## not yet released
 
-(nothing yet)
+- **Backward incompatible** and **security-related** change to parsing the
+  `-d DELIM` option. ([#148](https://github.com/trentm/json/issues/148))
+
+  The `-d DELIM` option allows specifying the field delimiter in output:
+
+        % echo '{"name":"trent","age":38}' | json -a name age
+        trent 38
+        % echo '{"name":"trent","age":38}' | json -a name age -d,
+        trent,38
+
+  The given "DELIM" string is parsed to allow escapes. For example:
+
+        % echo '{"name":"trent","age":38}' | json -a name age -d'\t'
+        trent	38
+        % echo '{"name":"trent","age":38}' | json -a name age -d'\n'
+        trent
+        38
+
+  Before this change, that parsing used `eval()`, which allowed for unintended
+  code execution if an untrusted argument to `-d` was provided. The fix for
+  this vulnerability changes to use `JSON.parse()` to support escapes. However
+  that results in a backward incompatible change, because the set
+  [JSON escapes](https://tools.ietf.org/html/rfc7159#section-7) is a subset of
+  [JavaScript escapes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#escape_notation).
+
+  The only escape I expect that would affect any current user would be the
+  null byte escape (`\0`) which can be useful for processing values that may
+  have spaces or other likely delimiter characters. For example:
+
+        # BEFORE
+        % echo '{"title":"Monsters, Inc.","year":"2001"}' \
+          | json -a title year -d'\0' \
+          | xargs -0 node -e 'console.log(process.argv)'
+        [ 'node', 'Monsters, Inc.', '2001\n' ]
+
+        # AFTER
+        % echo '{"title":"Monsters, Inc.","year":"2001"}' | json -a title year -d'\0'
+        json: error: Unexpected number in JSON at position 2
+
+  One must now use the JSON unicode escape syntax, '\u0000':
+
+        % echo '{"title":"Monsters, Inc.","year":"2001"}' \
+          | json -a title year -d'\u0000' \
+          | xargs -0 node -e 'console.log(process.argv)'
+        [ 'node', 'Monsters, Inc.', '2001\n' ]
 
 
 ## 10.0.0

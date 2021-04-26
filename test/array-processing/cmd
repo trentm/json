@@ -18,7 +18,7 @@ echo '{"name":"Trent","id":12,"email":"trent@example.com"}' | $JSON -a name emai
 echo ""
 echo '[{"name":"Trent","id":12,"email":"trent@example.com"},
        {"name":"Mark","id":13,"email":"mark@example.com"}]' \
-  | $JSON -d, -a name email     # TODO: how to spec '\0' as delim (a la -print0)?
+  | $JSON -d, -a name email
 
 # Delims (issue #26)
 echo ''
@@ -29,7 +29,7 @@ echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age 
 echo '# newline'
 echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\n'
 echo '# nul to xargs'
-echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\0' | xargs -0 && echo 'end-of-xargs-output'
+echo '[{"name":"trent","age":38},{"name":"ewan", "age":4}]' | $JSON -a name age -d '\u0000' | xargs -0 && echo 'end-of-xargs-output'
 
 echo ""
 echo '[{"foo": "bar"}, {"foo": "baz"}]' | $JSON -a

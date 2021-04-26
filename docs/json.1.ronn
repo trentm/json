@@ -499,7 +499,9 @@ output:
     Process input as an array of separate inputs and output in tabular form.
 
   * `-d DELIM`:
-    Delimiter character for tabular output (default is ' ').
+    Delimiter character for tabular output (default is ' '). This supports
+    [JSON escapes](https://tools.ietf.org/html/rfc7159#section-7), e.g.:
+    '\t' for tab or '\u0000' for the null byte.
 
   * `-A`:
     Process input as a single object, i.e. stop `-e` and `-c` automatically
@@ -786,5 +788,4 @@ MIT License (see <https://github.com/trentm/json/blob/master/LICENSE.txt>)
 
 ## COPYRIGHT
 
-json is Copyright (c) 2014 Trent Mick and Copyright (c) 2014 Joyent Inc.
-All rights reserved.
+json is Copyright 2021 Trent Mick and Copyright 2020 Joyent Inc.
