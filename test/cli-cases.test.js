@@ -7,7 +7,6 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 
-var ansidiff = require('ansidiff');
 var tap = require('tap');
 
 tap.jobs = os.cpus().length;
