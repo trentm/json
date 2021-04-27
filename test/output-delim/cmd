@@ -9,7 +9,7 @@ echo "# -d DELIM with escapes"
 echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\t'
 echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\n'
 echo '{"title":"Monsters, Inc.","year":"2001"}' \
-    | json -a title year -d'\u0000' \
+    | $JSON -a title year -d'\u0000' \
     | xargs -0 && echo "eof"
 
 echo "# -d DELIM edge cases"
