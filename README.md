@@ -42,7 +42,7 @@ for updates to json.
 
 # Installation
 
-1. Get [node](http://nodejs.org).
+1. Get [node](https://nodejs.org).
 
 2. `npm install -g json`
 
@@ -112,11 +112,11 @@ referring to this module.
 
 # Alternatives you might prefer
 
-- jq: <http://stedolan.github.io/jq/>
-- json:select: <http://jsonselect.org/>
+- jq: <https://stedolan.github.io/jq/>
+- json:select: <https://jsonselect.org/>
 - json-command: <https://github.com/zpoley/json-command>
-- JSONPath: <http://goessner.net/articles/JsonPath/>, <http://code.google.com/p/jsonpath/wiki/Javascript>
+- JSONPath: <https://goessner.net/articles/JsonPath/>, <https://code.google.com/p/jsonpath/wiki/Javascript>
 - jsawk: <https://github.com/micha/jsawk>
-- jshon: <http://kmkeen.com/jshon/>
+- jshon: <https://kmkeen.com/jshon/>
 - json2: <https://github.com/vi/json2>
 - fx: <https://github.com/antonmedv/fx>

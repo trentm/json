@@ -77,7 +77,7 @@
   If one of the lookup fields isn't a valid JS identifier, then the JS array
   notation is supported:
 
-        $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
+        $ echo '{"https://example.com": "my-value"}' | json '["https://example.com"]'
         my-value
 
   Before this change, `json` would effectively *exec* the string between the
@@ -660,7 +660,7 @@
 - Update man page and move bulk examples from README to man page. Use ronn (the
   ruby one) instead of ronnjs: better and more reliable formatting. Add 'make
   docs' and 'make publish' (the latter to push to GH pages at
-  <http://trentm.com/json>).
+  <https://trentm.com/json>).
 - [issue #31] Fix error message for `json -o`.
 
 

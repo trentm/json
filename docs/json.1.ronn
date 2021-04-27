@@ -310,19 +310,19 @@ If your lookup isn't a number or [a JS
 indentifier](https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Variables)
 you can always use **JavaScript array-style lookups** like this:
 
-    $ echo '{"http://example.com": "my-value"}' | json '["http://example.com"]'
+    $ echo '{"https://example.com": "my-value"}' | json '["https://example.com"]'
     my-value
 
 just like you would in JavaScript:
 
     $ node
-    > var d = {"http://example.com": "my-value"}
-    > d["http://example.com"]
+    > var d = {"https://example.com": "my-value"}
+    > d["https://example.com"]
     'my-value'
 
 Or it might be easier to set **an alternate lookup delimiter**:
 
-    $ echo '{"http://example.com": "my-value"}' | json -D, http://example.com
+    $ echo '{"https://example.com": "my-value"}' | json -D, https://example.com
     my-value
 
     $ echo '{"etc": {"resolv.conf":1, "passwd":2}}' | json -D/ etc/resolv.conf
@@ -381,7 +381,7 @@ without changing the mode. This can be use to make the above shorter:
     {"first":"Ewan","last":"Mick"} 4
 
 You can get colored (non-JSON) output using node.js's
-[`util.inspect`](http://nodejs.org/docs/latest/api/all.html#util.inspect):
+[`util.inspect`](https://nodejs.org/docs/latest/api/all.html#util_util_inspect_object_options):
 
     $ echo '[{"name": "Trent"},{"name": "Ewan"}]' | json -o inspect
     [ { name: 'Trent' },
@@ -578,12 +578,12 @@ Other output formats are supported:
 
 A typical JSON REST API response:
 
-    $ curl -s http://ifconfig.me/all.json
+    $ curl -s https://ifconfig.me/all.json
     {"connection":"","ip_addr":"216.57.203.67","lang":"","remote_host":...
 
 **Nice output by default**:
 
-    $ curl -s http://ifconfig.me/all.json | json
+    $ curl -s https://ifconfig.me/all.json | json
     {
       "connection": "",
       "ip_addr": "201.73.103.12",
@@ -601,7 +601,7 @@ A typical JSON REST API response:
 
 Say you just want to **extract one value**:
 
-    $ curl -s http://ifconfig.me/all.json | json ip_addr
+    $ curl -s https://ifconfig.me/all.json | json ip_addr
     201.73.103.12
 
 Or, looking at the [node.js project](https://github.com/joyent/node) using
@@ -613,27 +613,25 @@ the Github API:
 If you use `curl -i` to get HTTP headers (because perhaps they contain
 relevant information), **json will skip the HTTP headers automatically**:
 
-    $ curl -is https://api.github.com/repos/joyent/node | json
-    HTTP/1.1 200 OK
-    Server: nginx/1.0.13
-    Date: Tue, 24 Jul 2012 04:01:08 GMT
-    Content-Type: application/json; charset=utf-8
-    Connection: keep-alive
-    Status: 200 OK
-    ETag: "1a21d980a01768dde42145ce2b58694c"
-    X-RateLimit-Remaining: 4997
-    Content-Length: 1513
-    Cache-Control: public, max-age=60
-    Vary: Accept
-    X-RateLimit-Limit: 5000
-    Last-Modified: Tue, 24 Jul 2012 03:50:11 GMT
+    % curl -is https://api.github.com/repos/nodejs/node | json | head -40
+    HTTP/2 200
+    server: GitHub.com
+    date: Tue, 27 Apr 2021 02:37:35 GMT
+    content-type: application/json; charset=utf-8
+    cache-control: public, max-age=60, s-maxage=60
+    ...
+    x-ratelimit-reset: 1619493612
+    x-ratelimit-used: 4
+    accept-ranges: bytes
+    content-length: 6190
+    x-github-request-id: FE79:0336:F4D0EA:34E46F6:608778EF
 
     {
-      "master_branch": "master",
-      "has_issues": true,
-      "has_downloads": false,
-      "homepage": "http://nodejs.org/",
-      "html_url": "https://github.com/joyent/node",
+      "id": 27193779,
+      "node_id": "MDEwOlJlcG9zaXRvcnkyNzE5Mzc3OQ==",
+      "name": "node",
+      "full_name": "nodejs/node",
+      "private": false,
     ...
 
 Or, say you are stuck with the headers in your pipeline, **'json -H' will
@@ -662,62 +660,50 @@ allows a special case for an integer lookup:
 
 `json` includes the `-a` (aka `--array`) option for **processing each element of
 an input JSON array independently** and **using tabular output**. Let's first
-get a list of open node.js issues (note that this is a subset because of
-[GH API pagination](http://developer.github.com/v3/#pagination)):
+get a list (the first N) open node.js issues:
 
-    $ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&per_page=100
+    % curl -s https://api.github.com/repos/nodejs/node/issues?state=open\&per_page=100
     [
       {
-        "number": 3757,
-        "html_url": "https://github.com/joyent/node/issues/3757",
-        "body": "Fix #3756.\n\nReview, please: @TooTallNate",
-        "milestone": null,
-        "user": {
-          "gravatar_id": "73a2b24daecb976af81e010b7a3ce3c6",
-          "login": "isaacs",
-          "avatar_url": "https://secure.gravatar.com/avatar/73a2b24dae...
+        "url": "https://api.github.com/repos/nodejs/node/issues/38427",
+        "repository_url": "https://api.github.com/repos/nodejs/node",
+        "labels_url": "https://api.github.com/repos/nodejs/node/issues/38427/labels{/name}",
+        "comments_url": "https://api.github.com/repos/nodejs/node/issues/38427/comments",
+        "events_url": "https://api.github.com/repos/nodejs/node/issues/38427/events",
+        "html_url": "https://github.com/nodejs/node/issues/38427",
+        "id": 868380510,
+        "node_id": "MDU6SXNzdWU4NjgzODA1MTA=",
     ...
 
 We can then print a table with just some fields as follows:
 
-    $ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&per_page=100 \
+    % curl -s https://api.github.com/repos/nodejs/node/issues?state=open\&per_page=100 \
         | json -a comments number title
-    0 3757 readline: Remove event listeners on close
-    0 3756 readline: No way to completely unhook interface from input/output
-    1 3755 node-v0.6.20 hello example segfaults on RaspberryPi (w/Arch + bash)
-    0 3753 Prohibit same listeners in EventEmitter. Closes #964.
-    1 3752 Auto-detect hardfloat eabi and armv7 variables on ARM based on compiler
-    3 3751 persistent REPL history
-    0 3749 glibc errors on SheevaPlug / Debian Squeeze
+    0 38427 Cannot call `session.setLocalWindowSize(number)` before session connects
+    0 38426 Increase HTTP/2 window size
+    2 38425 crypto: fix Hash and Cipher abort on end
+    0 38424 doc: update node-api support matrix
+    1 38423 deps: patch V8 to 9.0.257.24
+    0 38422 doc: indicate that abort tests do not generate core files
+    4 38421 fs: fix validation of negative offset to avoid abort
     ...
 
 Ultimately this can be useful for then using other command-line tools. For
-example, we could get the list of top-five most commented open node issues:
+example, we could get the list of top-five most commented open node issues
+(of this subset of 100):
 
-    $ curl -s https://api.github.com/repos/joyent/node/issues?state=open\&per_page=100 \
-        | json -a comments number title | sort -n  | tail -5
-    9 3510 Automatically `.toString()` functions in REPL.
-    11 3668 JSON documentation index listing
-    12 3624 Add a return value to Buffer.write* methods that returns the ...
-    12 3655 defer dgram listening event
-    14 3613 Connections closed by node stay permanently in FIN_WAIT2
-
-Or get a breakdown by ISO language code of the recent tweets mentioning "nodejs":
-
-    $ curl -s http://search.twitter.com/search.json?q=nodejs\&rpp=100 \
-        | json results | json -a iso_language_code | sort | uniq -c | sort
-       1 es
-       1 no
-       1 th
-       4 ru
-      12 ja
-      23 pt
-      58 en
+    % curl -s https://api.github.com/repos/nodejs/node/issues?state=open\&per_page=100 \
+        | json -a comments number title | sort -n | tail -5
+    14 38273 deps: update V8 to 9.1
+    14 38339 with node16 I see performance of async/await is worse than node 12
+    16 38328 events: use nullish coalencing operator
+    19 38155 Assertion `(env_->execution_async_id()) == (0)' failed
+    29 38184 switch from c-ares to getdns
 
 The **`-d` option can be used to specify a delimiter**:
 
-    $ curl -s https://api.github.com/repos/joyent/node/issues?state=open \
-            | json -a created_at number title -d,
+    % curl -s https://api.github.com/repos/nodejs/node/issues?state=open \
+        | json -a created_at number title -d,
     2012-07-24T03:45:03Z,3757,readline: Remove event listeners on close
     2012-07-24T03:32:10Z,3756,readline: No way to completely unhook inte...
     2012-07-23T21:17:50Z,3755,node-v0.6.20 hello example segfaults on Ra...

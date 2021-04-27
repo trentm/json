@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git://github.com/trentm/json.git"
   },
-  "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
+  "author": "Trent Mick <trentm@gmail.com> (https://trentm.com)",
   "main": "./lib/json.js",
   "man": [
     "./man/man1/json.1"
