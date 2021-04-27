@@ -1,0 +1,50 @@
+name: Test
+
+# https://github.community/t/how-to-trigger-an-action-on-push-or-pull-request-but-not-both/16662/2
+on:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - 'docs/**'
+    - 'man/**'
+    - '*.md'
+  pull_request:
+    branches:
+    - master
+    paths-ignore:
+    - 'docs/**'
+    - 'man/**'
+    - '*.md'
+
+jobs:
+  # Test once on unix-y plats (because the test suite assumes bash), using
+  # LTS node version (https://nodejs.org/en/about/releases/).
+  test-plats:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - run: npm ci
+    - run: npm test
+
+  # Test once for every supported node version (don't repeat the LTS
+  # node version from the previous step). Only test on one
+  # platform to not overkill the number of builds.
+  test-vers:
+    strategy:
+      matrix:
+        node: ['10.x', '12.x', '14.x']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm ci
+    - run: npm test
