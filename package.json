@@ -8,6 +8,10 @@
   },
   "author": "Trent Mick <trentm@gmail.com> (https://trentm.com)",
   "main": "./lib/json.js",
+  "files": [
+    "lib",
+    "man"
+  ],
   "man": [
     "./man/man1/json.1"
   ],
