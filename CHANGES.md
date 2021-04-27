@@ -2,6 +2,10 @@
 
 ## not yet released
 
+(nothing yet)
+
+## 11.0.0
+
 - **Backward incompatible** and **security-related** change to parsing the
   `-d DELIM` option. ([#148](https://github.com/trentm/json/issues/148))
 
@@ -23,8 +27,8 @@
   Before this change, that parsing used `eval()`, which allowed for unintended
   code execution if an untrusted argument to `-d` was provided. The fix for
   this vulnerability changes to use `JSON.parse()` to support escapes. However
-  that results in a backward incompatible change, because the set
-  [JSON escapes](https://tools.ietf.org/html/rfc7159#section-7) is a subset of
+  that results in a backward incompatible change, because the set of
+  [JSON escapes](https://tools.ietf.org/html/rfc7159#section-7) is a *subset* of
   [JavaScript escapes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#escape_notation).
 
   The only escape I expect that would affect any current user would be the
