@@ -19,5 +19,5 @@ echo '{"name":"trent", "age":38}' | $JSON -a name age -d'""' # had a bug in this
 echo "# unsupported JavaScript-only escapes in -d DELIM" >&2
 echo '{"title":"Monsters, Inc.","year":"2001"}' \
     | $JSON -a title year -d'\0' \
-    | xargs -0 node -e 'console.log(process.argv)'
+    | xargs -0
 echo '{"name":"trent", "age":38}' | $JSON -a name age -d'\x2c'
