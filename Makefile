@@ -4,7 +4,6 @@
 #
 
 JSSTYLE_FILES := $(shell find lib test -name "*.js")
-NODEUNIT=./node_modules/nodeunit/bin/nodeunit
 NODEOPT ?= $(HOME)/opt
 
 
@@ -13,9 +12,8 @@ NODEOPT ?= $(HOME)/opt
 #
 
 all:
-
-node_modules/.bin/nodeunit:
 	npm install
+
 node_modules/.bin/uglifyjs:
 	npm install
 deps/JSON-js/json_parse.js:
@@ -43,39 +41,8 @@ publish:
 		&& git push origin gh-pages || true)
 
 .PHONY: test
-test: | node_modules/.bin/nodeunit
-	$(NODEUNIT) test/test.js
-
-# Test will all supported node versions (presumes install locations I use on my
-# machine).
-.PHONY: testall
-testall: test7 test6 test012 test010 test4
-
-.PHONY: test7
-test7:
-	@echo "# Test node 7.x (with node `$(NODEOPT)/node-7/bin/node --version`)"
-	@$(NODEOPT)/node-7/bin/node --version | grep '^v7\.'
-	PATH="$(NODEOPT)/node-7/bin:$(PATH)" make test
-.PHONY: test6
-test6:
-	@echo "# Test node 6.x (with node `$(NODEOPT)/node-6/bin/node --version`)"
-	@$(NODEOPT)/node-6/bin/node --version | grep '^v6\.'
-	PATH="$(NODEOPT)/node-6/bin:$(PATH)" make test
-.PHONY: test4
-test4:
-	@echo "# Test node 4.x (with node `$(NODEOPT)/node-4/bin/node --version`)"
-	@$(NODEOPT)/node-4/bin/node --version | grep '^v4\.'
-	PATH="$(NODEOPT)/node-4/bin:$(PATH)" make test
-.PHONY: test012
-test012:
-	@echo "# Test node 0.12.x (with node `$(NODEOPT)/node-0.12/bin/node --version`)"
-	@$(NODEOPT)/node-0.12/bin/node --version | grep '^v0\.12\.'
-	PATH="$(NODEOPT)/node-0.12/bin:$(PATH)" make test
-.PHONY: test010
-test010:
-	@echo "# Test node 0.10.x (with node `$(NODEOPT)/node-0.10/bin/node --version`)"
-	@$(NODEOPT)/node-0.10/bin/node --version | grep '^v0\.10\.'
-	PATH="$(NODEOPT)/node-0.10/bin:$(PATH)" make test
+test:
+	./node_modules/.bin/tap test/*.test.js
 
 .PHONY: cutarelease
 cutarelease: check-version

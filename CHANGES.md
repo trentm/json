@@ -2,7 +2,14 @@
 
 ## not yet released
 
-(nothing yet)
+- **Backwards incompatible**: Drop official support for versions of node
+  before v10. I don't intend to break things, but going forward I will only
+  be testing on node v10 and later. That's actually a significant change
+  because earlier releases supported back to node *v0.10.0*.
+- Modernizing dev of this repo a bit:
+    - Change test tool from nodeunit to node-tap.
+    - Update the docs a bit.
+
 
 ## 11.0.0
 

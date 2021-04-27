@@ -19,10 +19,10 @@
     "json": "./lib/json.js"
   },
   "scripts": {
-    "test": "make test"
+    "test": "tap test/*.test.js"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=10"
   },
   "keywords": [
     "json",
@@ -32,11 +32,10 @@
     "shell"
   ],
   "devDependencies": {
-    "ansidiff": "1.0",
     "async": "^3.2.0",
     "ben": "0.0.x",
-    "nodeunit": "^0.11.3",
     "semver": "^7.3.2",
+    "tap": "^15.0.5",
     "uglify-js": "^3.10.2"
   }
 }

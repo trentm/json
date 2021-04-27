@@ -74,14 +74,12 @@ discussed on [issue #56](https://github.com/trentm/json/issues/56). You can also
 
 # Test suite
 
-    make test
+    npm test   # or 'make test'
 
-You can also limit (somewhat) which tests are run with the `TEST_ONLY` envvar,
-e.g.:
+This is using node-tap, so you can use all [its options](https://node-tap.org/docs/cli/),
+for example filtering which tests to run:
 
-    cd test && TEST_ONLY=executable nodeunit test.js
-
-I test against node 0.4 (less so now), 0.6, 0.8, and 0.10.
+    npm test -- -g stream
 
 
 # License
