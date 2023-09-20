@@ -538,6 +538,16 @@ $ cat config.json
   "hostname": "127.0.0.1",
   "port": 8080
 }
+
+# add/update field that contains periods
+$ json -I -f config.json -e 'this["field.with.periods"]="update"'
+json: updated "config.json" in-place
+$ cat config.json
+{
+  "hostname": "127.0.0.1",
+  "port": 8080,
+  "field.with.periods": "update"
+}
 </code></pre>
 
 <p>Some limitations. Only one file at a time:</p>
