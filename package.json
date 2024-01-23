@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git://github.com/trentm/json.git"
   },
+  "license": "MIT",
   "author": "Trent Mick <trentm@gmail.com> (https://trentm.com)",
   "main": "./lib/json.js",
   "files": [
